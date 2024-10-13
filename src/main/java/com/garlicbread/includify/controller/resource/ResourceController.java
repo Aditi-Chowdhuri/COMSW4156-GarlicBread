@@ -2,6 +2,7 @@ package com.garlicbread.includify.controller.resource;
 
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.service.resource.ResourceService;
+import com.garlicbread.includify.service.resource.ResourceTypeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class ResourceController {
 
     private final ResourceService resourceService;
+    private final ResourceTypeService resourceTypeService;
 
-    public ResourceController(ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService, ResourceTypeService resourceTypeService) {
         this.resourceService = resourceService;
+        this.resourceTypeService = resourceTypeService;
     }
 
     @GetMapping("/all")
