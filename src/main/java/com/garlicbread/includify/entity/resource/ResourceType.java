@@ -12,7 +12,7 @@ public class ResourceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "resourceType", fetch = FetchType.LAZY)
     private List<Resource> resources;
 
     @Column(nullable = false)

@@ -24,7 +24,12 @@ public class Appointment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "appointment", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "appointment_resources",
+        joinColumns = @JoinColumn(name = "appointment_id"),
+        inverseJoinColumns = @JoinColumn(name = "resource_id")
+    )
     private List<Resource> resources;
 
     @ManyToOne

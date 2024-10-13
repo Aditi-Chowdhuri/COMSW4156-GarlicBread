@@ -1,5 +1,6 @@
 package com.garlicbread.includify.entity.user;
 
+import com.garlicbread.includify.entity.resource.Resource;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -11,8 +12,11 @@ public class UserCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private List<User> users;
+
+    @ManyToMany(mappedBy = "targetUserCategory", fetch = FetchType.LAZY)
+    private List<Resource> resources;
 
     @Column(nullable = false)
     private String title;
