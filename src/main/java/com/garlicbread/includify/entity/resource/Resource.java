@@ -51,5 +51,39 @@ public class Resource {
 
     @ManyToMany(mappedBy = "resources")
     private List<Appointment> appointments;
+
+
+    // Getters
+    public String getId() {
+        return id;
+    }
+
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    public List<ResourceType> getResourceType() {
+        return resourceType;
+    }
+
+    public List<UserCategory> getTargetUserCategory() {
+        return targetUserCategory;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUsageInstructions() {
+        return usageInstructions;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
 }
 
