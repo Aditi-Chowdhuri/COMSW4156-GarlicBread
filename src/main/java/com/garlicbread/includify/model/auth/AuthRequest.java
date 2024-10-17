@@ -1,18 +1,18 @@
 package com.garlicbread.includify.model.auth;
 
-import com.garlicbread.includify.util.Profile;
+import jakarta.validation.constraints.NotBlank;
 
 public class AuthRequest {
 
+    @NotBlank(message = "email is required")
     private String email;
+
+    @NotBlank(message = "password is required")
     private String password;
-    private String profile;
 
     public String getEmail() {
         return email;
     }
-
-    public Profile getProfile() { return Profile.valueOf(profile.toUpperCase()); }
 
     public String getPassword() {
         return password;
