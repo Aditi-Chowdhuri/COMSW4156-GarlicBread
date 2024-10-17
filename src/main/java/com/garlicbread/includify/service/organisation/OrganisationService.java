@@ -1,6 +1,7 @@
 package com.garlicbread.includify.service.organisation;
 
 import com.garlicbread.includify.entity.organisation.Organisation;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.organisation.OrganisationRepository;
 
 import org.springframework.stereotype.Service;
@@ -34,28 +35,16 @@ public class OrganisationService {
 
     public Organisation updateOrganisation(String id, Organisation organisationDetails) {
         return organisationRepository.findById(id)
-                .map(organisation -> {
-                    organisation.setName(organisationDetails.getName());
-                    organisation.setEmail(organisationDetails.getEmail());
-                    organisation.setHashedPassword(organisationDetails.getHashedPassword());
-                    organisation.setDescription(organisationDetails.getDescription());
-                    organisation.setLatitude(organisationDetails.getLatitude());
-                    organisation.setLongitude(organisationDetails.getLongitude());
-                    organisation.setAddress(organisationDetails.getAddress());
-                    return organisationRepository.save(organisation);
-                }).orElseThrow(() -> new RuntimeException("Organisation not found with id " + id));
-    }
-
-    public Organisation updatePartialOrganisation(String id, Map<String, Object> updates) {
-        return organisationRepository.findById(id)
-                .map(organisation -> {
-                    updates.forEach((key, value) -> {
-                        Field field = ReflectionUtils.findField(Organisation.class, key);
-                        field.setAccessible(true);
-                        ReflectionUtils.setField(field, organisation, value);
-                    });
-                    return organisationRepository.save(organisation);
-                }).orElseThrow(() -> new RuntimeException("Organisation not found with id " + id));
+            .map(organisation -> {
+                organisation.setName(organisationDetails.getName());
+                organisation.setEmail(organisationDetails.getEmail());
+                organisation.setPasswordWithoutHash(organisationDetails.getPassword());
+                organisation.setDescription(organisationDetails.getDescription());
+                organisation.setLatitude(organisationDetails.getLatitude());
+                organisation.setLongitude(organisationDetails.getLongitude());
+                organisation.setAddress(organisationDetails.getAddress());
+                return organisationRepository.save(organisation);
+            }).orElseThrow(() -> new ResourceNotFoundException("Organisation not found with id " + id));
     }
 
     public void deleteOrganisation(String id) {

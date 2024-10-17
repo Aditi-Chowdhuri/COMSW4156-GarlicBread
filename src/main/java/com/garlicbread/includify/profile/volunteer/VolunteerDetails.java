@@ -23,7 +23,7 @@ public class VolunteerDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return volunteer.getHashedPassword();
+        return volunteer.getPassword();
     }
 
     @Override

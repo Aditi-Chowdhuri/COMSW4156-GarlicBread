@@ -1,9 +1,12 @@
 package com.garlicbread.includify.controller.resource;
 
 import com.garlicbread.includify.entity.resource.Resource;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.service.resource.ResourceService;
 import com.garlicbread.includify.service.resource.ResourceTypeService;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,25 +27,38 @@ public class ResourceController {
 
     @GetMapping("/all")
     @PermitAll
-    public List<Resource> getAllResources() {
-        return resourceService.getAllResources();
+    public ResponseEntity<List<Resource>> getAllResources() {
+        List<Resource> resources = resourceService.getAllResources();
+        if (resources.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PermitAll
-    public Optional<Resource> getResourceById(@PathVariable String id) {
-        return resourceService.getResourceById(id);
+    public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
+        Optional<Resource> resource = resourceService.getResourceById(id);
+        return resource
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ORGANISATION')")
-    public Resource addResource(@RequestBody Resource resource) {
-        return resourceService.addResource(resource);
-    }
+    public ResponseEntity<Resource> addResource(@RequestBody Resource resource) {
+        Resource createdResource = resourceService.addResource(resource);
+        return new ResponseEntity<>(createdResource, HttpStatus.CREATED);    }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ORGANISATION')")
-    public void deleteResource(@PathVariable String id) {
-        resourceService.deleteResource(id);
+    public ResponseEntity<String> deleteResource(@PathVariable String id) {
+        Optional<Resource> resource = resourceService.getResourceById(id);
+        if (resource.isPresent()) {
+            resourceService.deleteResource(id);
+            return new ResponseEntity<>("Resource deleted successfully", HttpStatus.NO_CONTENT);
+        } else {
+            throw new ResourceNotFoundException("Resource not found with id: " + id);
+        }
     }
 }

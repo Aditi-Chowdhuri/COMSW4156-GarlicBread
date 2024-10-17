@@ -22,7 +22,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public String getPassword() {
-        return user.getHashedPassword();
+        return user.getPassword();
     }
 
     @Override
