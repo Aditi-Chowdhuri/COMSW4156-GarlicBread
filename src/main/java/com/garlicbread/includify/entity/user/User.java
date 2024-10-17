@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.garlicbread.includify.entity.resource.Resource;
 
 @Entity
-@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "id", "email" }) })
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User {
 
     @Id
@@ -31,13 +30,9 @@ public class User {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @@Column(nullable = false)
+    @Column(nullable = false)
     @NotBlank(message = "Password is required")
     private String hashedPassword;
-
-    // one user can have many resources
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Resource> resources;
 
     public String getId() {
         return id;
@@ -58,11 +53,6 @@ public class User {
     public String getHashedPassword() {
         return hashedPassword;
     }
-
-    public List<Resource> getResources() {
-        return resources;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
