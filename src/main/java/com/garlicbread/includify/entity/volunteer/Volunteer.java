@@ -42,9 +42,14 @@ public class Volunteer {
     @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Please provide valid phone")
     private String phone;
 
+    public String getEmail() {
+        return email;
+    }
+
     public String getHashedPassword() {
         return this.hashedPassword;
     }
+
     public void setHashedPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.hashedPassword = passwordEncoder.encode(plainPassword);
