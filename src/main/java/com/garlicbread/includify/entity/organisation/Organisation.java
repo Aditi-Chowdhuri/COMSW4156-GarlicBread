@@ -1,5 +1,6 @@
 package com.garlicbread.includify.entity.organisation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.util.Utils;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Organisation {
 
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String description;

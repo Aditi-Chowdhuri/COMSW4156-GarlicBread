@@ -1,9 +1,12 @@
 package com.garlicbread.includify.controller.user;
 
 import com.garlicbread.includify.entity.user.User;
+import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
+import com.garlicbread.includify.model.user.UserRequest;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.service.user.UserService;
+import com.garlicbread.includify.util.UserMapper;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,13 @@ public class UserController {
     public UserController(UserService userService, UserCategoryService userCategoryService) {
         this.userService = userService;
         this.userCategoryService = userCategoryService;
+    }
+
+    @PostMapping("/createCategory")
+    @PermitAll
+    public ResponseEntity<UserCategory> createUserCategory(@Valid @RequestBody UserCategory userCategory) {
+        UserCategory createdUserCategory = userCategoryService.createCategory(userCategory);
+        return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
@@ -47,15 +58,28 @@ public class UserController {
 
     @PostMapping("/create")
     @PermitAll
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest userRequest) {
+        List<UserCategory> userCategories = new ArrayList<>();
+        userRequest.getCategoryIds().forEach(categoryId -> {
+            userCategories.add(userCategoryService.getById(categoryId));
+        });
+
+        User user = UserMapper.mapToUser(userRequest, userCategories);
+
         User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
+    public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody UserRequest userRequest) {
+        List<UserCategory> userCategories = new ArrayList<>();
+        userRequest.getCategoryIds().forEach(categoryId -> {
+            userCategories.add(userCategoryService.getById(categoryId));
+        });
+
+        User user = UserMapper.mapToUser(userRequest, userCategories);
+        User updatedUser = userService.updateUser(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
