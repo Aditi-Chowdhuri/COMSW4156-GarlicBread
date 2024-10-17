@@ -1,9 +1,9 @@
 package com.garlicbread.includify.entity.organisation;
 
 import com.garlicbread.includify.entity.resource.Resource;
+import com.garlicbread.includify.util.Utils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
 
 @Entity
@@ -25,7 +25,7 @@ public class Organisation {
 
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
-    private String hashedPassword;
+    private String password;
 
     private String description;
 
@@ -57,8 +57,8 @@ public class Organisation {
         return email;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
     public String getDescription() {
@@ -89,9 +89,12 @@ public class Organisation {
         this.email = email;
     }
 
-    public void setHashedPassword(String plainPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.hashedPassword = passwordEncoder.encode(plainPassword);
+    public void setPassword(String plainPassword) {
+        this.password = Utils.hashPassword(plainPassword);
+    }
+
+    public void setPasswordWithoutHash(String password) {
+        this.password = password;
     }
 
     public void setDescription(String description) {

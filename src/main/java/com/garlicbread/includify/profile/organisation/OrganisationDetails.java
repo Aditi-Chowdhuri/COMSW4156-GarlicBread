@@ -23,7 +23,7 @@ public class OrganisationDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return organisation.getHashedPassword();
+        return organisation.getPassword();
     }
 
     @Override
