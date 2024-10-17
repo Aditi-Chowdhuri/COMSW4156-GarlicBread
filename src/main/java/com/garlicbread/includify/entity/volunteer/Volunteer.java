@@ -1,5 +1,6 @@
 package com.garlicbread.includify.entity.volunteer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.garlicbread.includify.util.Utils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -28,6 +29,7 @@ public class Volunteer {
 
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(nullable = false)

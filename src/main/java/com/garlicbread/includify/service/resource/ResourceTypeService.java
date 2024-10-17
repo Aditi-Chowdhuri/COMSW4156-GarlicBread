@@ -1,5 +1,7 @@
 package com.garlicbread.includify.service.resource;
 
+import com.garlicbread.includify.entity.resource.ResourceType;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.resource.ResourceTypeRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,14 @@ public class ResourceTypeService {
         this.resourceTypeRepository = resourceTypeRepository;
     }
 
-    // add the required methods
+    public ResourceType createResourceType(ResourceType resourceType) {
+        return resourceTypeRepository.save(resourceType);
+    }
+
+    public ResourceType getById(String id) {
+        return resourceTypeRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Resource not found with id " + id)
+        );
+    }
 
 }

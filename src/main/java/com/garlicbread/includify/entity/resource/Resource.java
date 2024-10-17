@@ -1,5 +1,6 @@
 package com.garlicbread.includify.entity.resource;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.garlicbread.includify.entity.appointment.Appointment;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.user.UserCategory;
@@ -58,10 +59,6 @@ public class Resource {
         return id;
     }
 
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-
     public List<ResourceType> getResourceType() {
         return resourceType;
     }
@@ -84,6 +81,39 @@ public class Resource {
 
     public List<Appointment> getAppointments() {
         return appointments;
+    }
+
+    @JsonProperty("organisationId")
+    public String getOrganisation() {
+        return this.organisation.getId();
+    }
+
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
+    }
+
+    public void setResourceType(List<ResourceType> resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public void setTargetUserCategory(List<UserCategory> targetUserCategory) {
+        this.targetUserCategory = targetUserCategory;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUsageInstructions(String usageInstructions) {
+        this.usageInstructions = usageInstructions;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }
 
