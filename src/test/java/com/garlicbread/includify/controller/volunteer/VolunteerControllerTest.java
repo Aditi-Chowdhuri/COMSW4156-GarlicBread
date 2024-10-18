@@ -71,6 +71,9 @@ public class VolunteerControllerTest {
         testVolunteer = new Volunteer();
         testVolunteer.setEmail("rb3713@columbia.edu");
         testVolunteer.setName("Rahaf Ibrahim");
+        testVolunteer.setAge(25);
+        testVolunteer.setAddress("116st, NY");
+        testVolunteer.setPhone("929-428-6666");
 
         when(jwtDecoder.decode(any())).thenReturn(jwt);
         when(jwt.getClaimAsString("sub")).thenReturn("test_user");
@@ -128,15 +131,17 @@ public class VolunteerControllerTest {
 
     @Test
     void createVolunteer_Happy_Path() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(testVolunteer);
+        String requestBodyWithPassword = requestBody.substring(0,
+                requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
         when(volunteerService.addVolunteer(any(Volunteer.class))).thenReturn(testVolunteer);
 
-        String requestBody = objectMapper.writeValueAsString(testVolunteer);
 
-        mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+        mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON).content(requestBodyWithPassword)
                         .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim Mo"));
+                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
     }
 
     @Test
