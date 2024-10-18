@@ -14,7 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.volunteer.Volunteer;
 import com.garlicbread.includify.profile.volunteer.VolunteerDetails;
+import com.garlicbread.includify.service.auth.OrganisationDetailsService;
 import com.garlicbread.includify.service.auth.ProfileServiceSelector;
+import com.garlicbread.includify.service.auth.UserDetailsService;
 import com.garlicbread.includify.service.auth.VolunteerDetailsService;
 import com.garlicbread.includify.service.volunteer.VolunteerService;
 import java.util.Collections;
@@ -47,8 +49,14 @@ public class VolunteerControllerTest {
     @MockBean
     private ProfileServiceSelector profileServiceSelector;
 
-    @Autowired
+    @MockBean
     private VolunteerDetailsService volunteerDetailsService;
+
+    @MockBean
+    private OrganisationDetailsService organisationDetailsService;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -76,7 +84,8 @@ public class VolunteerControllerTest {
     void testGetAllVolunteers_Happy_Path() throws Exception {
         when(volunteerService.getAllVolunteers()).thenReturn(Collections.singletonList(testVolunteer));
 
-        mockMvc.perform(get("/volunteer/all"))
+        mockMvc.perform(get("/volunteer/all")
+                .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email").value("rb3713@columbia.edu"))
@@ -87,15 +96,20 @@ public class VolunteerControllerTest {
     void testGetAllVolunteers_Sad_Path() throws Exception {
         when(volunteerService.getAllVolunteers()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/volunteer/all"))
+        mockMvc.perform(get("/volunteer/all")
+                        .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void getVolunteerById_Happy_Path() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(testVolunteer);
+        String requestBodyWithPassword = requestBody.substring(0,
+                requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
         when(volunteerService.getVolunteerById("1")).thenReturn(Optional.of(testVolunteer));
 
-        mockMvc.perform(get("/volunteer/1"))
+        mockMvc.perform(get("/volunteer/1")
+                .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.email").value("rb3713@columbia.edu"))
@@ -106,7 +120,8 @@ public class VolunteerControllerTest {
     void getVolunteerById_Sad_Path() throws Exception {
         when(volunteerService.getVolunteerById("22")).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/volunteer/22"))
+        mockMvc.perform(get("/volunteer/22")
+                        .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Volunteer not found with id: 22"));
     }
@@ -117,10 +132,11 @@ public class VolunteerControllerTest {
 
         String requestBody = objectMapper.writeValueAsString(testVolunteer);
 
-        mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+                        .header("Authorization", "Bearer testJWTToken"))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
+                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim Mo"));
     }
 
     @Test
