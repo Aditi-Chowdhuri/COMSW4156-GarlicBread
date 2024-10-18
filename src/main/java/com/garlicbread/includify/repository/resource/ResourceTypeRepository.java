@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResourceTypeRepository extends JpaRepository<ResourceType, String> {
 
-    // add required methods
+  // add required methods
 
 }

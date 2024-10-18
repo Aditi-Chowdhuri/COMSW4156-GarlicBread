@@ -36,7 +36,10 @@ public class ResourceController {
   private final OrganisationService organisationService;
   private final UserCategoryService userCategoryService;
 
-  public ResourceController(ResourceService resourceService, ResourceTypeService resourceTypeService, OrganisationService organisationService, UserCategoryService userCategoryService) {
+  public ResourceController(ResourceService resourceService,
+                            ResourceTypeService resourceTypeService,
+                            OrganisationService organisationService,
+                            UserCategoryService userCategoryService) {
     this.resourceService = resourceService;
     this.resourceTypeService = resourceTypeService;
     this.organisationService = organisationService;
@@ -45,7 +48,8 @@ public class ResourceController {
 
   @PostMapping("/createResourceType")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<ResourceType> createResourceType(@Valid @RequestBody ResourceType resourceType) {
+  public ResponseEntity<ResourceType> createResourceType(
+      @Valid @RequestBody ResourceType resourceType) {
     ResourceType createdResourceType = resourceTypeService.createResourceType(resourceType);
     return new ResponseEntity<>(createdResourceType, HttpStatus.CREATED);
   }
@@ -64,33 +68,36 @@ public class ResourceController {
   @PermitAll
   public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
     Optional<Resource> resource = resourceService.getResourceById(id);
-    return resource
-        .map(ResponseEntity::ok)
-        .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
+    return resource.map(ResponseEntity::ok)
+        .orElseThrow(() -> new ResourceNotFoundException("Resource " + "not found with id: " + id));
   }
 
   @PostMapping("/add")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest) {
-    Optional<Organisation> organisation = organisationService.getOrganisationById(resourceRequest.getOrganisationId());
+    Optional<Organisation> organisation =
+        organisationService.getOrganisationById(resourceRequest.getOrganisationId());
 
     if (organisation.isEmpty()) {
-      throw new ResourceNotFoundException("Organisation not found with id: " + resourceRequest.getOrganisationId());
+      throw new ResourceNotFoundException(
+          "Organisation not found with " + "id: " + resourceRequest.getOrganisationId());
     }
 
     List<ResourceType> resourceTypes = new ArrayList<>();
     resourceRequest.getResourceTypeIds().forEach(resourceTypeId -> {
-    resourceTypes.add(resourceTypeService.getById(resourceTypeId));
-  });
+      resourceTypes.add(resourceTypeService.getById(resourceTypeId));
+    });
 
-  List<UserCategory> userCategories = new ArrayList<>();
+    List<UserCategory> userCategories = new ArrayList<>();
     resourceRequest.getTargetUserCategoryIds().forEach(targetUserCategoryId -> {
-    userCategories.add(userCategoryService.getById(targetUserCategoryId));
-  });
+      userCategories.add(userCategoryService.getById(targetUserCategoryId));
+    });
 
-  Resource resource = ResourceMapper.mapToResource(resourceRequest, organisation.get(), resourceTypes, userCategories);
+    Resource resource =
+        ResourceMapper.mapToResource(resourceRequest, organisation.get(), resourceTypes,
+            userCategories);
 
-  Resource addedResource = resourceService.addResource(resource);
+    Resource addedResource = resourceService.addResource(resource);
     return ResponseEntity.status(HttpStatus.CREATED).body(addedResource);
   }
 

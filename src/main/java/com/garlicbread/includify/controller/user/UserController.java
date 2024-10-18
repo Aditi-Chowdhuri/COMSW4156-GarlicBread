@@ -38,7 +38,8 @@ public class UserController {
 
   @PostMapping("/createCategory")
   @PermitAll
-  public ResponseEntity<UserCategory> createUserCategory(@Valid @RequestBody UserCategory userCategory) {
+  public ResponseEntity<UserCategory> createUserCategory(
+      @Valid @RequestBody UserCategory userCategory) {
     UserCategory createdUserCategory = userCategoryService.createCategory(userCategory);
     return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
   }
@@ -57,9 +58,8 @@ public class UserController {
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<User> getUserById(@PathVariable String id) {
     Optional<User> user = userService.getUserById(id);
-    return user
-        .map(ResponseEntity::ok)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    return user.map(ResponseEntity::ok).orElseThrow(
+        () -> new ResourceNotFoundException("User not" + " " + "found with id: " + id));
   }
 
   @PostMapping("/create")
@@ -78,7 +78,8 @@ public class UserController {
 
   @PutMapping("/update/{id}")
   @PreAuthorize("hasAuthority('USER')")
-  public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody UserRequest userRequest) {
+  public ResponseEntity<User> updateUser(@PathVariable String id,
+                                         @Valid @RequestBody UserRequest userRequest) {
     List<UserCategory> userCategories = new ArrayList<>();
     userRequest.getCategoryIds().forEach(categoryId -> {
       userCategories.add(userCategoryService.getById(categoryId));

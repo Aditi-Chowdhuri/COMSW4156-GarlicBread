@@ -5,14 +5,13 @@ import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,22 +43,25 @@ public class OrganisationController {
   @PermitAll
   public ResponseEntity<Organisation> getOrganisationById(@PathVariable String id) {
     Optional<Organisation> organisation = organisationService.getOrganisationById(id);
-    return organisation
-        .map(ResponseEntity::ok)
+    return organisation.map(ResponseEntity::ok)
         .orElseThrow(() -> new ResourceNotFoundException("Organisation not found with id: " + id));
   }
 
   @PostMapping("/create")
   @PermitAll
-  public ResponseEntity<Organisation> createOrganisation(@Valid @RequestBody Organisation organisation) {
+  public ResponseEntity<Organisation> createOrganisation(
+      @Valid @RequestBody Organisation organisation) {
     Organisation createdOrganisation = organisationService.createOrganisation(organisation);
     return new ResponseEntity<>(createdOrganisation, HttpStatus.CREATED);
   }
 
   @PutMapping("/update/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<Organisation> updateOrganisation(@PathVariable String id, @Valid @RequestBody Organisation organisationDetails) {
-    Organisation updatedOrganisation = organisationService.updateOrganisation(id, organisationDetails);
+  public ResponseEntity<Organisation> updateOrganisation(@PathVariable String id,
+                                                         @Valid @RequestBody
+                                                         Organisation organisationDetails) {
+    Organisation updatedOrganisation =
+        organisationService.updateOrganisation(id, organisationDetails);
     return new ResponseEntity<>(updatedOrganisation, HttpStatus.OK);
   }
 
@@ -71,7 +73,7 @@ public class OrganisationController {
       organisationService.deleteOrganisation(id);
       return new ResponseEntity<>("Organisation deleted successfully", HttpStatus.NO_CONTENT);
     } else {
-      throw new ResourceNotFoundException("Organisation not found with id: " + id);
+      throw new ResourceNotFoundException("Organisation not found with " + "id: " + id);
     }
   }
 
