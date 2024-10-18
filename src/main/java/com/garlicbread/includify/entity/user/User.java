@@ -1,13 +1,13 @@
 package com.garlicbread.includify.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.garlicbread.includify.util.Utils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.garlicbread.includify.entity.resource.Resource;
 
 @Entity
-@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "id", "email" }) })
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User {
 
     @Id
@@ -19,7 +19,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    @NotBlank(message = "Age is required")
+    @Min(value = 1)
     private int age;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -33,11 +33,8 @@ public class User {
 
     @Column(nullable = false)
     @NotBlank(message = "Password is required")
-    private String hashedPassword;
-
-    // one user can have many resources
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Resource> resources;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     public String getId() {
         return id;
@@ -55,12 +52,12 @@ public class User {
         return email;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public List<Resource> getResources() {
-        return resources;
+    public List<UserCategory> getCategories() {
+        return categories;
     }
 
     public void setName(String name) {
@@ -75,9 +72,16 @@ public class User {
         this.email = email;
     }
 
-    public void setHashedPassword(String plainPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.hashedPassword = passwordEncoder.encode(plainPassword);
+    public void setPassword(String plainPassword) {
+        this.password = Utils.hashPassword(plainPassword);
+    }
+
+    public void setPasswordWithoutHash(String password) {
+        this.password = password;
+    }
+
+    public void setCategories(List<UserCategory> categories) {
+        this.categories = categories;
     }
 
 }

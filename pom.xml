@@ -55,11 +55,22 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 			<version>3.0.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
 
 	</dependencies>
 
@@ -71,39 +82,30 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.2</version>
-				<executions>
-					<execution>
-						<id>checkstyle</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.23.0</version>
 				<configuration>
-					<configLocation>google_checks.xml</configLocation> <!-- You can customize this -->
-					<encoding>UTF-8</encoding>
-					<consoleOutput>true</consoleOutput>
-					<failsOnError>true</failsOnError>
+					<rulesets>
+						rulesets/java/quickstart.xml
+					</rulesets>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.15.0</version> <!-- Update to the latest version -->
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.0</version>
 				<configuration>
-					<printFailingErrors>true</printFailingErrors>
-					<rulesets>
-						<ruleset>rulesets/java/quickstart.xml</ruleset>
-					</rulesets>
+					<configLocation>google_checks.xml</configLocation>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
 				</configuration>
 				<executions>
 					<execution>
-						<phase>verify</phase> <!-- Run during the verify phase -->
+						<id>validate</id>
+						<phase>validate</phase>
 						<goals>
-							<goal>pmd</goal>
 							<goal>check</goal>
 						</goals>
 					</execution>
@@ -131,7 +133,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
-
 </project>

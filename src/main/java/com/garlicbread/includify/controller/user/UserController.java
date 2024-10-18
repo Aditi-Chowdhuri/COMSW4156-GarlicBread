@@ -1,12 +1,20 @@
 package com.garlicbread.includify.controller.user;
 
-import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.user.User;
+import com.garlicbread.includify.entity.user.UserCategory;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
+import com.garlicbread.includify.model.user.UserRequest;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.service.user.UserService;
+import com.garlicbread.includify.util.UserMapper;
+import jakarta.annotation.security.PermitAll;
+import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,35 +31,74 @@ public class UserController {
   private final UserService userService;
   private final UserCategoryService userCategoryService;
 
-  public UserController(UserService userService, 
-      UserCategoryService userCategoryService) {
+  public UserController(UserService userService, UserCategoryService userCategoryService) {
     this.userService = userService;
     this.userCategoryService = userCategoryService;
   }
 
+  @PostMapping("/createCategory")
+  @PermitAll
+  public ResponseEntity<UserCategory> createUserCategory(@Valid @RequestBody UserCategory userCategory) {
+    UserCategory createdUserCategory = userCategoryService.createCategory(userCategory);
+    return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
+  }
+
   @GetMapping("/all")
-  public List<User> getAllUsers() {
-    return userService.getAllUsers();
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<List<User>> getAllUsers() {
+    List<User> users = userService.getAllUsers();
+    if (users.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<>(users, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public Optional<User> getUSerById(@PathVariable String id) {
-    return userService.getUserById(id);
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<User> getUserById(@PathVariable String id) {
+    Optional<User> user = userService.getUserById(id);
+    return user
+        .map(ResponseEntity::ok)
+        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
 
   @PostMapping("/create")
-  public User createUser(@RequestBody User user) {
-    return userService.createUser(user);
+  @PermitAll
+  public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest userRequest) {
+    List<UserCategory> userCategories = new ArrayList<>();
+    userRequest.getCategoryIds().forEach(categoryId -> {
+      userCategories.add(userCategoryService.getById(categoryId));
+    });
+
+    User user = UserMapper.mapToUser(userRequest, userCategories);
+
+    User createdUser = userService.createUser(user);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
   }
 
   @PutMapping("/update/{id}")
-  public User updateUser(@PathVariable String id, 
-      @RequestBody User userDetails) {
-    return userService.updateUser(id, userDetails);
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody UserRequest userRequest) {
+    List<UserCategory> userCategories = new ArrayList<>();
+    userRequest.getCategoryIds().forEach(categoryId -> {
+      userCategories.add(userCategoryService.getById(categoryId));
+    });
+
+    User user = UserMapper.mapToUser(userRequest, userCategories);
+    User updatedUser = userService.updateUser(id, user);
+    return new ResponseEntity<>(updatedUser, HttpStatus.OK);
   }
 
   @DeleteMapping("/delete/{id}")
-  public void deleteUser(@PathVariable String id) {
-    userService.deleteUser(id);
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<String> deleteUser(@PathVariable String id) {
+    Optional<User> user = userService.getUserById(id);
+    if (user.isPresent()) {
+      userService.deleteUser(id);
+      return new ResponseEntity<>("User deleted successfully", HttpStatus.NO_CONTENT);
+    } else {
+      throw new ResourceNotFoundException("User not found with id: " + id);
+    }
   }
+
 }

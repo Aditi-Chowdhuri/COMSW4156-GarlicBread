@@ -1,13 +1,11 @@
 package com.garlicbread.includify.service.user;
 
 import com.garlicbread.includify.entity.user.User;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -37,9 +35,9 @@ public class UserService {
                     user.setName(userDetails.getName());
                     user.setAge(userDetails.getAge());
                     user.setEmail(userDetails.getEmail());
-                    user.setHashedPassword(userDetails.getHashedPassword());
+                    user.setPasswordWithoutHash(userDetails.getPassword());
                     return userRepository.save(user);
-                }).orElseThrow(() -> new RuntimeException("User not found with id " + id));
+                }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     public void deleteUser(String id) {
