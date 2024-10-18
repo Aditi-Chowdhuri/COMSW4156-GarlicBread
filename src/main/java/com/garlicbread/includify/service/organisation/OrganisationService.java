@@ -1,3 +1,8 @@
+/**
+ * This package contains service classes for managing organisation-related operations
+ * in the Includify application.
+ */
+
 package com.garlicbread.includify.service.organisation;
 
 import com.garlicbread.includify.entity.organisation.Organisation;
@@ -7,6 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing Organisation entities.
+ * This class provides methods for CRUD operations on organisations.
+ */
 @Service
 public class OrganisationService {
 
