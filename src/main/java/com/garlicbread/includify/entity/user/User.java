@@ -31,7 +31,7 @@ public class User {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @@Column(nullable = false)
+    @Column(nullable = false)
     @NotBlank(message = "Password is required")
     private String hashedPassword;
 

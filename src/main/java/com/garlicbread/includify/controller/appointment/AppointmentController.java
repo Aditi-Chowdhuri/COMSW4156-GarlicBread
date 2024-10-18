@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/appointment")
 public class AppointmentController {
 
-    private final AppointmentService appointmentService;
+  private final AppointmentService appointmentService;
 
-    public AppointmentController(AppointmentService appointmentService) {
-        this.appointmentService = appointmentService;
-    }
+  public AppointmentController(AppointmentService appointmentService) {
+    this.appointmentService = appointmentService;
+  }
 
-    // add the required methods
+  // add the required methods
 }
