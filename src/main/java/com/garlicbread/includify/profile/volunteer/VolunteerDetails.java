@@ -7,6 +7,11 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Represents the details of a volunteer user in the security context.
+ * Implements the UserDetails interface to provide user-related information
+ * required by Spring Security.
+ */
 public class VolunteerDetails implements UserDetails {
 
   private final Volunteer volunteer;

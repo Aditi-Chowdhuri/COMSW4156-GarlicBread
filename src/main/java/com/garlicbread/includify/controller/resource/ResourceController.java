@@ -27,6 +27,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing resources in the application.
+ * Provides endpoints for creating, retrieving, and deleting resources
+ * and resource types.
+ */
 @RestController
 @RequestMapping("/resource")
 public class ResourceController {
@@ -36,6 +41,14 @@ public class ResourceController {
   private final OrganisationService organisationService;
   private final UserCategoryService userCategoryService;
 
+  /**
+   * Constructs a ResourceController with the specified services.
+   *
+   * @param resourceService the service for managing resources
+   * @param resourceTypeService the service for managing resource types
+   * @param organisationService the service for managing organisations
+   * @param userCategoryService the service for managing user categories
+   */
   public ResourceController(ResourceService resourceService,
                             ResourceTypeService resourceTypeService,
                             OrganisationService organisationService,
@@ -54,6 +67,11 @@ public class ResourceController {
     return new ResponseEntity<>(createdResourceType, HttpStatus.CREATED);
   }
 
+  /**
+   * Retrieves all resources.
+   *
+   * @return ResponseEntity containing the list of resources or a NO_CONTENT status if none exist
+   */
   @GetMapping("/all")
   @PermitAll
   public ResponseEntity<List<Resource>> getAllResources() {
@@ -64,6 +82,13 @@ public class ResourceController {
     return new ResponseEntity<>(resources, HttpStatus.OK);
   }
 
+  /**
+   * Retrieves a specific resource by its ID.
+   *
+   * @param id the ID of the resource to retrieve
+   * @return ResponseEntity containing the found resource or
+   * throws ResourceNotFoundException if not found
+   */
   @GetMapping("/{id}")
   @PermitAll
   public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
@@ -72,6 +97,12 @@ public class ResourceController {
         .orElseThrow(() -> new ResourceNotFoundException("Resource " + "not found with id: " + id));
   }
 
+  /**
+   * Adds a new resource.
+   *
+   * @param resourceRequest the request body containing details of the resource to add
+   * @return ResponseEntity containing the added resource and HTTP status
+   */
   @PostMapping("/add")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest) {
@@ -101,6 +132,13 @@ public class ResourceController {
     return ResponseEntity.status(HttpStatus.CREATED).body(addedResource);
   }
 
+  /**
+   * Deletes a resource by its ID.
+   *
+   * @param id the ID of the resource to delete
+   * @return ResponseEntity with a message indicating successful deletion
+   * or throws ResourceNotFoundException if not found
+   */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<String> deleteResource(@PathVariable String id) {

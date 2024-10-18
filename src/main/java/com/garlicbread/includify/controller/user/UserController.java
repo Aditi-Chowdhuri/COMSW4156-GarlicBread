@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing user-related operations.
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -36,6 +39,12 @@ public class UserController {
     this.userCategoryService = userCategoryService;
   }
 
+  /**
+   * Creates a new user category.
+   *
+   * @param userCategory the user category to create
+   * @return a ResponseEntity containing the created UserCategory
+   */
   @PostMapping("/createCategory")
   @PermitAll
   public ResponseEntity<UserCategory> createUserCategory(
@@ -44,6 +53,11 @@ public class UserController {
     return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
   }
 
+  /**
+   * Retrieves all users.
+   *
+   * @return a ResponseEntity containing a list of all users
+   */
   @GetMapping("/all")
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<List<User>> getAllUsers() {
@@ -54,6 +68,13 @@ public class UserController {
     return new ResponseEntity<>(users, HttpStatus.OK);
   }
 
+  /**
+   * Retrieves a user by their ID.
+   *
+   * @param id the ID of the user to retrieve
+   * @return a ResponseEntity containing the found User
+   * @throws ResourceNotFoundException if the user is not found
+   */
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<User> getUserById(@PathVariable String id) {
@@ -62,6 +83,12 @@ public class UserController {
         () -> new ResourceNotFoundException("User not" + " " + "found with id: " + id));
   }
 
+  /**
+   * Creates a new user based on the provided UserRequest.
+   *
+   * @param userRequest the request containing user information
+   * @return a ResponseEntity containing the created User
+   */
   @PostMapping("/create")
   @PermitAll
   public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest userRequest) {
@@ -76,6 +103,13 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
   }
 
+  /**
+   * Updates an existing user.
+   *
+   * @param id          the ID of the user to update
+   * @param userRequest the request containing updated user information
+   * @return a ResponseEntity containing the updated User
+   */
   @PutMapping("/update/{id}")
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<User> updateUser(@PathVariable String id,
@@ -90,6 +124,13 @@ public class UserController {
     return new ResponseEntity<>(updatedUser, HttpStatus.OK);
   }
 
+  /**
+   * Deletes a user by their ID.
+   *
+   * @param id the ID of the user to delete
+   * @return a ResponseEntity with a success message
+   * @throws ResourceNotFoundException if the user is not found
+   */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<String> deleteUser(@PathVariable String id) {

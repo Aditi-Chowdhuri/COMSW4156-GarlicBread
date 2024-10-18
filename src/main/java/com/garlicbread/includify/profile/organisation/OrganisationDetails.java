@@ -7,6 +7,10 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Represents the details of an organization that implements the UserDetails interface.
+ * This class is used for authentication and authorization of organizations in the application.
+ */
 public class OrganisationDetails implements UserDetails {
 
   private final Organisation organisation;

@@ -5,6 +5,10 @@ import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.user.UserCategoryRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing user categories.
+ * This class provides methods for creating and retrieving user categories.
+ */
 @Service
 public class UserCategoryService {
 

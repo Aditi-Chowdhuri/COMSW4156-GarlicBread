@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing resources.
+ * This class provides methods to perform CRUD operations
+ * on resources, leveraging the ResourceRepository.
+ */
 @Service
 public class ResourceService {
 

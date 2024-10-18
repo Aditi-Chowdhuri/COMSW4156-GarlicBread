@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a user request for creating or updating user information.
+ */
 public class UserRequest {
 
   @NotBlank(message = "Name is required")

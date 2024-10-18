@@ -15,6 +15,10 @@ import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a category of users in the application.
+ * This entity is mapped to the 'user_category' table in the database.
+ */
 @Entity
 @Table(name = "user_category", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})})
 public class UserCategory {
@@ -44,6 +48,11 @@ public class UserCategory {
     }
   }
 
+  /**
+   * Gets the list of user IDs associated with this category.
+   *
+   * @return a list of user IDs
+   */
   @JsonProperty("userId")
   public List<String> getUserIds() {
     if (users == null) {
@@ -56,6 +65,11 @@ public class UserCategory {
     return userIds;
   }
 
+  /**
+   * Gets the list of resource IDs associated with this category.
+   *
+   * @return a list of resource IDs
+   */
   @JsonProperty("resourceId")
   public List<String> getResourceIds() {
     if (resources == null) {

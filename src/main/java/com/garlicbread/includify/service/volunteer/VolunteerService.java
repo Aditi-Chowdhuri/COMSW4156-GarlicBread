@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing volunteer operations.
+ * This class provides methods to perform CRUD operations on volunteers.
+ */
 @Service
 public class VolunteerService {
 

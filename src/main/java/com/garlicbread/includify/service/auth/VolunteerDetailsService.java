@@ -8,6 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for loading volunteer details from the database.
+ * This class implements Spring Security's UserDetailsService interface
+ * to retrieve volunteer information based on email for authentication.
+ */
 @Service
 public class VolunteerDetailsService
     implements org.springframework.security.core.userdetails.UserDetailsService {

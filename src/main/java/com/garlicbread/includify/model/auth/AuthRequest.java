@@ -2,6 +2,9 @@ package com.garlicbread.includify.model.auth;
 
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Represents an authentication request containing user credentials.
+ */
 public class AuthRequest {
 
   @NotBlank(message = "email is required")

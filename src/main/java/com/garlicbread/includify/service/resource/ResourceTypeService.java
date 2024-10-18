@@ -5,6 +5,11 @@ import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.resource.ResourceTypeRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing resource types.
+ * This class provides methods to create and retrieve resource types
+ * from the underlying data store.
+ */
 @Service
 public class ResourceTypeService {
 
