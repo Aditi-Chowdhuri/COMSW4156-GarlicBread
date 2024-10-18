@@ -17,6 +17,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.List;
 
+/**
+ * Represents an appointment entity in the system.
+ * An appointment is associated with an organization, a user,
+ * a list of resources, and optionally a volunteer.
+ */
 @Entity
 @Table(name = "appointment")
 public class Appointment {

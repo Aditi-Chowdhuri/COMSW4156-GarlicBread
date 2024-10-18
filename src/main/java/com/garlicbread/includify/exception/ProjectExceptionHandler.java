@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Centralized exception handler for the application.
+ * This class handles various exceptions thrown within the application
+ * and provides appropriate HTTP responses.
+ */
 @ControllerAdvice
 public class ProjectExceptionHandler {
 
@@ -29,6 +34,12 @@ public class ProjectExceptionHandler {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
+  /**
+   * Handles validation errors that occur when method arguments are invalid.
+   *
+   * @param ex the thrown MethodArgumentNotValidException
+   * @return ResponseEntity containing a map of field errors and HTTP status
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, String>> handleValidationExceptions(
       MethodArgumentNotValidException ex) {
@@ -38,6 +49,13 @@ public class ProjectExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * Handles HttpRequestMethodNotSupportedException and returns a 405 METHOD NOT ALLOWED response.
+   *
+   * @param ex      the thrown HttpRequestMethodNotSupportedException
+   * @param request the current web request
+   * @return ResponseEntity containing ApiError and HTTP status
+   */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
   public ResponseEntity<ApiError> handleHttpRequestMethodNotSupported(

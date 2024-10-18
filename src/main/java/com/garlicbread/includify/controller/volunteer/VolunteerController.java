@@ -24,10 +24,20 @@ public class VolunteerController {
 
   private final VolunteerService volunteerService;
 
+  /**
+   * Constructs a VolunteerController with the specified VolunteerService.
+   *
+   * @param volunteerService the service used for volunteer operations
+   */
   public VolunteerController(VolunteerService volunteerService) {
     this.volunteerService = volunteerService;
   }
 
+  /**
+   * Retrieves all volunteers.
+   *
+   * @return ResponseEntity containing a list of volunteers and HTTP status
+   */
   @GetMapping("/all")
   public ResponseEntity<List<Volunteer>> getAllVolunteers() {
     List<Volunteer> volunteers = volunteerService.getAllVolunteers();
@@ -37,6 +47,13 @@ public class VolunteerController {
     return new ResponseEntity<>(volunteers, HttpStatus.OK);
   }
 
+  /**
+   * Retrieves a volunteer by their ID.
+   *
+   * @param id the ID of the volunteer to retrieve
+   * @return ResponseEntity containing the volunteer and HTTP status
+   * @throws ResourceNotFoundException if no volunteer is found with the given ID
+   */
   @GetMapping("/{id}")
   public ResponseEntity<Volunteer> getVolunteerById(@PathVariable String id) {
     Optional<Volunteer> volunteer = volunteerService.getVolunteerById(id);
@@ -44,6 +61,12 @@ public class VolunteerController {
         () -> new ResourceNotFoundException("Volunteer " + "not found with id: " + id));
   }
 
+  /**
+   * Adds a new volunteer.
+   *
+   * @param volunteer the volunteer to add
+   * @return ResponseEntity containing the newly created volunteer and HTTP status
+   */
   @PostMapping("/add")
   @PermitAll
   public ResponseEntity<Volunteer> addVolunteer(@Valid @RequestBody Volunteer volunteer) {
@@ -51,6 +74,13 @@ public class VolunteerController {
     return new ResponseEntity<>(newVolunteer, HttpStatus.CREATED);
   }
 
+  /**
+   * Deletes a volunteer by their ID.
+   *
+   * @param id the ID of the volunteer to delete
+   * @return ResponseEntity containing a success message and HTTP status
+   * @throws ResourceNotFoundException if no volunteer is found with the given ID
+   */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAnyAuthority('VOLUNTEER')")
   public ResponseEntity<String> deleteResource(@PathVariable String id) {

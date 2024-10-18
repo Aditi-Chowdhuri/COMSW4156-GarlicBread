@@ -4,6 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a request for a resource within the application.
+ * This class contains the necessary fields and validations
+ * required to create or update a resource request.
+ */
 public class ResourceRequest {
 
   @NotBlank(message = "Organisation id is required")
@@ -38,6 +43,11 @@ public class ResourceRequest {
     this.resourceTypeIds = resourceTypeIds;
   }
 
+  /**
+   * Gets the list of target user category IDs associated with this resource request.
+   *
+   * @return a list of target user category IDs
+   */
   public List<String> getTargetUserCategoryIds() {
     return targetUserCategoryIds != null ? new ArrayList<>(targetUserCategoryIds) :
         new ArrayList<>();

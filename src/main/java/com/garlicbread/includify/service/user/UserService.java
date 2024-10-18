@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing user-related operations.
+ * This class provides methods for creating, retrieving, updating, and deleting users.
+ */
 @Service
 public class UserService {
 
@@ -28,6 +32,14 @@ public class UserService {
     return userRepository.save(user);
   }
 
+  /**
+   * Updates an existing user with the provided details.
+   *
+   * @param id the ID of the user to update
+   * @param userDetails the new details for the user
+   * @return the updated user
+   * @throws ResourceNotFoundException if no user is found with the specified ID
+   */
   public User updateUser(String id, User userDetails) {
     return userRepository.findById(id).map(user -> {
       user.setName(userDetails.getName());
@@ -41,7 +53,4 @@ public class UserService {
   public void deleteUser(String id) {
     userRepository.deleteById(id);
   }
-
-  // add the required methods
-
 }
