@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppointmentService {
 
-    private final AppointmentRepository appointmentRepository;
+  private final AppointmentRepository appointmentRepository;
 
-    public AppointmentService(AppointmentRepository appointmentRepository) {
-        this.appointmentRepository = appointmentRepository;
-    }
+  public AppointmentService(AppointmentRepository appointmentRepository) {
+    this.appointmentRepository = appointmentRepository;
+  }
 
-    // add the required methods
+  // add the required methods
 
 }

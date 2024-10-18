@@ -8,19 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserCategoryService {
 
-    private final UserCategoryRepository userCategoryRepository;
+  private final UserCategoryRepository userCategoryRepository;
 
-    public UserCategoryService(UserCategoryRepository userCategoryRepository) {
-        this.userCategoryRepository = userCategoryRepository;
-    }
+  public UserCategoryService(UserCategoryRepository userCategoryRepository) {
+    this.userCategoryRepository = userCategoryRepository;
+  }
 
-    public UserCategory createCategory(UserCategory userCategory) {
-        return userCategoryRepository.save(userCategory);
-    }
+  public UserCategory createCategory(UserCategory userCategory) {
+    return userCategoryRepository.save(userCategory);
+  }
 
-    public UserCategory getById(String id) {
-        return userCategoryRepository.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("User Category not found with id " + id)
-        );
-    }
+  public UserCategory getById(String id) {
+    return userCategoryRepository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("User Category not found " + "with id " + id));
+  }
 }

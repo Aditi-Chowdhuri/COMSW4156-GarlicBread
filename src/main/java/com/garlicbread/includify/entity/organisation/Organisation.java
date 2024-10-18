@@ -3,115 +3,126 @@ package com.garlicbread.includify.entity.organisation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.util.Utils;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@Table(name = "organisation", uniqueConstraints = { @UniqueConstraint(columnNames = {"email"}) })
+@Table(name = "organisation", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Organisation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Name is required")
-    private String name;
+  @Column(nullable = false)
+  @NotBlank(message = "Name is required")
+  private String name;
 
-    @Column(nullable = false, unique = true)
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email is required")
-    private String email;
+  @Column(nullable = false, unique = true)
+  @Email(message = "Invalid email format")
+  @NotBlank(message = "Email is required")
+  private String email;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Password is required")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
+  @Column(nullable = false)
+  @NotBlank(message = "Password is required")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private String password;
 
-    private String description;
+  private String description;
 
-    @Column(nullable = false)
-    @NotNull(message = "Latitude is required")
-    private String latitude;
+  @Column(nullable = false)
+  @NotNull(message = "Latitude is required")
+  private String latitude;
 
-    @Column(nullable = false)
-    @NotNull(message = "Longitude is required")
-    private String longitude;
+  @Column(nullable = false)
+  @NotNull(message = "Longitude is required")
+  private String longitude;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Address is required")
-    private String address;
+  @Column(nullable = false)
+  @NotBlank(message = "Address is required")
+  private String address;
 
-    // one organisation can have many resources
-    @OneToMany(mappedBy = "organisation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Resource> resources;
+  // one organisation can have many resources
+  @OneToMany(mappedBy = "organisation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+  private List<Resource> resources;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getLatitude() {
-        return latitude;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getLongitude() {
-        return longitude;
-    }
+  public void setPassword(String plainPassword) {
+    this.password = Utils.hashPassword(plainPassword);
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public List<Resource> getResources() {
-        return resources;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getLatitude() {
+    return latitude;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
+  }
 
-    public void setPassword(String plainPassword) {
-        this.password = Utils.hashPassword(plainPassword);
-    }
+  public String getLongitude() {
+    return longitude;
+  }
 
-    public void setPasswordWithoutHash(String password) {
-        this.password = password;
-    }
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
+  public List<Resource> getResources() {
+    return resources;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setPasswordWithoutHash(String password) {
+    this.password = password;
+  }
 }

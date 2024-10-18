@@ -40,15 +40,14 @@ public class VolunteerController {
   @GetMapping("/{id}")
   public ResponseEntity<Volunteer> getVolunteerById(@PathVariable String id) {
     Optional<Volunteer> volunteer = volunteerService.getVolunteerById(id);
-    return volunteer
-        .map(ResponseEntity::ok)
-        .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found with id: " + id));
+    return volunteer.map(ResponseEntity::ok).orElseThrow(
+        () -> new ResourceNotFoundException("Volunteer " + "not found with id: " + id));
   }
 
   @PostMapping("/add")
   @PermitAll
   public ResponseEntity<Volunteer> addVolunteer(@Valid @RequestBody Volunteer volunteer) {
-    Volunteer newVolunteer =  volunteerService.addVolunteer(volunteer);
+    Volunteer newVolunteer = volunteerService.addVolunteer(volunteer);
     return new ResponseEntity<>(newVolunteer, HttpStatus.CREATED);
   }
 
@@ -60,7 +59,7 @@ public class VolunteerController {
       volunteerService.deleteVolunteer(id);
       return new ResponseEntity<>("Volunteer deleted successfully", HttpStatus.NO_CONTENT);
     } else {
-      throw new ResourceNotFoundException("Volunteer not found with id: " + id);
+      throw new ResourceNotFoundException("Volunteer not found with id:" + " " + id);
     }
   }
 }
