@@ -41,11 +41,7 @@ public class UserCategory {
   @Column(nullable = false)
   private String description;
 
-  public UserCategory(String string) {
-    //TODO Auto-generated constructor stub
-}
-
-@PreRemove
+  @PreRemove
   private void preRemove() {
     if (users != null && !users.isEmpty()) {
       throw new IllegalStateException("Cannot delete user category with" + " existing users.");

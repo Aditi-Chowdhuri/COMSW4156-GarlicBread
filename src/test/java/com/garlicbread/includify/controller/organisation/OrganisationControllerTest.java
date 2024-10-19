@@ -1,4 +1,4 @@
-package com.garlicbread.includify.controller;
+package com.garlicbread.includify.controller.organisation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
