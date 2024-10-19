@@ -21,9 +21,9 @@ public class ProfileServiceSelector {
   /**
    * Constructs a new ProfileServiceSelector with the specified services.
    *
-   * @param volunteerDetailsService the service for volunteer profile handling
+   * @param volunteerDetailsService    the service for volunteer profile handling
    * @param organisationDetailsService the service for organisation profile handling
-   * @param userDetailsService the service for general user profile handling
+   * @param userDetailsService         the service for general user profile handling
    */
   public ProfileServiceSelector(VolunteerDetailsService volunteerDetailsService,
                                 OrganisationDetailsService organisationDetailsService,

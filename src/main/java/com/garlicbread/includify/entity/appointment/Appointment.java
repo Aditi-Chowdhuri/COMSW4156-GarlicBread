@@ -40,7 +40,7 @@ public class Appointment {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "appointment_resources", joinColumns = @JoinColumn(name = "appointment_id"),
-          inverseJoinColumns = @JoinColumn(name = "resource_id"))
+      inverseJoinColumns = @JoinColumn(name = "resource_id"))
   private List<Resource> resources;
 
   @ManyToOne

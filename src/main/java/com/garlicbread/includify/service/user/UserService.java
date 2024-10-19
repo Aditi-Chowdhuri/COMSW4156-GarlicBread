@@ -35,7 +35,7 @@ public class UserService {
   /**
    * Updates an existing user with the provided details.
    *
-   * @param id the ID of the user to update
+   * @param id          the ID of the user to update
    * @param userDetails the new details for the user
    * @return the updated user
    * @throws ResourceNotFoundException if no user is found with the specified ID

@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.user.User;
@@ -162,10 +161,10 @@ public class UserControllerTest {
     userRequest.setAge(21);
     String requestBody = objectMapper.writeValueAsString(userRequest);
     mockMvc.perform(
-                    post("/user/create").contentType(MediaType.APPLICATION_JSON).content(requestBody))
-            .andExpect(status().isCreated())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+            post("/user/create").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
   }
 
   @Test

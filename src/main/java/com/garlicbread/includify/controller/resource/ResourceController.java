@@ -44,7 +44,7 @@ public class ResourceController {
   /**
    * Constructs a ResourceController with the specified services.
    *
-   * @param resourceService the service for managing resources
+   * @param resourceService     the service for managing resources
    * @param resourceTypeService the service for managing resource types
    * @param organisationService the service for managing organisations
    * @param userCategoryService the service for managing user categories
