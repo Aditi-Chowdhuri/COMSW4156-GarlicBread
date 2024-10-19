@@ -35,9 +35,9 @@ public class AuthController {
    * Constructs an AuthController with the specified services and managers.
    *
    * @param tokenService                      the token service used for generating tokens
-   * @param organisationAuthenticationManager  the authentication manager for organizations
+   * @param organisationAuthenticationManager the authentication manager for organizations
    * @param userAuthenticationManager         the authentication manager for users
-   * @param volunteerAuthenticationManager     the authentication manager for volunteers
+   * @param volunteerAuthenticationManager    the authentication manager for volunteers
    */
   public AuthController(TokenService tokenService,
                         @Qualifier(Constants.ORGANISATION_AUTHENTICATION_MANAGER)

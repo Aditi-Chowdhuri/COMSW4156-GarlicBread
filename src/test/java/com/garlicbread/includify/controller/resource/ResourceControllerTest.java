@@ -10,13 +10,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
 import com.garlicbread.includify.entity.user.UserCategory;
-import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.resource.ResourceRequest;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.auth.OrganisationDetailsService;
@@ -234,8 +234,7 @@ public class ResourceControllerTest {
 
   @Test
   void addResource_with_invalid_organisation() throws Exception {
-    when(organisationService.getOrganisationById(anyString())).thenThrow(
-        new ResourceNotFoundException("Organisation not found with id: 1"));
+    when(organisationService.getOrganisationById(anyString())).thenReturn(Optional.empty());
     when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
     when(resourceTypeService.getById(anyString())).thenReturn(testResourceType);
     when(userCategoryService.getById(anyString())).thenReturn(testUserCategory);

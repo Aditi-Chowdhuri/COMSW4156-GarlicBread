@@ -41,7 +41,7 @@ public class OrganisationService {
    * Updates an existing Organisation with the given details.
    * If the Organisation is not found, throws a ResourceNotFoundException.
    *
-   * @param id the unique ID of the Organisation to be updated
+   * @param id                  the unique ID of the Organisation to be updated
    * @param organisationDetails the details to update in the Organisation
    * @return the updated Organisation entity
    * @throws ResourceNotFoundException if no Organisation is found with the given ID

@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Represents an organization entity in the system.
- *  An organization is associated with resources.
+ * An organization is associated with resources.
  */
 @Entity
 @Table(name = "organisation", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
