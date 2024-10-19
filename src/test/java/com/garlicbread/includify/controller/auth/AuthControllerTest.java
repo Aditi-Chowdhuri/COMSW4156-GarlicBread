@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.model.auth.AuthRequest;
@@ -28,6 +29,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Unit tests for the {@link AuthController} class.
+ * This class tests the login functionality for different user roles
+ * including organisation, volunteer, and user logins.
+ */
 @WebMvcTest(AuthController.class)
 @Import(SecurityConfig.class)
 public class AuthControllerTest {
@@ -126,9 +132,9 @@ public class AuthControllerTest {
   void testLogin_InvalidCredentials() throws Exception {
     when(organisationAuthenticationManager.authenticate(
         any(UsernamePasswordAuthenticationToken.class))).thenThrow(
-        new org.springframework.security.core.AuthenticationException(
-            "Invalid username or password") {
-        });
+          new org.springframework.security.core.AuthenticationException(
+              "Invalid username or password") {
+          });
 
     AuthRequest authRequest = new AuthRequest();
     authRequest.setEmail("invalid_user@columbi.com");
