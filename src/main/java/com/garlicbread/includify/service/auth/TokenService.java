@@ -26,8 +26,8 @@ public class TokenService {
   /**
    * Generates a JWT token for the specified user.
    *
-   * @param username   the username for which the token is generated
-   * @param profile    the profile information associated with the user
+   * @param username    the username for which the token is generated
+   * @param profile     the profile information associated with the user
    * @param authorities a list of authorities granted to the user
    * @return a signed JWT token as a String
    */

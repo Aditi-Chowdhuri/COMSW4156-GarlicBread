@@ -41,7 +41,7 @@ public class User {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_categories", joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "category_id"))
+      inverseJoinColumns = @JoinColumn(name = "category_id"))
   private List<UserCategory> categories;
 
   @Column(nullable = false, unique = true)

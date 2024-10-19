@@ -6,16 +6,17 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
 import com.garlicbread.includify.entity.user.UserCategory;
+import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.resource.ResourceRequest;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.auth.OrganisationDetailsService;
@@ -100,6 +101,74 @@ public class ResourceControllerTest {
   }
 
   @Test
+  void createResourceType_Failed_Auth() throws Exception {
+    when(profileServiceSelector.selectService(any())).thenThrow(new IllegalArgumentException());
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(post("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody).header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void createResourceType_Invalid_Email_In_Token() throws Exception {
+    when(jwt.getClaimAsString("sub")).thenReturn(null);
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(post("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody).header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void createResourceType_Invalid_Method() throws Exception {
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(put("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody).header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isMethodNotAllowed());
+  }
+
+  @Test
+  void createResourceType_Invalid_Profile_In_Token() throws Exception {
+    when(jwt.getClaimAsString("profile")).thenReturn(null);
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(post("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody).header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void createResourceType_No_Header() throws Exception {
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(post("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+        .content(requestBody)).andExpect(status().isForbidden());
+  }
+
+  @Test
+  void createResourceType_Invalid_Token() throws Exception {
+    when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
+        testResourceType);
+    String requestBody = objectMapper.writeValueAsString(testResourceType);
+
+    mockMvc.perform(post("/resource/createResourceType").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody).header("Authorization", "testJWTToken"))
+        .andExpect(status().isForbidden());
+  }
+
+  @Test
   void testGetAllResources_Happy_Path() throws Exception {
     when(resourceService.getAllResources()).thenReturn(Collections.singletonList(testResource));
     mockMvc.perform(get("/resource/all")).andExpect(status().isOk())
@@ -155,6 +224,47 @@ public class ResourceControllerTest {
     resourceRequest.setUsageInstructions("Usage instructions");
     resourceRequest.setResourceTypeIds(List.of("1"));
     resourceRequest.setTargetUserCategoryIds(List.of("1"));
+    String requestBody = objectMapper.writeValueAsString(resourceRequest);
+    mockMvc.perform(
+            post("/resource/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.title").value("Test Resource"));
+  }
+
+  @Test
+  void addResource_with_invalid_organisation() throws Exception {
+    when(organisationService.getOrganisationById(anyString())).thenThrow(
+        new ResourceNotFoundException("Organisation not found with id: 1"));
+    when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
+    when(resourceTypeService.getById(anyString())).thenReturn(testResourceType);
+    when(userCategoryService.getById(anyString())).thenReturn(testUserCategory);
+    ResourceRequest resourceRequest = new ResourceRequest();
+    resourceRequest.setOrganisationId("1");
+    resourceRequest.setTitle("Test Resource");
+    resourceRequest.setDescription("Description test");
+    resourceRequest.setUsageInstructions("Usage instructions");
+    resourceRequest.setResourceTypeIds(List.of("1"));
+    resourceRequest.setTargetUserCategoryIds(List.of("1"));
+    String requestBody = objectMapper.writeValueAsString(resourceRequest);
+    mockMvc.perform(
+            post("/resource/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNotFound())
+        .andExpect(content().string("Organisation not found with id: 1"));
+  }
+
+  @Test
+  void addResource_without_resourceType_and_targetUserCategory_Happy_Path() throws Exception {
+    when(organisationService.getOrganisationById(anyString())).thenReturn(
+        Optional.of(testOrganisation));
+    when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
+    when(resourceTypeService.getById(anyString())).thenReturn(testResourceType);
+    when(userCategoryService.getById(anyString())).thenReturn(testUserCategory);
+    ResourceRequest resourceRequest = new ResourceRequest();
+    resourceRequest.setOrganisationId("1");
+    resourceRequest.setTitle("Test Resource");
+    resourceRequest.setDescription("Description test");
+    resourceRequest.setUsageInstructions("Usage instructions");
     String requestBody = objectMapper.writeValueAsString(resourceRequest);
     mockMvc.perform(
             post("/resource/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
