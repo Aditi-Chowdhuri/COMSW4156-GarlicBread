@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
-import com.garlicbread.includify.controller.organisation.OrganisationController;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
