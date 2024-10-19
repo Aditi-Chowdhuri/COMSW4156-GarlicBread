@@ -1,3 +1,8 @@
+/**
+ * This package contains service classes for managing organisation-related operations
+ * in the Includify application.
+ */
+
 package com.garlicbread.includify.service.organisation;
 
 import com.garlicbread.includify.entity.organisation.Organisation;
@@ -7,6 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing Organisation entities.
+ * This class provides methods for CRUD operations on organisations.
+ */
 @Service
 public class OrganisationService {
 
@@ -28,6 +37,15 @@ public class OrganisationService {
     return organisationRepository.save(organisation);
   }
 
+  /**
+   * Updates an existing Organisation with the given details.
+   * If the Organisation is not found, throws a ResourceNotFoundException.
+   *
+   * @param id the unique ID of the Organisation to be updated
+   * @param organisationDetails the details to update in the Organisation
+   * @return the updated Organisation entity
+   * @throws ResourceNotFoundException if no Organisation is found with the given ID
+   */
   public Organisation updateOrganisation(String id, Organisation organisationDetails) {
     return organisationRepository.findById(id).map(organisation -> {
       organisation.setName(organisationDetails.getName());

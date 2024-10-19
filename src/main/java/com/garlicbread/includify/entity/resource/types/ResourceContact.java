@@ -12,6 +12,10 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Represents the contact information associated with a resource.
+ * This entity is mapped to the 'resource_contact' table in the database.
+ */
 @Entity
 @Table(name = "resource_contact")
 public class ResourceContact {

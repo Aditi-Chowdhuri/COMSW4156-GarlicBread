@@ -12,6 +12,11 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entity representing the infrastructure details of a resource.
+ * This class maps the infrastructure-related details such as location
+ * (latitude, longitude, address) to a specific resource.
+ */
 @Entity
 @Table(name = "resource_infra")
 public class ResourceInfra {

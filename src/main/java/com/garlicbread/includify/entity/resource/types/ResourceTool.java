@@ -12,6 +12,10 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Represents a tool resource in the system, associated with a specific resource.
+ * Each ResourceTool entity can be mapped to only one Resource.
+ */
 @Entity
 @Table(name = "resource_tool")
 public class ResourceTool {

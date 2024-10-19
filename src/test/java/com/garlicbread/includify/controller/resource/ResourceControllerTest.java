@@ -41,6 +41,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Unit tests for the ResourceController class.
+ */
 @WebMvcTest(ResourceController.class)
 @Import(SecurityConfig.class)
 public class ResourceControllerTest {

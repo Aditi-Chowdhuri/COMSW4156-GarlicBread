@@ -12,6 +12,11 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entity representing a service provided by a resource.
+ * This class maps to the 'resource_service' table in the database.
+ * Each ResourceService is associated with a single {@link Resource}.
+ */
 @Entity
 @Table(name = "resource_service")
 public class ResourceService {

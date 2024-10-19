@@ -14,6 +14,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+/**
+ * Represents a volunteer entity in the system.
+ */
 @Entity
 @Table(name = "volunteer", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Volunteer {

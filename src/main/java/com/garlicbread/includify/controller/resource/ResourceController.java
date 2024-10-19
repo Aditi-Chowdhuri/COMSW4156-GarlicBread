@@ -86,8 +86,7 @@ public class ResourceController {
    * Retrieves a specific resource by its ID.
    *
    * @param id the ID of the resource to retrieve
-   * @return ResponseEntity containing the found resource or
-   * throws ResourceNotFoundException if not found
+   * @return ResponseEntity containing the found resource
    */
   @GetMapping("/{id}")
   @PermitAll
@@ -137,7 +136,6 @@ public class ResourceController {
    *
    * @param id the ID of the resource to delete
    * @return ResponseEntity with a message indicating successful deletion
-   * or throws ResourceNotFoundException if not found
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
