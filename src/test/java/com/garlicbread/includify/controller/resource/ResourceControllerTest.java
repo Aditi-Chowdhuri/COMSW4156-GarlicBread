@@ -234,7 +234,7 @@ public class ResourceControllerTest {
   @Test
   void addResource_with_invalid_organisation() throws Exception {
     when(organisationService.getOrganisationById(anyString()))
-            .thenThrow(new ResourceNotFoundException("Organisation not found with id: 1"));
+            .thenReturn(Optional.empty());
     when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
     when(resourceTypeService.getById(anyString())).thenReturn(testResourceType);
     when(userCategoryService.getById(anyString())).thenReturn(testUserCategory);
