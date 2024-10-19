@@ -1,5 +1,10 @@
 package com.garlicbread.includify.util;
 
+/**
+ * This class contains constant values used throughout our Includify application.
+ * It includes authentication-related constants, authority types, claim keys,
+ * and endpoints that do not require authentication.
+ */
 public class Constants {
 
   public static final String ORGANISATION_AUTHENTICATION_MANAGER =

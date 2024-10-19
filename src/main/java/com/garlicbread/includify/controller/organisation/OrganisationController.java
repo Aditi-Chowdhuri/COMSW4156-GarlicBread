@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing Organisations.
+ * This class provides endpoints for creating, retrieving, updating, and deleting organisations.
+ */
 @RestController
 @RequestMapping("/organisation")
 public class OrganisationController {
@@ -29,6 +33,11 @@ public class OrganisationController {
     this.organisationService = organisationService;
   }
 
+  /**
+   * Get all organisations.
+   *
+   * @return a list of all organisations, or NO_CONTENT if none are found
+   */
   @GetMapping("/all")
   @PermitAll
   public ResponseEntity<List<Organisation>> getAllOrganisations() {
@@ -39,6 +48,12 @@ public class OrganisationController {
     return new ResponseEntity<>(organisations, HttpStatus.OK);
   }
 
+  /**
+   * Get an organisation by its ID.
+   *
+   * @param id the ID of the organisation
+   * @return the organisation if found, or throws ResourceNotFoundException if not found
+   */
   @GetMapping("/{id}")
   @PermitAll
   public ResponseEntity<Organisation> getOrganisationById(@PathVariable String id) {
@@ -46,6 +61,13 @@ public class OrganisationController {
     return organisation.map(ResponseEntity::ok)
         .orElseThrow(() -> new ResourceNotFoundException("Organisation not found with id: " + id));
   }
+
+  /**
+   * Create a new organisation.
+   *
+   * @param organisation the organisation object to create
+   * @return the created organisation with HTTP status CREATED
+   */
 
   @PostMapping("/create")
   @PermitAll
@@ -55,6 +77,14 @@ public class OrganisationController {
     return new ResponseEntity<>(createdOrganisation, HttpStatus.CREATED);
   }
 
+  /**
+   * Update an existing organisation.
+   * Requires the 'ORGANISATION' authority to execute this operation.
+   *
+   * @param id                 the ID of the organisation to update
+   * @param organisationDetails the new organisation details
+   * @return the updated organisation with HTTP status OK
+   */
   @PutMapping("/update/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<Organisation> updateOrganisation(@PathVariable String id,
@@ -65,6 +95,13 @@ public class OrganisationController {
     return new ResponseEntity<>(updatedOrganisation, HttpStatus.OK);
   }
 
+  /**
+  * Delete an organisation by its ID.
+  * Requires the 'ORGANISATION' authority to execute this operation.
+  *
+  * @param id the ID of the organisation to delete
+  * @return a message confirming deletion with HTTP status NO_CONTENT,
+  */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<String> deleteOrganisation(@PathVariable String id) {

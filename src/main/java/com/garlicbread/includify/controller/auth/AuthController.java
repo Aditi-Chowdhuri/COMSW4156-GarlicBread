@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for handling authentication requests for different user profiles.
+ * This class manages login operations for organizations, volunteers, and users,
+ * delegating authentication tasks to respective authentication managers.
+ */
 @RestController
 public class AuthController {
 
@@ -26,6 +31,14 @@ public class AuthController {
   private final AuthenticationManager userAuthenticationManager;
   private final AuthenticationManager volunteerAuthenticationManager;
 
+  /**
+   * Constructs an AuthController with the specified services and managers.
+   *
+   * @param tokenService                      the token service used for generating tokens
+   * @param organisationAuthenticationManager  the authentication manager for organizations
+   * @param userAuthenticationManager         the authentication manager for users
+   * @param volunteerAuthenticationManager     the authentication manager for volunteers
+   */
   public AuthController(TokenService tokenService,
                         @Qualifier(Constants.ORGANISATION_AUTHENTICATION_MANAGER)
                         AuthenticationManager organisationAuthenticationManager,

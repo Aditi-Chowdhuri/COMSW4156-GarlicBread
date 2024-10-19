@@ -33,6 +33,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Unit tests for the VolunteerController class.
+ */
 @WebMvcTest(VolunteerController.class)
 @Import(SecurityConfig.class)
 public class VolunteerControllerTest {

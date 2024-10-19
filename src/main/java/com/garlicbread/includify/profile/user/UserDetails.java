@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * Custom implementation of the {@link org.springframework.security.core.userdetails.UserDetails}
+ * interface to represent the application's user details.
+ */
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
   private final User user;

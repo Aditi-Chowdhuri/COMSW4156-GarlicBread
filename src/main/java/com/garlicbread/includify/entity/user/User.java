@@ -18,6 +18,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * Entity class representing a User in the system.
+ * This class is mapped to the "user" table in the database
+ * with a unique constraint on the email field.
+ */
 @Entity
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User {

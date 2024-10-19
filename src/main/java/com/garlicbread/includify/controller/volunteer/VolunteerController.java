@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing volunteer operations.
+ * Provides endpoints for adding, retrieving, and deleting volunteers.
+ */
 @RestController
 @RequestMapping("/volunteer")
 public class VolunteerController {
