@@ -81,7 +81,7 @@ public class OrganisationController {
    * Update an existing organisation.
    * Requires the 'ORGANISATION' authority to execute this operation.
    *
-   * @param id                 the ID of the organisation to update
+   * @param id                  the ID of the organisation to update
    * @param organisationDetails the new organisation details
    * @return the updated organisation with HTTP status OK
    */
@@ -96,12 +96,12 @@ public class OrganisationController {
   }
 
   /**
-  * Delete an organisation by its ID.
-  * Requires the 'ORGANISATION' authority to execute this operation.
-  *
-  * @param id the ID of the organisation to delete
-  * @return a message confirming deletion with HTTP status NO_CONTENT,
-  */
+   * Delete an organisation by its ID.
+   * Requires the 'ORGANISATION' authority to execute this operation.
+   *
+   * @param id the ID of the organisation to delete
+   * @return a message confirming deletion with HTTP status NO_CONTENT,
+   */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<String> deleteOrganisation(@PathVariable String id) {

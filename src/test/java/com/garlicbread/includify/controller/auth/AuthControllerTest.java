@@ -15,7 +15,6 @@ import com.garlicbread.includify.service.auth.TokenService;
 import com.garlicbread.includify.service.auth.UserDetailsService;
 import com.garlicbread.includify.service.auth.VolunteerDetailsService;
 import com.garlicbread.includify.util.Constants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,13 +76,6 @@ public class AuthControllerTest {
   @Mock
   private Authentication authentication;
 
-  @BeforeEach
-  void setUp() {
-    //        when(authentication.getAuthorities()).thenReturn(
-    //                List.of((GrantedAuthority) () -> "USER"));
-    //        when(authentication.getName()).thenReturn("rb3713@columbia.edu");
-  }
-
   @Test
   void testOrganisationLogin_HappyPath() throws Exception {
     when(organisationAuthenticationManager.authenticate(
@@ -124,8 +116,8 @@ public class AuthControllerTest {
     authRequest.setPassword("password");
 
     mockMvc.perform(post("/user/login").contentType("application/json")
-            .content(objectMapper.writeValueAsString(authRequest))).andExpect(status().isOk())
-        .andExpect(jsonPath("$").value("test-token"));
+        .content(objectMapper.writeValueAsString(authRequest))).andExpect(status().isOk())
+            .andExpect(jsonPath("$").value("test-token"));
   }
 
   @Test
