@@ -37,130 +37,123 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(SecurityConfig.class)
 public class VolunteerControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
-    @MockBean
-    private VolunteerService volunteerService;
+  @MockBean
+  private VolunteerService volunteerService;
 
-    @MockBean
-    private JwtDecoder jwtDecoder;
+  @MockBean
+  private JwtDecoder jwtDecoder;
 
-    @MockBean
-    private ProfileServiceSelector profileServiceSelector;
+  @MockBean
+  private ProfileServiceSelector profileServiceSelector;
 
-    @MockBean
-    private VolunteerDetailsService volunteerDetailsService;
+  @MockBean
+  private VolunteerDetailsService volunteerDetailsService;
 
-    @MockBean
-    private OrganisationDetailsService organisationDetailsService;
+  @MockBean
+  private OrganisationDetailsService organisationDetailsService;
 
-    @MockBean
-    private UserDetailsService userDetailsService;
+  @MockBean
+  private UserDetailsService userDetailsService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+  @Autowired
+  private ObjectMapper objectMapper;
 
-    @Mock
-    private Jwt jwt;
+  @Mock
+  private Jwt jwt;
 
-    private Volunteer testVolunteer;
+  private Volunteer testVolunteer;
 
-    @BeforeEach
-    void setUp() {
-        testVolunteer = new Volunteer();
-        testVolunteer.setEmail("rb3713@columbia.edu");
-        testVolunteer.setName("Rahaf Ibrahim");
-        testVolunteer.setAge(25);
-        testVolunteer.setAddress("116st, NY");
-        testVolunteer.setPhone("929-428-6666");
+  @BeforeEach
+  void setUp() {
+    testVolunteer = new Volunteer();
+    testVolunteer.setEmail("rb3713@columbia.edu");
+    testVolunteer.setName("Rahaf Ibrahim");
+    testVolunteer.setAge(25);
+    testVolunteer.setAddress("116st, NY");
+    testVolunteer.setPhone("929-428-6666");
 
-        when(jwtDecoder.decode(any())).thenReturn(jwt);
-        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
-        when(jwt.getClaimAsString("profile")).thenReturn("VOLUNTEER");
+    when(jwtDecoder.decode(any())).thenReturn(jwt);
+    when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+    when(jwt.getClaimAsString("profile")).thenReturn("VOLUNTEER");
 
-        when(profileServiceSelector.selectService(any())).thenReturn(volunteerDetailsService);
-        when(volunteerDetailsService.loadUserByUsername(any())).thenReturn(new VolunteerDetails(testVolunteer));
-    }
+    when(profileServiceSelector.selectService(any())).thenReturn(volunteerDetailsService);
+    when(volunteerDetailsService.loadUserByUsername(any())).thenReturn(
+        new VolunteerDetails(testVolunteer));
+  }
 
-    @Test
-    void testGetAllVolunteers_Happy_Path() throws Exception {
-        when(volunteerService.getAllVolunteers()).thenReturn(Collections.singletonList(testVolunteer));
+  @Test
+  void testGetAllVolunteers_Happy_Path() throws Exception {
+    when(volunteerService.getAllVolunteers()).thenReturn(Collections.singletonList(testVolunteer));
 
-        mockMvc.perform(get("/volunteer/all")
-                .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].email").value("rb3713@columbia.edu"))
-                .andExpect(jsonPath("$[0].name").value("Rahaf Ibrahim"));
-    }
+    mockMvc.perform(get("/volunteer/all").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].email").value("rb3713@columbia.edu"))
+        .andExpect(jsonPath("$[0].name").value("Rahaf Ibrahim"));
+  }
 
-    @Test
-    void testGetAllVolunteers_Sad_Path() throws Exception {
-        when(volunteerService.getAllVolunteers()).thenReturn(Collections.emptyList());
+  @Test
+  void testGetAllVolunteers_Sad_Path() throws Exception {
+    when(volunteerService.getAllVolunteers()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/volunteer/all")
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNoContent());
-    }
+    mockMvc.perform(get("/volunteer/all").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNoContent());
+  }
 
-    @Test
-    void getVolunteerById_Happy_Path() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(testVolunteer);
-        String requestBodyWithPassword = requestBody.substring(0,
-                requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
-        when(volunteerService.getVolunteerById("1")).thenReturn(Optional.of(testVolunteer));
+  @Test
+  void getVolunteerById_Happy_Path() throws Exception {
+    String requestBody = objectMapper.writeValueAsString(testVolunteer);
+    String requestBodyWithPassword = requestBody.substring(0,
+        requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
+    when(volunteerService.getVolunteerById("1")).thenReturn(Optional.of(testVolunteer));
 
-        mockMvc.perform(get("/volunteer/1")
-                .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.email").value("rb3713@columbia.edu"))
-                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
-    }
+    mockMvc.perform(get("/volunteer/1").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.email").value("rb3713@columbia.edu"))
+        .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
+  }
 
-    @Test
-    void getVolunteerById_Sad_Path() throws Exception {
-        when(volunteerService.getVolunteerById("22")).thenReturn(Optional.empty());
+  @Test
+  void getVolunteerById_Sad_Path() throws Exception {
+    when(volunteerService.getVolunteerById("22")).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/volunteer/22")
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Volunteer not found with id: 22"));
-    }
+    mockMvc.perform(get("/volunteer/22").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNotFound())
+        .andExpect(content().string("Volunteer not found with id: 22"));
+  }
 
-    @Test
-    void createVolunteer_Happy_Path() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(testVolunteer);
-        String requestBodyWithPassword = requestBody.substring(0,
-                requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
-        when(volunteerService.addVolunteer(any(Volunteer.class))).thenReturn(testVolunteer);
+  @Test
+  void createVolunteer_Happy_Path() throws Exception {
+    String requestBody = objectMapper.writeValueAsString(testVolunteer);
+    String requestBodyWithPassword = requestBody.substring(0,
+        requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
+    when(volunteerService.addVolunteer(any(Volunteer.class))).thenReturn(testVolunteer);
 
 
-        mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON).content(requestBodyWithPassword)
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
-    }
+    mockMvc.perform(post("/volunteer/add").contentType(MediaType.APPLICATION_JSON)
+            .content(requestBodyWithPassword).header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Rahaf Ibrahim"));
+  }
 
-    @Test
-    void deleteVolunteer_Happy_Path() throws Exception {
-        when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.of(testVolunteer));
+  @Test
+  void deleteVolunteer_Happy_Path() throws Exception {
+    when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.of(testVolunteer));
 
-        mockMvc.perform(delete("/volunteer/delete/testId").contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNoContent())
-                .andExpect(content().string("Volunteer deleted successfully"));
-    }
+    mockMvc.perform(delete("/volunteer/delete/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNoContent())
+        .andExpect(content().string("Volunteer deleted successfully"));
+  }
 
-    @Test
-    void deleteVolunteer_Sad_Path() throws Exception {
-        when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.empty());
+  @Test
+  void deleteVolunteer_Sad_Path() throws Exception {
+    when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.empty());
 
-        mockMvc.perform(delete("/volunteer/delete/testId").contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Volunteer not found with id: testId"));
-    }
+    mockMvc.perform(delete("/volunteer/delete/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNotFound())
+        .andExpect(content().string("Volunteer not found with id: testId"));
+  }
 }
