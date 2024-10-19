@@ -152,6 +152,23 @@ public class UserControllerTest {
   }
 
   @Test
+  void createUser_without_categories_Happy_Path() throws Exception {
+    when(userService.createUser(any(User.class))).thenReturn(testUser);
+    when(userCategoryService.getById(anyString())).thenReturn(testCategory);
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc123");
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+                    post("/user/create").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+  }
+
+  @Test
   void updateUser_Sad_Path() throws Exception {
     when(userService.updateUser(anyString(), any(User.class))).thenThrow(
         new ResourceNotFoundException("User not found with id: 1"));
