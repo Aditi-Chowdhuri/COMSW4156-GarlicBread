@@ -49,6 +49,7 @@ public class Volunteer {
   @NotBlank(message = "Phone number is required")
   private String phone;
 
+  // Getters
   public String getEmail() {
     return email;
   }
@@ -81,4 +82,24 @@ public class Volunteer {
     return phone;
   }
 
+  // Setters
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setAge(int age) {
+    this.age = age;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 }
