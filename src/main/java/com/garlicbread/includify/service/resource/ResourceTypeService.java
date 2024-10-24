@@ -28,4 +28,8 @@ public class ResourceTypeService {
         .orElseThrow(() -> new ResourceNotFoundException("Resource not found with " + "id " + id));
   }
 
+  public void deleteResourceTypeById(String id) {
+    resourceTypeRepository.deleteById(id);
+  }
+
 }

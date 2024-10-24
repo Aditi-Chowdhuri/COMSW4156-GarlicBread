@@ -26,4 +26,8 @@ public class UserCategoryService {
     return userCategoryRepository.findById(id).orElseThrow(
         () -> new ResourceNotFoundException("User Category not found " + "with id " + id));
   }
+
+  public void deleteCategoryById(String id) {
+    userCategoryRepository.deleteById(id);
+  }
 }

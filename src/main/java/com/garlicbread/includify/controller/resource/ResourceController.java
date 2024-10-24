@@ -69,6 +69,27 @@ public class ResourceController {
     return new ResponseEntity<>(createdResourceType, HttpStatus.CREATED);
   }
 
+  @DeleteMapping("/deleteResourceType/{id}")
+  @PreAuthorize("hasAuthority('ORGANISATION')")
+  public ResponseEntity<String> deleteResourceType(
+      @PathVariable String id) {
+    try {
+      if (Integer.parseInt(id) <= 4) {
+        return new ResponseEntity<>("Cannot delete a default resource type", HttpStatus.FORBIDDEN);
+      }
+    } catch (NumberFormatException ignored) {
+      return new ResponseEntity<>("Invalid id passed", HttpStatus.BAD_REQUEST);
+    }
+
+    ResourceType resourceType = resourceTypeService.getById(id);
+    if (resourceType != null) {
+      resourceTypeService.deleteResourceTypeById(id);
+      return new ResponseEntity<>("Resource type deleted successfully", HttpStatus.NO_CONTENT);
+    } else {
+      throw new ResourceNotFoundException("Resource type not found with " + "id: " + id);
+    }
+  }
+
   /**
    * Retrieves all resources.
    *

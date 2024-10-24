@@ -55,6 +55,26 @@ public class UserController {
     return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
   }
 
+  @DeleteMapping("/deleteCategory/{id}")
+  public ResponseEntity<String> deleteUserCategory(
+      @PathVariable String id) {
+    try {
+      if (Integer.parseInt(id) <= 4) {
+        return new ResponseEntity<>("Cannot delete a default user category", HttpStatus.FORBIDDEN);
+      }
+    } catch (NumberFormatException ignored) {
+      return new ResponseEntity<>("Invalid id passed", HttpStatus.BAD_REQUEST);
+    }
+
+    UserCategory userCategory = userCategoryService.getById(id);
+    if (userCategory != null) {
+      userCategoryService.deleteCategoryById(id);
+      return new ResponseEntity<>("User category deleted successfully", HttpStatus.NO_CONTENT);
+    } else {
+      throw new ResourceNotFoundException("User category not found with " + "id: " + id);
+    }
+  }
+
   /**
    * Retrieves all users.
    *
