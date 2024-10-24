@@ -93,7 +93,8 @@ public class OrganisationController {
                                                          @Valid @RequestBody
                                                          Organisation organisationDetails,
                                                          Authentication authentication) {
-    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal())
+            .getId();
     if (!authenticatedOrganisationId.equals(id)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
@@ -112,9 +113,10 @@ public class OrganisationController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<String> deleteOrganisation(@PathVariable String id, Authentication authentication) {
-    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
-        ((OrganisationDetails) authentication.getPrincipal()).getId();
+  public ResponseEntity<String> deleteOrganisation(@PathVariable String id,
+                                                   Authentication authentication) {
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal())
+            .getId();
     if (!authenticatedOrganisationId.equals(id)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }

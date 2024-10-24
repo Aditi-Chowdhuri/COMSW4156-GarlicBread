@@ -55,6 +55,12 @@ public class UserController {
     return new ResponseEntity<>(createdUserCategory, HttpStatus.CREATED);
   }
 
+  /**
+   * Deletes a user category by its ID.
+   *
+   * @param id the ID of the user category to delete
+   * @return a ResponseEntity containing a success message or error
+   */
   @DeleteMapping("/deleteCategory/{id}")
   @PermitAll
   public ResponseEntity<String> deleteUserCategory(

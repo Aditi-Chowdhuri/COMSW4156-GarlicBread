@@ -89,7 +89,8 @@ public class VolunteerController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAnyAuthority('VOLUNTEER')")
-  public ResponseEntity<String> deleteResource(@PathVariable String id, Authentication authentication) {
+  public ResponseEntity<String> deleteResource(@PathVariable String id,
+                                               Authentication authentication) {
     String authenticatedVolunteerId = ((VolunteerDetails) authentication.getPrincipal()).getId();
     if (!authenticatedVolunteerId.equals(id)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
