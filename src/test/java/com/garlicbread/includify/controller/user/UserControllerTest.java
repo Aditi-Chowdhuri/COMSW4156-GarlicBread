@@ -72,6 +72,7 @@ public class UserControllerTest {
   @BeforeEach
   void setUp() {
     testUser = new User();
+    testUser.setId("1");
     testUser.setEmail("ima014566@gmail.com");
     testUser.setName("Ibrahim Mo");
     testCategory = new UserCategory();

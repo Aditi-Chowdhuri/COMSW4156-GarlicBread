@@ -6,6 +6,7 @@ import com.garlicbread.includify.entity.resource.ResourceType;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.resource.ResourceRequest;
+import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.resource.ResourceService;
 import com.garlicbread.includify.service.resource.ResourceTypeService;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,6 +69,27 @@ public class ResourceController {
     return new ResponseEntity<>(createdResourceType, HttpStatus.CREATED);
   }
 
+  @DeleteMapping("/deleteResourceType/{id}")
+  @PreAuthorize("hasAuthority('ORGANISATION')")
+  public ResponseEntity<String> deleteResourceType(
+      @PathVariable String id) {
+    try {
+      if (Integer.parseInt(id) <= 4) {
+        return new ResponseEntity<>("Cannot delete a default resource type", HttpStatus.FORBIDDEN);
+      }
+    } catch (NumberFormatException ignored) {
+      return new ResponseEntity<>("Invalid id passed", HttpStatus.BAD_REQUEST);
+    }
+
+    ResourceType resourceType = resourceTypeService.getById(id);
+    if (resourceType != null) {
+      resourceTypeService.deleteResourceTypeById(id);
+      return new ResponseEntity<>("Resource type deleted successfully", HttpStatus.NO_CONTENT);
+    } else {
+      throw new ResourceNotFoundException("Resource type not found with " + "id: " + id);
+    }
+  }
+
   /**
    * Retrieves all resources.
    *
@@ -104,7 +127,13 @@ public class ResourceController {
    */
   @PostMapping("/add")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest) {
+  public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest
+      , Authentication authentication) {
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedOrganisationId.equals(resourceRequest.getOrganisationId())) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     Optional<Organisation> organisation =
         organisationService.getOrganisationById(resourceRequest.getOrganisationId());
 
@@ -139,7 +168,19 @@ public class ResourceController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<String> deleteResource(@PathVariable String id) {
+  public ResponseEntity<String> deleteResource(@PathVariable String id, Authentication authentication) {
+    String authenticatedOrganisationId =
+        ((OrganisationDetails) authentication.getPrincipal()).getId();
+    Optional<Organisation> organisation =
+        organisationService.getOrganisationById(authenticatedOrganisationId);
+    if (organisation.isPresent()) {
+      List<String> resourceIds =
+          organisation.get().getResources().stream().map(Resource::getId).toList();
+      if (!resourceIds.contains(id)) {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }
+    }
+
     Optional<Resource> resource = resourceService.getResourceById(id);
     if (resource.isPresent()) {
       resourceService.deleteResource(id);

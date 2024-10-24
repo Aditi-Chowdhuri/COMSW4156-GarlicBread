@@ -75,6 +75,7 @@ public class OrganisationControllerTest {
   @BeforeEach
   void setUp() {
     testOrganisation = new Organisation();
+    testOrganisation.setId("testId");
     testOrganisation.setAddress("New York");
     testOrganisation.setEmail("test@cu.com");
     testOrganisation.setLatitude("12.89");

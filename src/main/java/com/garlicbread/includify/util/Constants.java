@@ -23,5 +23,6 @@ public class Constants {
   public static final String[] NO_AUTH_ENDPOINTS =
       new String[]{"/organisation/login", "/volunteer/login", "/user/login", "/volunteer/add",
           "/user/create", "/organisation/create", "/resource/all", "/resource/{id}",
-          "/organisation/all", "/organisation/{id}"};
+          "/organisation/all", "/organisation/{id}", "/", "/user/deleteCategory/{id}",
+          "/user/createCategory"};
 }

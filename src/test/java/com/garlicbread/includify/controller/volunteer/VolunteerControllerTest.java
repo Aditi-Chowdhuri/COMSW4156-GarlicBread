@@ -72,6 +72,7 @@ public class VolunteerControllerTest {
   @BeforeEach
   void setUp() {
     testVolunteer = new Volunteer();
+    testVolunteer.setId("testId");
     testVolunteer.setEmail("rb3713@columbia.edu");
     testVolunteer.setName("Rahaf Ibrahim");
     testVolunteer.setAge(25);

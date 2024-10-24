@@ -29,6 +29,10 @@ public class OrganisationDetails implements UserDetails {
     return organisation.getPassword();
   }
 
+  public String getId() {
+    return organisation.getId();
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of((GrantedAuthority) () -> Constants.AUTHORITY_ORGANISATION);
