@@ -2,6 +2,7 @@ package com.garlicbread.includify.controller.organisation;
 
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
+import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,7 +91,13 @@ public class OrganisationController {
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<Organisation> updateOrganisation(@PathVariable String id,
                                                          @Valid @RequestBody
-                                                         Organisation organisationDetails) {
+                                                         Organisation organisationDetails,
+                                                         Authentication authentication) {
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedOrganisationId.equals(id)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     Organisation updatedOrganisation =
         organisationService.updateOrganisation(id, organisationDetails);
     return new ResponseEntity<>(updatedOrganisation, HttpStatus.OK);
@@ -104,7 +112,13 @@ public class OrganisationController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<String> deleteOrganisation(@PathVariable String id) {
+  public ResponseEntity<String> deleteOrganisation(@PathVariable String id, Authentication authentication) {
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
+        ((OrganisationDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedOrganisationId.equals(id)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     Optional<Organisation> organisation = organisationService.getOrganisationById(id);
     if (organisation.isPresent()) {
       organisationService.deleteOrganisation(id);

@@ -30,6 +30,10 @@ public class VolunteerDetails implements UserDetails {
     return volunteer.getPassword();
   }
 
+  public String getId() {
+    return volunteer.getId();
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of((GrantedAuthority) () -> Constants.AUTHORITY_VOLUNTEER);

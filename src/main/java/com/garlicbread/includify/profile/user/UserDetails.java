@@ -28,6 +28,10 @@ public class UserDetails implements org.springframework.security.core.userdetail
     return user.getPassword();
   }
 
+  public String getId() {
+    return user.getId();
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of((GrantedAuthority) () -> Constants.AUTHORITY_USER);

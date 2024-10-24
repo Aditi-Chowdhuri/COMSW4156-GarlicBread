@@ -81,6 +81,7 @@ public class ResourceControllerTest {
   @BeforeEach
   void setUp() {
     testOrganisation = new Organisation();
+    testOrganisation.setId("1");
     testOrganisation.setName("Columbia University");
     testResourceType = new ResourceType();
     testResourceType.setTitle("infrastructure");
