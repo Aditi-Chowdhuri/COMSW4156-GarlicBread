@@ -61,6 +61,12 @@ public class ResourceController {
     this.userCategoryService = userCategoryService;
   }
 
+  /**
+   * Endpoint to create a new resource type.
+   *
+   * @param resourceType the resource type to be created
+   * @return ResponseEntity containing the created resource type
+   */
   @PostMapping("/createResourceType")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<ResourceType> createResourceType(
@@ -69,6 +75,12 @@ public class ResourceController {
     return new ResponseEntity<>(createdResourceType, HttpStatus.CREATED);
   }
 
+  /**
+   * Endpoint to delete a resource type by its ID.
+   *
+   * @param id the ID of the resource type to delete
+   * @return ResponseEntity with a message indicating success or failure
+   */
   @DeleteMapping("/deleteResourceType/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
   public ResponseEntity<String> deleteResourceType(
@@ -127,9 +139,10 @@ public class ResourceController {
    */
   @PostMapping("/add")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest
-      , Authentication authentication) {
-    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal()).getId();
+  public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest,
+                                              Authentication authentication) {
+    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal())
+            .getId();
     if (!authenticatedOrganisationId.equals(resourceRequest.getOrganisationId())) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
@@ -168,7 +181,8 @@ public class ResourceController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<String> deleteResource(@PathVariable String id, Authentication authentication) {
+  public ResponseEntity<String> deleteResource(@PathVariable String id,
+                                               Authentication authentication) {
     String authenticatedOrganisationId =
         ((OrganisationDetails) authentication.getPrincipal()).getId();
     Optional<Organisation> organisation =
