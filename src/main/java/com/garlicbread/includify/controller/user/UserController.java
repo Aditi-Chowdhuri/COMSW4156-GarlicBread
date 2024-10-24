@@ -56,6 +56,7 @@ public class UserController {
   }
 
   @DeleteMapping("/deleteCategory/{id}")
+  @PermitAll
   public ResponseEntity<String> deleteUserCategory(
       @PathVariable String id) {
     try {
