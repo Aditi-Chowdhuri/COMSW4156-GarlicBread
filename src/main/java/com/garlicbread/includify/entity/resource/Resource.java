@@ -103,6 +103,10 @@ public class Resource {
     this.usageInstructions = usageInstructions;
   }
 
+  public void setId(String id) {
+    this.id = id;
+  }
+
   public List<Appointment> getAppointments() {
     return appointments;
   }

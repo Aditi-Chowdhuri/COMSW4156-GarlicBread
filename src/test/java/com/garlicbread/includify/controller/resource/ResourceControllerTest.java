@@ -114,6 +114,39 @@ public class ResourceControllerTest {
   }
 
   @Test
+  void deleteResourceType_Invalid_Id() throws Exception {
+    mockMvc.perform(delete("/resource/deleteResourceType/abc").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isBadRequest()).andExpect(content().string("Invalid id passed"));
+  }
+
+  @Test
+  void deleteResourceType_Forbidden() throws Exception {
+    mockMvc.perform(delete("/resource/deleteResourceType/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default " +
+            "resource type"));
+  }
+
+  @Test
+  void deleteResourceType_Happy_Path() throws Exception {
+    when(resourceTypeService.getById(any())).thenReturn(testResourceType);
+    mockMvc.perform(delete("/resource/deleteResourceType/5").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNoContent()).andExpect(content().string("Resource type deleted " +
+            "successfully"));
+  }
+
+  @Test
+  void deleteResourceType_Sad_Path() throws Exception {
+    when(resourceTypeService.getById(any())).thenReturn(null);
+    mockMvc.perform(delete("/resource/deleteResourceType/5").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNotFound()).andExpect(content().string("Resource type not found " +
+            "with id: 5"));
+  }
+
+  @Test
   void createResourceType_Invalid_Email_In_Token() throws Exception {
     when(jwt.getClaimAsString("sub")).thenReturn(null);
     when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
@@ -234,6 +267,27 @@ public class ResourceControllerTest {
   }
 
   @Test
+  void addResource_Forbidden() throws Exception {
+    testOrganisation.setId("2");
+    when(organisationService.getOrganisationById(anyString())).thenReturn(
+        Optional.of(testOrganisation));
+    when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
+    when(resourceTypeService.getById(anyString())).thenReturn(testResourceType);
+    when(userCategoryService.getById(anyString())).thenReturn(testUserCategory);
+    ResourceRequest resourceRequest = new ResourceRequest();
+    resourceRequest.setOrganisationId("1");
+    resourceRequest.setTitle("Test Resource");
+    resourceRequest.setDescription("Description test");
+    resourceRequest.setUsageInstructions("Usage instructions");
+    resourceRequest.setResourceTypeIds(List.of("1"));
+    resourceRequest.setTargetUserCategoryIds(List.of("1"));
+    String requestBody = objectMapper.writeValueAsString(resourceRequest);
+    mockMvc.perform(
+            post("/resource/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
+
+  @Test
   void addResource_with_invalid_organisation() throws Exception {
     when(organisationService.getOrganisationById(anyString())).thenReturn(Optional.empty());
     when(resourceService.addResource(any(Resource.class))).thenReturn(testResource);
@@ -275,10 +329,23 @@ public class ResourceControllerTest {
 
   @Test
   void deleteResource_Happy_Path() throws Exception {
+    Organisation organisation = new Organisation();
+    organisation.setId("1");
+    testResource.setOrganisation(organisation);
     when(resourceService.getResourceById(anyString())).thenReturn(Optional.of(testResource));
     mockMvc.perform(delete("/resource/delete/1").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNoContent())
         .andExpect(content().string("Resource deleted successfully"));
+  }
+
+  @Test
+  void deleteResource_Forbidden() throws Exception {
+    Organisation organisation = new Organisation();
+    organisation.setId("2");
+    testResource.setOrganisation(organisation);
+    when(resourceService.getResourceById(anyString())).thenReturn(Optional.of(testResource));
+    mockMvc.perform(delete("/resource/delete/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
   }
 
   @Test
