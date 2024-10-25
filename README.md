@@ -140,6 +140,16 @@ The possible clients who would likely use our service includes:
 
 - **Description**: Creates a new organization.
 - **Request**: Expects a JSON payload (body) representing the organization.
+  ```json
+  {
+  "name": "Inclusive Support Organization",
+  "email": "info@inclusivesupport.org",
+  "password": "securePassword123",
+  "description": "An organization dedicated to providing resources and support for individuals with disabilities.",
+  "latitude": "37.7749",
+  "longitude": "-122.4194",
+  "address": "123 Inclusive Way, San Francisco, CA, 94103"
+  }
 - **Response**:
      - `201 OK`: Returns the organisation.
      - `500 Internal Server Error`: Failed to create the organisation.
@@ -152,12 +162,26 @@ The possible clients who would likely use our service includes:
 - **Path Variable**:`id` (String): The id of the organization to update.
 - **Request**: Expects a JSON payload (body) with the updated organization
   details.
+  ```json
+  {
+  "name": "Inclusive Support Organization",
+  "email": "info@inclusivesupport.org",
+  "password": "securePassword123",
+  "description": "An organization dedicated to providing resources and support for individuals with disabilities.",
+  "latitude": "37.7749",
+  "longitude": "-122.4194",
+  "address": "123 Inclusive Way, San Francisco, CA, 94103"
+  }
 - **Response**:
      - `200 OK`: Returns the organisation.
+     - `401 Unauthorized`: Invalid token in auth header.
+     - `403 Forbidden` : The auth header token is of a different 
+       organisation from the one you want to update.
      - `404 Resource Not Found`: No organization with given id is found.
 - **Pre-requisites**: Id of an existing organisation.
 - **Authorization**: Requires a JWT Bearer token in Auth Header with
-  `ORGANISATION` privileges.
+  `ORGANISATION` privileges. Also note that this token should be generated 
+  by the same organisation that you are trying to update.
 
 ### 5. **DELETE `/organisation/delete/{id}`**
 
@@ -166,10 +190,14 @@ The possible clients who would likely use our service includes:
 - **Request**: None
 - **Response**:
      - `204 No content`: Deleted the organisation.
+     - `401 Unauthorized`: Invalid token in auth header.
+     - `403 Forbidden` : The auth header token is of a different
+       organisation from the one you want to delete.
      - `404 Resource Not Found`: No organization with given id is found.
 - **Pre-requisites**: Id of an existing organisation.
 - **Authorization**: Requires a JWT Bearer token in Auth Header with
-  `ORGANISATION` privileges.
+  `ORGANISATION` privileges. Also note that this token should be generated
+  by the same organisation that you are trying to delete.
 
 ### Summary of Endpoints:
 
@@ -185,13 +213,35 @@ The possible clients who would likely use our service includes:
 
 - **Description**: Creates a new resource type.
 - **Request**: Expects a JSON payload representing the resource type.
+  ```json
+  {
+  "title": "Tools",
+  "description": "Tools like hearing loops and wheelchairs that aid individuals with disabilities.",
+  }
 - **Response**:
   - `201 Created`: Returns the created resource type.
   - `500 Internal Server Error`: If the resource type creation fails.
 - **Pre-requisites**: A valid resource type JSON body.
-- **Authorization**: Requires JWT Bearer token with `ORGANISATION` privileges.
+- **Authorization**: Requires JWT Bearer token with `ORGANISATION` 
+  privileges.
 
-### 2. **GET `/resource/all`**
+### 2. **DELETE `/resource/deleteResourceType/{id}`**
+
+- **Description**: Delete a resource type.
+- **Path Variable**:
+  - `id` (integer): The ID of the resource type to delete.
+- **Response**:
+  - `204 Not Content`: Resource type deleted successfully.
+  - `400 Bad Request`: Invalid id passed.
+  - `401 Unauthorized`: Invalid JWT token in header.
+  - `403 Forbidden`: Unable to delete a default resource type.
+  - `404 Not Found`: Resource type of given id not found.
+  - `500 Internal Server Error`: Resource type deletion failed.
+- **Pre-requisites**: A valid id of a resource type.
+- **Authorization**: Requires JWT Bearer token with `ORGANISATION`
+  privileges.
+
+### 3. **GET `/resource/all`**
 
 - **Description**: Fetches all available resources.
 - **Request**: None.
@@ -201,7 +251,7 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: None.
 - **Authorization**: Public (No authorization required).
 
-### 3. **GET `/resource/{id}`**
+### 4. **GET `/resource/{id}`**
 
 - **Description**: Fetches a specific resource by its ID.
 - **Path Variable**:
@@ -212,18 +262,35 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: A valid resource ID.
 - **Authorization**: Public (No authorization required).
 
-### 4. **POST `/resource/add`**
+### 5. **POST `/resource/add`**
 
 - **Description**: Adds a new resource.
 - **Request**: Expects a JSON payload representing the resource details.
+  ```json
+  {
+  "organisationId": "org123",
+  "resourceTypeIds": [
+  "1"
+  ],
+  "targetUserCategoryIds": [
+  "1",
+  "2"
+  ],
+  "title": "Ramp for Wheelchairs",
+  "description": "A ramp designed for wheelchair accessibility",
+  "usageInstructions": "Ensure ramp is securely positioned for use",
+  }
 - **Response**:
   - `201 Created`: Returns the created resource.
   - `404 Not Found`: If the associated organisation or resource type IDs are invalid.
   - `500 Internal Server Error`: If resource creation fails.
 - **Pre-requisites**: Valid JSON body with resource details, including organisation ID and resource type IDs.
-- **Authorization**: Requires JWT Bearer token with `ORGANISATION` privileges.
+- **Authorization**: Requires JWT Bearer token with `ORGANISATION` 
+  privileges. Also note that the JWT token needs to be generated by the same 
+  organisation in which you want to add the resource (organisationId field 
+  in request body).
 
-### 5. **DELETE `/resource/delete/{id}`**
+### 6. **DELETE `/resource/delete/{id}`**
 
 - **Description**: Deletes a resource by its ID.
 - **Path Variable**:
@@ -232,11 +299,14 @@ The possible clients who would likely use our service includes:
   - `204 No Content`: Resource deleted successfully.
   - `404 Not Found`: If the resource with the specified ID is not found.
 - **Pre-requisites**: A valid resource ID.
-- **Authorization**: Requires JWT Bearer token with `ORGANISATION` privileges.
+- **Authorization**: Requires JWT Bearer token with `ORGANISATION` 
+  privileges. Also note that the JWT token needs to be generated by the same
+  organisation whose resource you want to delete.
 
 ### Summary of Endpoints:
 
 - **POST** `/resource/createResourceType` → Create a new resource type.
+- **DELETE** `/resource/deleteResourceType/id` → Delete a resource type.
 - **GET** `/resource/all` → Fetch all resources.
 - **GET** `/resource/{id}` → Fetch resource by ID.
 - **POST** `/resource/add` → Add a new resource.
@@ -244,129 +314,181 @@ The possible clients who would likely use our service includes:
 
 ## User Endpoints
 
-### 1. Create a User Category
+### 1. **POST `/user/createCategory`**
 
-- **URL**: `/user/createCategory`
-- **Method**: `POST`
-- **Access**: `@PermitAll` (Open to everyone)
 - **Description**: Creates a new user category.
-- **Request Body**:
-  - A valid `UserCategory` object.
+- **Request**: Expects a JSON payload representing the user category.
+  ```json
+  {
+  "title": "Senior Citizens",
+  "description": "Categories for senior citizens including services and resources tailored for their needs."
+  }
 - **Response**:
-  - `201 Created`: Returns the created `UserCategory` object.
+  - `201 Created`: Returns the created user category.
+  - `500 Internal Server Error`: If category creation fails.
+- **Pre-requisites**: A valid user category JSON body.
+- **Authorization**: Public (No authorization required).
 
-### 2. Get All Users
+### 2. **DELETE `/user/deleteCategory/{id}`**
 
-- **URL**: `/user/all`
-- **Method**: `GET`
-- **Access**: `@PreAuthorize("hasAuthority('USER')")` (Restricted to users with `USER` authority)
-- **Description**: Retrieves all users from the system.
+- **Description**: Deletes a user category by its ID.
+- **Path Variable**:
+  - `id` (integer): The ID of the user category to delete.
 - **Response**:
-  - `200 OK`: Returns a list of users.
-  - `204 No Content`: If no users are found.
+  - `204 No Content`: User category deleted successfully.
+  - `400 Bad Request`: Invalid ID format passed.
+  - `403 Forbidden`: Default categories cannot be deleted.
+  - `404 Not Found`: If the category with the given ID is not found.
+  - `500 Internal Server Error`: If the deletion fails.
+- **Pre-requisites**: A valid user category ID.
+- **Authorization**: Public (No authorization required).
 
-### 3. Get User by ID
+### 3. **GET `/user/all`**
 
-- **URL**: `/user/{id}`
-- **Method**: `GET`
-- **Access**: `@PreAuthorize("hasAuthority('USER')")` (Restricted to users with `USER` authority)
-- **Description**: Retrieves a specific user by their ID.
+- **Description**: Retrieves all users.
+- **Response**:
+  - `200 OK`: Returns a list of all users.
+  - `204 No Content`: If no users exist.
+- **Pre-requisites**: None.
+- **Authorization**: Requires JWT Bearer token with `USER` authority.
+
+### 4. **GET `/user/{id}`**
+
+- **Description**: Retrieves a user by their ID.
 - **Path Variable**:
   - `id` (String): The ID of the user to retrieve.
 - **Response**:
-  - `200 OK`: Returns the `User` object if found.
-  - Throws `ResourceNotFoundException` if the user is not found.
+  - `200 OK`: Returns the user with the specified ID.
+  - `404 Not Found`: If the user with the specified ID is not found.
+- **Pre-requisites**: A valid user ID.
+- **Authorization**: Requires JWT Bearer token with `USER` authority.
 
-### 4. Create a User
+### 5. **POST `/user/create`**
 
-- **URL**: `/user/create`
-- **Method**: `POST`
-- **Access**: `@PermitAll` (Open to everyone)
 - **Description**: Creates a new user.
-- **Request Body**:
-  - A valid `UserRequest` object.
+- **Request**: Expects a JSON payload representing the user request.
+  ```json
+  {
+  "name": "Jane Smith",
+  "age": 30,
+  "email": "jane.smith@example.com",
+  "password": "strongPassword456",
+  "categoryIds": ["1"] // optional
+  }
 - **Response**:
-  - `201 Created`: Returns the created `User` object.
+  - `201 Created`: Returns the created user.
+  - `404 Not Found`: If any of the category IDs are invalid.
+  - `500 Internal Server Error`: If user creation fails.
+- **Pre-requisites**: Valid JSON body with user details, including category IDs.
+- **Authorization**: Public (No authorization required).
 
-### 5. Update a User
+### 6. **PUT `/user/update/{id}`**
 
-- **URL**: `/user/update/{id}`
-- **Method**: `PUT`
-- **Access**: `@PreAuthorize("hasAuthority('USER')")` (Restricted to users with `USER` authority)
 - **Description**: Updates an existing user.
 - **Path Variable**:
   - `id` (String): The ID of the user to update.
-- **Request Body**:
-  - A valid `UserRequest` object containing updated information.
+- **Request**: Expects a JSON payload representing the updated user details.
+  ```json
+  {
+  "name": "Jane Smith",
+  "age": 30,
+  "email": "jane.smith@example.com",
+  "password": "strongPassword456",
+  "categoryIds": ["1"] // optional
+  }
 - **Response**:
-  - `200 OK`: Returns the updated `User` object.
+  - `200 OK`: Returns the updated user.
+  - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
+  - `404 Not Found`: If the user with the specified ID is not found.
+  - `500 Internal Server Error`: If user update fails.
+- **Pre-requisites**: Valid JSON body with updated user details.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
+  token must belong to the user being updated.
 
-### 6. Delete a User
+### 7. **DELETE `/user/delete/{id}`**
 
-- **URL**: `/user/delete/{id}`
-- **Method**: `DELETE`
-- **Access**: `@PreAuthorize("hasAuthority('USER')")` (Restricted to users with `USER` authority)
 - **Description**: Deletes a user by their ID.
 - **Path Variable**:
   - `id` (String): The ID of the user to delete.
 - **Response**:
-  - `204 No Content`: If deletion is successful.
-  - Throws `ResourceNotFoundException` if the user is not found.
+  - `204 No Content`: User deleted successfully.
+  - `403 Forbidden`: If the authenticated user does not match the ID of the user being deleted.
+  - `404 Not Found`: If the user with the specified ID is not found.
+  - `500 Internal Server Error`: If user deletion fails.
+- **Pre-requisites**: A valid user ID.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
+  token must belong to the user being deleted.
 
 ### Summary of Endpoints:
 
 - **POST** `/user/createCategory` → Create a new user category.
-- **GET** `/user/all` → Fetch all users.
-- **GET** `/user/{id}` → Fetch user by ID.
+- **DELETE** `/user/deleteCategory/{id}` → Delete a user category by its ID.
+- **GET** `/user/all` → Retrieve all users.
+- **GET** `/user/{id}` → Retrieve a user by ID.
 - **POST** `/user/create` → Create a new user.
 - **PUT** `/user/update/{id}` → Update a user by ID.
 - **DELETE** `/user/delete/{id}` → Delete a user by ID.
 
 ## VolunteerController Endpoints
 
-### 1. **GET `/volunteer/all`**
-
-- **Description**: Fetches a list of all volunteers.
-- **Response**:
-    - Returns a list of volunteers if available.
-    - Returns `204 No Content` if no volunteers are found.
-- **Authorization**: No authorization required.
-
-### 2. **GET `/volunteer/{id}`**
-
-- **Description**: Fetches a specific volunteer by their ID.
-- **Path Variable**:
-    - `id` (String): The ID of the volunteer to retrieve.
-- **Response**:
-    - Returns the volunteer details if found.
-    - Throws `ResourceNotFoundException` if the volunteer is not found.
-- **Authorization**: No authorization required.
-
-### 3. **POST `/volunteer/add`**
+### 1. **POST `/volunteer/add`**
 
 - **Description**: Adds a new volunteer.
-- **Request Body**: Expects a JSON payload containing the volunteer details.
+- **Request**: Expects a JSON payload representing the volunteer details.
+  ```json
+  {
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "securePassword123",
+  "age": 25,
+  "address": "123 Maple Street, Springfield, IL",
+  "phone": "+1 (555) 123-4567"
+  }
 - **Response**:
-    - Returns the newly created volunteer.
-    - Status: `201 Created`.
-- **Authorization**: No authorization required (`@PermitAll`).
+  - `201 Created`: Returns the newly created volunteer.
+  - `500 Internal Server Error`: If the volunteer creation fails.
+- **Pre-requisites**: A valid volunteer JSON body.
+- **Authorization**: Public (No authorization required).
+
+### 2. **GET `/volunteer/all`**
+
+- **Description**: Retrieves all volunteers.
+- **Response**:
+  - `200 OK`: Returns a list of all volunteers.
+  - `204 No Content`: If no volunteers exist.
+- **Pre-requisites**: None.
+- **Authorization**: Public (No authorization required).
+
+### 3. **GET `/volunteer/{id}`**
+
+- **Description**: Retrieves a volunteer by their ID.
+- **Path Variable**:
+  - `id` (String): The ID of the volunteer to retrieve.
+- **Response**:
+  - `200 OK`: Returns the volunteer with the specified ID.
+  - `404 Not Found`: If the volunteer with the specified ID is not found.
+- **Pre-requisites**: A valid volunteer ID.
+- **Authorization**: Public (No authorization required).
 
 ### 4. **DELETE `/volunteer/delete/{id}`**
 
 - **Description**: Deletes a volunteer by their ID.
 - **Path Variable**:
-    - `id` (String): The ID of the volunteer to delete.
+  - `id` (String): The ID of the volunteer to delete.
 - **Response**:
-    - Returns a success message upon deletion.
-    - Status: `204 No Content`.
-    - Throws `ResourceNotFoundException` if the volunteer is not found.
-- **Authorization**: Requires the `VOLUNTEER` authority.
+  - `204 No Content`: Volunteer deleted successfully.
+  - `403 Forbidden`: If the authenticated volunteer does not match the ID of the volunteer being deleted.
+  - `404 Not Found`: If the volunteer with the specified ID is not found.
+  - `500 Internal Server Error`: If volunteer deletion fails.
+- **Pre-requisites**: A valid volunteer ID.
+- **Authorization**: Requires JWT Bearer token with `VOLUNTEER` authority. 
+  The token must belong to the volunteer being deleted.
 
 ### Summary of Endpoints:
 
-- **GET** `/volunteer/all` → Fetch all volunteers.
-- **GET** `/volunteer/{id}` → Fetch volunteer by ID.
 - **POST** `/volunteer/add` → Add a new volunteer.
+- **GET** `/volunteer/all` → Retrieve all volunteers.
+- **GET** `/volunteer/{id}` → Retrieve a volunteer by ID.
 - **DELETE** `/volunteer/delete/{id}` → Delete a volunteer by ID.
 
 ## Technology Stack
