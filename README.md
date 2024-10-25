@@ -563,16 +563,16 @@ project, along with additional details where applicable.
 The service is currently hosted [here](https://garlicbread-includify.ue.r.appspot.com/). However, owing to maintenance 
 issues it might not be available for long.
 
+![WhatsApp Image 2024-10-25 at 2 07 15 PM](https://github.com/user-attachments/assets/b503ef7d-b272-4424-9147-b29fcb8d46a0)
+
 ## Database Pushed to Cloud (GCP Cloud SQL)
 
 <img width="1450" alt="Screenshot 2024-10-18 at 11 18 47 PM" src="https://github.com/user-attachments/assets/58cb33bd-ee19-43f5-9dd1-c14a47594258">
-
 
 ## Style-checks
 
 ![WhatsApp Image 2024-10-18 at 11 01 50 PM](https://github.com/user-attachments/assets/03515699-ca94-42e6-a76d-29b81de20686)
 
-
 ## Jacoco Code Coverage Report
 
-![Image 10-19-24 at 12 46 AM](https://github.com/user-attachments/assets/1c8be81f-2036-4ca1-9089-9eddd575368c)
+<img width="1173" alt="Screenshot 2024-10-25 at 1 54 15 PM" src="https://github.com/user-attachments/assets/a1c7b4dc-0781-4e0d-906e-3bc2364e27e5">
