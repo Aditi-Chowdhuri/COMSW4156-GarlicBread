@@ -558,7 +558,12 @@ project, along with additional details where applicable.
 - **Postman**  
   Postman is used for testing the functionality of our APIs.
 
-## Database Pushed to Cloud
+## Service pushed to GCP App Engine
+
+The service is currently hosted [here](https://garlicbread-includify.ue.r.appspot.com/). However, owing to maintenance 
+issues it might not be available for long.
+
+## Database Pushed to Cloud (GCP Cloud SQL)
 
 <img width="1450" alt="Screenshot 2024-10-18 at 11 18 47 PM" src="https://github.com/user-attachments/assets/58cb33bd-ee19-43f5-9dd1-c14a47594258">
 
