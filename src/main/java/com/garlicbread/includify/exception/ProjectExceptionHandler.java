@@ -86,6 +86,12 @@ public class ProjectExceptionHandler {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
   }
 
+  @ExceptionHandler(IllegalStateException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   @ExceptionHandler(DataAccessException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<String> handleDataAccessException(DataAccessException ex) {
