@@ -44,7 +44,7 @@ public class UserCategory {
   @PreRemove
   private void preRemove() {
     if (users != null && !users.isEmpty()) {
-      throw new IllegalStateException("Cannot delete user category with" + " existing users.");
+      throw new IllegalStateException("Cannot delete user category with existing users.");
     }
   }
 

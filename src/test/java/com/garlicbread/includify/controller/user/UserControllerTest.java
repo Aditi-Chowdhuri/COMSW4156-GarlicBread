@@ -127,8 +127,8 @@ public class UserControllerTest {
   void deleteUserCategory_Forbidden() throws Exception {
     mockMvc.perform(delete("/user/deleteCategory/1").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default " +
-            "user category"));
+        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default "
+            + "user category"));
   }
 
   @Test
@@ -136,8 +136,8 @@ public class UserControllerTest {
     when(userCategoryService.getById(any())).thenReturn(testCategory);
     mockMvc.perform(delete("/user/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isNoContent()).andExpect(content().string("User category deleted " +
-            "successfully"));
+        .andExpect(status().isNoContent()).andExpect(content().string("User category deleted "
+            + "successfully"));
   }
 
   @Test
@@ -145,8 +145,8 @@ public class UserControllerTest {
     when(userCategoryService.getById(any())).thenReturn(null);
     mockMvc.perform(delete("/user/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isNotFound()).andExpect(content().string("User category not found " +
-            "with id: 7"));
+        .andExpect(status().isNotFound()).andExpect(content().string("User category not found "
+            + "with id: 7"));
   }
 
   @Test

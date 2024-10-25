@@ -115,7 +115,8 @@ public class ResourceControllerTest {
 
   @Test
   void deleteResourceType_Invalid_Id() throws Exception {
-    mockMvc.perform(delete("/resource/deleteResourceType/abc").contentType(MediaType.APPLICATION_JSON)
+    mockMvc.perform(delete("/resource/deleteResourceType/abc")
+            .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
         .andExpect(status().isBadRequest()).andExpect(content().string("Invalid id passed"));
   }
@@ -124,8 +125,8 @@ public class ResourceControllerTest {
   void deleteResourceType_Forbidden() throws Exception {
     mockMvc.perform(delete("/resource/deleteResourceType/1").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default " +
-            "resource type"));
+        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default "
+            + "resource type"));
   }
 
   @Test
@@ -133,8 +134,8 @@ public class ResourceControllerTest {
     when(resourceTypeService.getById(any())).thenReturn(testResourceType);
     mockMvc.perform(delete("/resource/deleteResourceType/5").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isNoContent()).andExpect(content().string("Resource type deleted " +
-            "successfully"));
+        .andExpect(status().isNoContent()).andExpect(content().string("Resource type deleted "
+            + "successfully"));
   }
 
   @Test
@@ -142,8 +143,8 @@ public class ResourceControllerTest {
     when(resourceTypeService.getById(any())).thenReturn(null);
     mockMvc.perform(delete("/resource/deleteResourceType/5").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken"))
-        .andExpect(status().isNotFound()).andExpect(content().string("Resource type not found " +
-            "with id: 5"));
+        .andExpect(status().isNotFound()).andExpect(content().string("Resource type not found "
+            + "with id: 5"));
   }
 
   @Test
