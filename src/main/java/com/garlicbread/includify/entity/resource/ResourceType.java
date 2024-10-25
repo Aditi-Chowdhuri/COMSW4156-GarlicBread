@@ -42,7 +42,7 @@ public class ResourceType {
   @PreRemove
   private void preRemove() {
     if (resources != null && !resources.isEmpty()) {
-      throw new IllegalStateException("Cannot delete resource type with" + " existing resources.");
+      throw new IllegalStateException("Cannot delete resource type with existing resources.");
     }
   }
 

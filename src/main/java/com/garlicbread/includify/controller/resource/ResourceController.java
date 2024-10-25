@@ -185,20 +185,15 @@ public class ResourceController {
                                                Authentication authentication) {
     String authenticatedOrganisationId =
         ((OrganisationDetails) authentication.getPrincipal()).getId();
-    Optional<Organisation> organisation =
-        organisationService.getOrganisationById(authenticatedOrganisationId);
-    if (organisation.isPresent()) {
-      List<String> resourceIds =
-          organisation.get().getResources().stream().map(Resource::getId).toList();
-      if (!resourceIds.contains(id)) {
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-      }
-    }
 
     Optional<Resource> resource = resourceService.getResourceById(id);
     if (resource.isPresent()) {
-      resourceService.deleteResource(id);
-      return new ResponseEntity<>("Resource deleted successfully", HttpStatus.NO_CONTENT);
+      if (resource.get().getOrganisation().equals(authenticatedOrganisationId)) {
+        resourceService.deleteResource(id);
+        return new ResponseEntity<>("Resource deleted successfully", HttpStatus.NO_CONTENT);
+      } else {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }
     } else {
       throw new ResourceNotFoundException("Resource not found with id: " + id);
     }

@@ -144,6 +144,15 @@ public class VolunteerControllerTest {
   }
 
   @Test
+  void deleteVolunteer_Forbidden() throws Exception {
+    testVolunteer.setId("test_id");
+    when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.of(testVolunteer));
+
+    mockMvc.perform(delete("/volunteer/delete/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
+
+  @Test
   void deleteVolunteer_Happy_Path() throws Exception {
     when(volunteerService.getVolunteerById(anyString())).thenReturn(Optional.of(testVolunteer));
 

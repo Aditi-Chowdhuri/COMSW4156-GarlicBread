@@ -117,6 +117,39 @@ public class UserControllerTest {
   }
 
   @Test
+  void deleteUserCategory_Invalid_Id() throws Exception {
+    mockMvc.perform(delete("/user/deleteCategory/abc").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isBadRequest()).andExpect(content().string("Invalid id passed"));
+  }
+
+  @Test
+  void deleteUserCategory_Forbidden() throws Exception {
+    mockMvc.perform(delete("/user/deleteCategory/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isForbidden()).andExpect(content().string("Cannot delete a default "
+            + "user category"));
+  }
+
+  @Test
+  void deleteUserCategory_Happy_Path() throws Exception {
+    when(userCategoryService.getById(any())).thenReturn(testCategory);
+    mockMvc.perform(delete("/user/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNoContent()).andExpect(content().string("User category deleted "
+            + "successfully"));
+  }
+
+  @Test
+  void deleteUserCategory_Sad_Path() throws Exception {
+    when(userCategoryService.getById(any())).thenReturn(null);
+    mockMvc.perform(delete("/user/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNotFound()).andExpect(content().string("User category not found "
+            + "with id: 7"));
+  }
+
+  @Test
   void createUser_Happy_Path() throws Exception {
     when(userService.createUser(any(User.class))).thenReturn(testUser);
     when(userCategoryService.getById(anyString())).thenReturn(testCategory);
@@ -184,6 +217,31 @@ public class UserControllerTest {
             put("/user/update/1").contentType(MediaType.APPLICATION_JSON).content(requestBody)
                 .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNotFound())
         .andExpect(content().string("User not found with id: 1"));
+  }
+
+  @Test
+  void updateUser_Forbidden() throws Exception {
+    testUser.setId("test_id");
+
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc");
+    userRequest.setCategoryIds(List.of("1"));
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+            put("/user/update/1").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
+
+
+  @Test
+  void deleteOrganisation_Forbidden() throws Exception {
+    testUser.setId("test_id");
+
+    mockMvc.perform(delete("/user/delete/testId").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
   }
 
   @Test

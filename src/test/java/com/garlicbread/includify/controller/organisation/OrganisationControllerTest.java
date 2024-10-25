@@ -181,6 +181,29 @@ public class OrganisationControllerTest {
   }
 
   @Test
+  void updateOrganisation_Forbidden() throws Exception {
+    testOrganisation.setId("test_id");
+
+    testOrganisation.setAddress("Updated Address");
+    String requestBody = objectMapper.writeValueAsString(testOrganisation);
+    String requestBodyWithPassword = requestBody.substring(0,
+        requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
+
+    mockMvc.perform(put("/organisation/update/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken").content(requestBodyWithPassword))
+        .andExpect(status().isForbidden());
+  }
+
+
+  @Test
+  void deleteOrganisation_Forbidden() throws Exception {
+    testOrganisation.setId("test_id");
+
+    mockMvc.perform(delete("/organisation/delete/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
+
+  @Test
   void deleteOrganisation_Sad_Path() throws Exception {
     when(organisationService.getOrganisationById(anyString())).thenReturn(Optional.empty());
 

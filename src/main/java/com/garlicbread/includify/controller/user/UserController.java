@@ -66,7 +66,7 @@ public class UserController {
   public ResponseEntity<String> deleteUserCategory(
       @PathVariable String id) {
     try {
-      if (Integer.parseInt(id) <= 4) {
+      if (Integer.parseInt(id) <= 6) {
         return new ResponseEntity<>("Cannot delete a default user category", HttpStatus.FORBIDDEN);
       }
     } catch (NumberFormatException ignored) {
