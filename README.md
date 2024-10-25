@@ -373,8 +373,10 @@ The possible clients who would likely use our service includes:
   "age": 30,
   "email": "jane.smith@example.com",
   "password": "strongPassword456",
-  "categoryIds": ["1"] // optional
+  "categoryIds": ["1"]
   }
+  ```
+  Note: categoryIds are optional.
 - **Response**:
   - `201 Created`: Returns the created user.
   - `404 Not Found`: If any of the category IDs are invalid.
@@ -394,8 +396,10 @@ The possible clients who would likely use our service includes:
   "age": 30,
   "email": "jane.smith@example.com",
   "password": "strongPassword456",
-  "categoryIds": ["1"] // optional
+  "categoryIds": ["1"]
   }
+  ```
+  Note: categoryIds are optional.
 - **Response**:
   - `200 OK`: Returns the updated user.
   - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
