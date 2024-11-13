@@ -33,4 +33,4 @@ jobs:
 #        run: pmd:check
 
       - name: Check Checkstyle Violations
-        run: checkstyle:checkstyle
+        run: mvn checkstyle:checkstyle
