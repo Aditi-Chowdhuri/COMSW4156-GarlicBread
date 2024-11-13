@@ -29,8 +29,37 @@ jobs:
       - name: Run tests
         run: mvn test
 
+      - name: Run JaCoCo Coverage
+        run: mvn jacoco:report
+
 #      - name: Check PMD Violations
 #        run: pmd:check
 
       - name: Check Checkstyle Violations
         run: mvn checkstyle:checkstyle
+
+      - name: Create Reports Directory
+        run: mkdir -p Reports
+
+      - name: Move JaCoCo Report to Reports Directory
+        run: cp target/site/jacoco/index.html Reports/jacoco-report.html
+
+      - name: Move Checkstyle Report to Reports Directory
+        run: cp target/site/checkstyle.html Reports/checkstyle-report.html
+
+#      - name: Move PMD Report to Reports Directory
+#        run: cp target/site/pmd.html Reports/pmd-report.html
+
+      - name: Upload Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: Reports/
+
+      - name: Commit Reports to Repository
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add Reports/*
+          git commit -m "Add all reports to Reports directory"
+          git push
