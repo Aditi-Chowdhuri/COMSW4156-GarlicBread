@@ -50,6 +50,10 @@ jobs:
 #      - name: Move PMD Report to Reports Directory
 #        run: cp target/site/pmd.html Reports/pmd-report.html
 
+      - name: Checkout the Branch
+        run: |
+          git checkout $GITHUB_REF 
+
       - name: Upload Reports as Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -62,4 +66,4 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add Reports/*
           git commit -m "Add all reports to Reports directory"
-          git push
+          git push origin HEAD:$GITHUB_REF
