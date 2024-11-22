@@ -3,12 +3,8 @@ package com.garlicbread.includify.util;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
-import com.garlicbread.includify.entity.resource.types.ResourceContact;
-import com.garlicbread.includify.entity.resource.types.ResourceTypeEntity;
 import com.garlicbread.includify.entity.user.UserCategory;
-import com.garlicbread.includify.model.resource.ResourceContactRequest;
 import com.garlicbread.includify.model.resource.ResourceRequest;
-import com.garlicbread.includify.model.resource.ResourceTypeRequest;
 import java.util.List;
 
 /**
@@ -45,26 +41,5 @@ public class ResourceMapper {
     resource.setDescription(request.getDescription());
     resource.setUsageInstructions(request.getUsageInstructions());
     return resource;
-  }
-
-  public static ResourceTypeEntity getSubTypeDetails(ResourceTypeRequest resourceTypeRequest,
-                                                      int resourceType) {
-    switch (resourceType) {
-      case 1:
-        ResourceContactRequest resourceContactRequest = (ResourceContactRequest) resourceTypeRequest;
-        ResourceContact resourceContact = new ResourceContact();
-
-        resourceContact.setName(resourceContactRequest.getName());
-        resourceContact.setPhone(resourceContactRequest.getPhone());
-        resourceContact.setAddress(resourceContactRequest.getAddress());
-        resourceContact.setLatitude(resourceContactRequest.getLatitude());
-        resourceContact.setLongitude(resourceContactRequest.getLongitude());
-        resourceContact.setDistance(resourceContactRequest.getDistance());
-
-        return resourceContact;
-      default:
-        return null;
-    }
-
   }
 }

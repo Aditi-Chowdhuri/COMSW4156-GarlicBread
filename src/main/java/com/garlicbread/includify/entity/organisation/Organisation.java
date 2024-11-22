@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -47,11 +46,11 @@ public class Organisation {
   private String description;
 
   @Column(nullable = false)
-  @NotNull(message = "Latitude is required")
+  @NotBlank(message = "Latitude is required")
   private String latitude;
 
   @Column(nullable = false)
-  @NotNull(message = "Longitude is required")
+  @NotBlank(message = "Longitude is required")
   private String longitude;
 
   @Column(nullable = false)

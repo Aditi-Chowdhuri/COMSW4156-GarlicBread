@@ -25,7 +25,7 @@ public class ResourceTypeService {
 
   public ResourceType getById(String id) {
     return resourceTypeRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Resource not found with " + "id " + id));
+        .orElseThrow(() -> new ResourceNotFoundException("Resource type not found with " + "id " + id));
   }
 
   public void deleteResourceTypeById(String id) {

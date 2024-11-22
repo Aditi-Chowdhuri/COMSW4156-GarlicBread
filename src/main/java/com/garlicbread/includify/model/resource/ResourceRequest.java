@@ -1,5 +1,9 @@
 package com.garlicbread.includify.model.resource;
 
+import com.garlicbread.includify.entity.resource.types.ResourceContact;
+import com.garlicbread.includify.entity.resource.types.ResourceInfra;
+import com.garlicbread.includify.entity.resource.types.ResourceService;
+import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -29,7 +33,16 @@ public class ResourceRequest {
   private String usageInstructions;
 
   @Valid
-  private ResourceContactRequest resourceContact;
+  private ResourceContact resourceContact;
+
+  @Valid
+  private ResourceTool resourceTool;
+
+  @Valid
+  private ResourceInfra resourceInfra;
+
+  @Valid
+  private ResourceService resourceService;
 
   // Getters and Setters
   public String getOrganisationId() {
@@ -87,11 +100,23 @@ public class ResourceRequest {
     this.usageInstructions = usageInstructions;
   }
 
-  public ResourceContactRequest getResourceContact() {
+  public ResourceContact getResourceContact() {
     return resourceContact;
   }
 
-  public void setResourceContact(ResourceContactRequest resourceContact) {
+  public void setResourceContact(ResourceContact resourceContact) {
     this.resourceContact = resourceContact;
+  }
+
+  public ResourceTool getResourceTool() {
+    return resourceTool;
+  }
+
+  public ResourceService getResourceService() {
+    return resourceService;
+  }
+
+  public ResourceInfra getResourceInfra() {
+    return resourceInfra;
   }
 }
