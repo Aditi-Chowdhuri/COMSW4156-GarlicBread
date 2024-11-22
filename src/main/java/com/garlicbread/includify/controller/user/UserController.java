@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for managing user-related operations.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/registration")
 public class UserController {
 
   private final UserService userService;
