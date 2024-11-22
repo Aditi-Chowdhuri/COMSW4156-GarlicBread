@@ -190,19 +190,21 @@ public class ResourceController {
         resourceRequest.getResourceService();
 
     Object[] resourceTypeEntities =
-        {resourceContact, resourceInfra, resourceServiceType, resourceTool};
+      {resourceContact, resourceInfra, resourceServiceType, resourceTool};
 
     for (ResourceType resourceType : resourceTypes) {
       if (resourceType.getId() <= 4 && resourceType.getId() >= 1) {
         if (resourceTypeEntities[resourceType.getId() - 1] == null) {
           return new ResponseEntity<>(
-            "Resource type details not provided for type " + resourceType.getId(),
-            HttpStatus.BAD_REQUEST);
+              "Resource type details not provided for type " + resourceType.getId(),
+              HttpStatus.BAD_REQUEST);
         }
-        if (resourceType.getId() == 3 && (resourceServiceType.getDate() == null && resourceServiceType.getDays() == null)){
+        if (resourceType.getId() == 3 && resourceServiceType.getDate()
+            == null && resourceServiceType.getDays() == null) {
           return new ResponseEntity<>(
-            "Either date or days field must be provided for resources of type " + resourceType.getId(),
-            HttpStatus.BAD_REQUEST);
+              "Either date or days field must be provided for resources of type "
+                  + resourceType.getId(),
+              HttpStatus.BAD_REQUEST);
         }
       }
     }

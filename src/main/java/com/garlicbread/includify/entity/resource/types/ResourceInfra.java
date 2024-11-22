@@ -1,7 +1,6 @@
 package com.garlicbread.includify.entity.resource.types;
 
 import com.garlicbread.includify.entity.resource.Resource;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -1,7 +1,6 @@
 package com.garlicbread.includify.entity.resource.types;
 
 import com.garlicbread.includify.entity.resource.Resource;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -39,14 +38,14 @@ public class ResourceService {
   private long timeEnd; // milliseconds after midnight
 
   @Column
-  @Pattern(regexp = "^[01]{7}$", message = "Days should be a 7-character binary string (e.g., " +
-      "0111110).")
+  @Pattern(regexp = "^[01]{7}$", message = "Days should be a 7-character binary string (e.g., "
+      + "0111110).")
   private String days; // a seven digit binary string starting from Sunday
   // (1 denotes the service is available that day and vice versa)
 
   @Column
-  @Pattern(regexp = "^(0[1-9]|1[0-2])([0-2][1-9]|[3][0-1])(19|20)\\d\\d$", message = "Invalid date " +
-      "format. It should be mmddyyyy.")
+  @Pattern(regexp = "^(0[1-9]|1[0-2])([0-2][1-9]|[3][0-1])(19|20)\\d\\d$", message = "Invalid date"
+      + " format. It should be mmddyyyy.")
   private String date; // mmddyyyy
 
   public String getId() {
