@@ -21,8 +21,8 @@ public class Constants {
   public static final String BEARER_TOKEN_PREFIX = "Bearer ";
   public static final String JWT_ISSUER = "http://localhost:8080/";
   public static final String[] NO_AUTH_ENDPOINTS =
-      new String[]{"/organisation/login", "/volunteer/login", "/user/login", "/volunteer/add",
-          "/user/create", "/organisation/create", "/resource/all", "/resource/{id}",
-          "/organisation/all", "/organisation/{id}", "/", "/user/deleteCategory/{id}",
-          "/user/createCategory"};
+      new String[]{"/organisation/login", "/volunteer/login", "/registration/login", "/volunteer"
+          + "/add", "/registration/create", "/organisation/create", "/resource/all",
+          "/resource/{id}", "/organisation/all", "/organisation/{id}", "/", "/registration"
+          + "/deleteCategory/{id}", "/registration/createCategory"};
 }

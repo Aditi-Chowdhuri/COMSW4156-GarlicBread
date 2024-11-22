@@ -115,7 +115,7 @@ public class AuthControllerTest {
     authRequest.setEmail("user@columbia.com");
     authRequest.setPassword("password");
 
-    mockMvc.perform(post("/user/login").contentType("application/json")
+    mockMvc.perform(post("/registration/login").contentType("application/json")
         .content(objectMapper.writeValueAsString(authRequest))).andExpect(status().isOk())
             .andExpect(jsonPath("$").value("test-token"));
   }

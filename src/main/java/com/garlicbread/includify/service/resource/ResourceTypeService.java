@@ -23,9 +23,17 @@ public class ResourceTypeService {
     return resourceTypeRepository.save(resourceType);
   }
 
+  /**
+   * Retrieves a {@link ResourceType} entity by its unique identifier.
+   *
+   * @param id the unique identifier of the {@link ResourceType} to retrieve
+   * @return the {@link ResourceType} entity if found
+   * @throws ResourceNotFoundException if no {@link ResourceType} is found with the given id
+   */
   public ResourceType getById(String id) {
     return resourceTypeRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Resource not found with " + "id " + id));
+        .orElseThrow(() ->
+            new ResourceNotFoundException("Resource type not found with " + "id " + id));
   }
 
   public void deleteResourceTypeById(String id) {

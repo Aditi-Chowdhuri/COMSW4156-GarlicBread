@@ -65,7 +65,7 @@ public class AuthController {
     return processLogin(volunteerAuthenticationManager, authRequest, Profile.VOLUNTEER);
   }
 
-  @PostMapping("/user/login")
+  @PostMapping("/registration/login")
   @PermitAll
   public String userLogin(@Valid @RequestBody AuthRequest authRequest) {
     return processLogin(userAuthenticationManager, authRequest, Profile.USER);

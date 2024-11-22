@@ -1,6 +1,7 @@
 package com.garlicbread.includify.controller.resource;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -26,7 +27,12 @@ import com.garlicbread.includify.service.auth.VolunteerDetailsService;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.resource.ResourceService;
 import com.garlicbread.includify.service.resource.ResourceTypeService;
+import com.garlicbread.includify.service.resource.types.ResourceContactService;
+import com.garlicbread.includify.service.resource.types.ResourceInfraService;
+import com.garlicbread.includify.service.resource.types.ResourceServiceService;
+import com.garlicbread.includify.service.resource.types.ResourceToolService;
 import com.garlicbread.includify.service.user.UserCategoryService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +62,14 @@ public class ResourceControllerTest {
   private ResourceTypeService resourceTypeService;
   @MockBean
   private OrganisationService organisationService;
+  @MockBean
+  private ResourceContactService resourceContactService;
+  @MockBean
+  private ResourceToolService resourceToolService;
+  @MockBean
+  private ResourceServiceService resourceServiceService;
+  @MockBean
+  private ResourceInfraService resourceInfraService;
   @MockBean
   private UserCategoryService userCategoryService;
   @MockBean
@@ -333,6 +347,8 @@ public class ResourceControllerTest {
     Organisation organisation = new Organisation();
     organisation.setId("1");
     testResource.setOrganisation(organisation);
+    testResource.setTargetUserCategory(new ArrayList<>());
+    testResource.setResourceType(new ArrayList<>());
     when(resourceService.getResourceById(anyString())).thenReturn(Optional.of(testResource));
     mockMvc.perform(delete("/resource/delete/1").contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNoContent())

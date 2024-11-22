@@ -3,6 +3,9 @@ package com.garlicbread.includify.controller.resource;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
+import com.garlicbread.includify.entity.resource.types.ResourceContact;
+import com.garlicbread.includify.entity.resource.types.ResourceInfra;
+import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.resource.ResourceRequest;
@@ -10,6 +13,10 @@ import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.resource.ResourceService;
 import com.garlicbread.includify.service.resource.ResourceTypeService;
+import com.garlicbread.includify.service.resource.types.ResourceContactService;
+import com.garlicbread.includify.service.resource.types.ResourceInfraService;
+import com.garlicbread.includify.service.resource.types.ResourceServiceService;
+import com.garlicbread.includify.service.resource.types.ResourceToolService;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.util.ResourceMapper;
 import jakarta.annotation.security.PermitAll;
@@ -42,6 +49,10 @@ public class ResourceController {
   private final ResourceTypeService resourceTypeService;
   private final OrganisationService organisationService;
   private final UserCategoryService userCategoryService;
+  private final ResourceContactService resourceContactService;
+  private final ResourceToolService resourceToolService;
+  private final ResourceInfraService resourceInfraService;
+  private final ResourceServiceService resourceServiceService;
 
   /**
    * Constructs a ResourceController with the specified services.
@@ -54,11 +65,19 @@ public class ResourceController {
   public ResourceController(ResourceService resourceService,
                             ResourceTypeService resourceTypeService,
                             OrganisationService organisationService,
-                            UserCategoryService userCategoryService) {
+                            UserCategoryService userCategoryService,
+                            ResourceContactService resourceContactService,
+                            ResourceToolService resourceToolService,
+                            ResourceInfraService resourceInfraService,
+                            ResourceServiceService resourceServiceService) {
     this.resourceService = resourceService;
     this.resourceTypeService = resourceTypeService;
     this.organisationService = organisationService;
     this.userCategoryService = userCategoryService;
+    this.resourceContactService = resourceContactService;
+    this.resourceToolService = resourceToolService;
+    this.resourceInfraService = resourceInfraService;
+    this.resourceServiceService = resourceServiceService;
   }
 
   /**
@@ -83,8 +102,7 @@ public class ResourceController {
    */
   @DeleteMapping("/deleteResourceType/{id}")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<String> deleteResourceType(
-      @PathVariable String id) {
+  public ResponseEntity<String> deleteResourceType(@PathVariable String id) {
     try {
       if (Integer.parseInt(id) <= 4) {
         return new ResponseEntity<>("Cannot delete a default resource type", HttpStatus.FORBIDDEN);
@@ -139,10 +157,10 @@ public class ResourceController {
    */
   @PostMapping("/add")
   @PreAuthorize("hasAuthority('ORGANISATION')")
-  public ResponseEntity<Resource> addResource(@Valid @RequestBody ResourceRequest resourceRequest,
-                                              Authentication authentication) {
-    String authenticatedOrganisationId = ((OrganisationDetails) authentication.getPrincipal())
-            .getId();
+  public ResponseEntity<Object> addResource(@Valid @RequestBody ResourceRequest resourceRequest,
+                                            Authentication authentication) {
+    String authenticatedOrganisationId =
+        ((OrganisationDetails) authentication.getPrincipal()).getId();
     if (!authenticatedOrganisationId.equals(resourceRequest.getOrganisationId())) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
@@ -165,11 +183,58 @@ public class ResourceController {
       userCategories.add(userCategoryService.getById(targetUserCategoryId));
     });
 
+    ResourceContact resourceContact = resourceRequest.getResourceContact();
+    ResourceTool resourceTool = resourceRequest.getResourceTool();
+    ResourceInfra resourceInfra = resourceRequest.getResourceInfra();
+    com.garlicbread.includify.entity.resource.types.ResourceService resourceServiceType =
+        resourceRequest.getResourceService();
+
+    Object[] resourceTypeEntities =
+      {resourceContact, resourceInfra, resourceServiceType, resourceTool};
+
+    for (ResourceType resourceType : resourceTypes) {
+      if (resourceType.getId() <= 4 && resourceType.getId() >= 1) {
+        if (resourceTypeEntities[resourceType.getId() - 1] == null) {
+          return new ResponseEntity<>(
+              "Resource type details not provided for type " + resourceType.getId(),
+              HttpStatus.BAD_REQUEST);
+        }
+        if (resourceType.getId() == 3 && resourceServiceType.getDate()
+            == null && resourceServiceType.getDays() == null) {
+          return new ResponseEntity<>(
+              "Either date or days field must be provided for resources of type "
+                  + resourceType.getId(),
+              HttpStatus.BAD_REQUEST);
+        }
+      }
+    }
+
     Resource resource =
         ResourceMapper.mapToResource(resourceRequest, organisation.get(), resourceTypes,
             userCategories);
 
     Resource addedResource = resourceService.addResource(resource);
+
+    if (resourceContact != null) {
+      resourceContact.setResource(addedResource);
+      resourceContactService.addResourceContact(resourceContact);
+    }
+
+    if (resourceInfra != null) {
+      resourceInfra.setResource(addedResource);
+      resourceInfraService.addResourceInfra(resourceInfra);
+    }
+
+    if (resourceServiceType != null) {
+      resourceServiceType.setResource(addedResource);
+      resourceServiceService.addResourceService(resourceServiceType);
+    }
+
+    if (resourceTool != null) {
+      resourceTool.setResource(addedResource);
+      resourceToolService.addResourceTool(resourceTool);
+    }
+
     return ResponseEntity.status(HttpStatus.CREATED).body(addedResource);
   }
 
@@ -189,6 +254,12 @@ public class ResourceController {
     Optional<Resource> resource = resourceService.getResourceById(id);
     if (resource.isPresent()) {
       if (resource.get().getOrganisation().equals(authenticatedOrganisationId)) {
+        resourceContactService.deleteResourceContact(id);
+        resourceToolService.deleteResourceTool(id);
+        resourceServiceService.deleteResourceService(id);
+        resourceInfraService.deleteResourceInfra(id);
+        resource.get().getResourceType().clear();
+        resource.get().getTargetUserCategory().clear();
         resourceService.deleteResource(id);
         return new ResponseEntity<>("Resource deleted successfully", HttpStatus.NO_CONTENT);
       } else {
