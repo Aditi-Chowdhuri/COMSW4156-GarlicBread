@@ -1,15 +1,21 @@
 package com.garlicbread.includify.controller.resource;
 
+import static com.garlicbread.includify.util.ResourceMapper.getSubTypeDetails;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
+import com.garlicbread.includify.entity.resource.types.ResourceContact;
+import com.garlicbread.includify.entity.resource.types.ResourceTypeEntity;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
+import com.garlicbread.includify.model.resource.ResourceContactRequest;
 import com.garlicbread.includify.model.resource.ResourceRequest;
+import com.garlicbread.includify.model.resource.ResourceTypeRequest;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.resource.ResourceService;
 import com.garlicbread.includify.service.resource.ResourceTypeService;
+import com.garlicbread.includify.service.resource.types.ResourceContactService;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.util.ResourceMapper;
 import jakarta.annotation.security.PermitAll;
@@ -42,6 +48,7 @@ public class ResourceController {
   private final ResourceTypeService resourceTypeService;
   private final OrganisationService organisationService;
   private final UserCategoryService userCategoryService;
+  private final ResourceContactService resourceContactService;
 
   /**
    * Constructs a ResourceController with the specified services.
@@ -54,11 +61,13 @@ public class ResourceController {
   public ResourceController(ResourceService resourceService,
                             ResourceTypeService resourceTypeService,
                             OrganisationService organisationService,
-                            UserCategoryService userCategoryService) {
+                            UserCategoryService userCategoryService,
+                            ResourceContactService resourceContactService) {
     this.resourceService = resourceService;
     this.resourceTypeService = resourceTypeService;
     this.organisationService = organisationService;
     this.userCategoryService = userCategoryService;
+    this.resourceContactService = resourceContactService;
   }
 
   /**
@@ -165,11 +174,42 @@ public class ResourceController {
       userCategories.add(userCategoryService.getById(targetUserCategoryId));
     });
 
+    ResourceContactRequest resourceContactRequest = resourceRequest.getResourceContact();
+
+    ResourceTypeRequest[] resourceTypeRequests = new ResourceTypeRequest[4];
+    resourceTypeRequests[0] = resourceContactRequest;
+
+    ResourceTypeEntity[] resourceTypeEntities = new ResourceTypeEntity[4];
+
+    for (ResourceType resourceType : resourceTypes) {
+      if (resourceType.getId() <= 4) {
+        if (resourceTypeRequests[resourceType.getId() - 1] != null) {
+          resourceTypeEntities[resourceType.getId() - 1] =
+              getSubTypeDetails(resourceTypeRequests[resourceType.getId() - 1], resourceType.getId());
+        }
+        else {
+          throw new ResourceNotFoundException("Resource type details not provided for type " + resourceType.getId());
+        }
+      }
+    }
+
     Resource resource =
         ResourceMapper.mapToResource(resourceRequest, organisation.get(), resourceTypes,
             userCategories);
 
     Resource addedResource = resourceService.addResource(resource);
+
+    for (int i = 0; i < 4; i++){
+      switch (i) {
+        case 0:
+          if (resourceTypeEntities[i] == null) {
+            continue;
+          }
+          ((ResourceContact) resourceTypeEntities[i]).setResource(addedResource);
+          resourceContactService.addResourceContact((ResourceContact) resourceTypeEntities[i]);
+      }
+    }
+
     return ResponseEntity.status(HttpStatus.CREATED).body(addedResource);
   }
 

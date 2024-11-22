@@ -18,10 +18,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "resource_contact")
-public class ResourceContact {
+public class ResourceContact extends ResourceTypeEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
 
   // one resource_contact can be mapped to only one resource
@@ -42,10 +41,75 @@ public class ResourceContact {
   @Column(nullable = false)
   private String address;
 
-  @Column(nullable = false)
+  @Column
   private String phone;
 
   @Column(nullable = false)
   private double distance; // distance in miles
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public Resource getResource() {
+    return resource;
+  }
+
+  public void setResource(Resource resource) {
+    this.resource = resource;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(String latitude) {
+    this.latitude = latitude;
+  }
+
+  public String getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(String longitude) {
+    this.longitude = longitude;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public double getDistance() {
+    return distance;
+  }
+
+  public void setDistance(double distance) {
+    this.distance = distance;
+  }
+
 }
 

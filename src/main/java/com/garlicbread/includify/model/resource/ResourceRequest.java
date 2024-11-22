@@ -1,5 +1,6 @@
 package com.garlicbread.includify.model.resource;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,10 @@ public class ResourceRequest {
   @NotBlank(message = "Usage instructions are required")
   private String usageInstructions;
 
+  @Valid
+  private ResourceContactRequest resourceContact;
+
+  // Getters and Setters
   public String getOrganisationId() {
     return organisationId;
   }
@@ -80,5 +85,13 @@ public class ResourceRequest {
 
   public void setUsageInstructions(String usageInstructions) {
     this.usageInstructions = usageInstructions;
+  }
+
+  public ResourceContactRequest getResourceContact() {
+    return resourceContact;
+  }
+
+  public void setResourceContact(ResourceContactRequest resourceContact) {
+    this.resourceContact = resourceContact;
   }
 }
