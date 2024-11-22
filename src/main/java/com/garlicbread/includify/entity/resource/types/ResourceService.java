@@ -25,7 +25,7 @@ public class ResourceService {
   private String id;
 
   // one resource_service can be mapped to only one resource
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne
   @MapsId
   @JoinColumn(name = "id")
   private Resource resource;

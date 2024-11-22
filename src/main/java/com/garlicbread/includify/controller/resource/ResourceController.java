@@ -252,6 +252,12 @@ public class ResourceController {
     Optional<Resource> resource = resourceService.getResourceById(id);
     if (resource.isPresent()) {
       if (resource.get().getOrganisation().equals(authenticatedOrganisationId)) {
+        resourceContactService.deleteResourceContact(id);
+        resourceToolService.deleteResourceTool(id);
+        resourceServiceService.deleteResourceService(id);
+        resourceInfraService.deleteResourceInfra(id);
+        resource.get().getResourceType().clear();
+        resource.get().getTargetUserCategory().clear();
         resourceService.deleteResource(id);
         return new ResponseEntity<>("Resource deleted successfully", HttpStatus.NO_CONTENT);
       } else {

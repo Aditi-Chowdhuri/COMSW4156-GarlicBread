@@ -26,7 +26,7 @@ public class ResourceTool {
   private String id;
 
   // one resource_tool can be mapped to only one resource
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne
   @MapsId
   @JoinColumn(name = "id")
   private Resource resource;

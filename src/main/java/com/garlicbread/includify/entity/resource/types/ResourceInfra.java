@@ -24,7 +24,7 @@ public class ResourceInfra {
   private String id;
 
   // one resource_infra can be mapped to only one resource
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne
   @MapsId
   @JoinColumn(name = "id")
   private Resource resource;

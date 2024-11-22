@@ -13,22 +13,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResourceServiceService {
 
-  private final ResourceServiceRepository resourceServiceService;
+  private final ResourceServiceRepository resourceServiceRepository;
 
   public ResourceServiceService(ResourceServiceRepository resourceServiceRepository) {
-    this.resourceServiceService = resourceServiceRepository;
+    this.resourceServiceRepository = resourceServiceRepository;
   }
 
   public Optional<ResourceService> getResourceServiceById(String id) {
-    return resourceServiceService.findById(id);
+    return resourceServiceRepository.findById(id);
   }
 
   public void addResourceService(ResourceService resourceService) {
-    resourceServiceService.save(resourceService);
+    resourceServiceRepository.save(resourceService);
   }
 
   public void deleteResourceService(String id) {
-    resourceServiceService.deleteById(id);
+    resourceServiceRepository.deleteById(id);
   }
 
 }

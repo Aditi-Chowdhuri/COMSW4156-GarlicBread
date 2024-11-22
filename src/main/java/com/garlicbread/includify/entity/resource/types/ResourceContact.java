@@ -24,7 +24,7 @@ public class ResourceContact {
   private String id;
 
   // one resource_contact can be mapped to only one resource
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne
   @MapsId
   @JoinColumn(name = "id")
   private Resource resource;
