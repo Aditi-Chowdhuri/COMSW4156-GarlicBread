@@ -115,8 +115,10 @@ public class Resource {
    */
   public List<String> getAppointments() {
     List<String> appointmentIds = new ArrayList<>();
-    for (Appointment appointment : this.appointments) {
-      appointmentIds.add(appointment.getId());
+    if (this.appointments != null) {
+      for (Appointment appointment : this.appointments) {
+        appointmentIds.add(appointment.getId());
+      }
     }
     return appointmentIds;
   }
