@@ -3,9 +3,13 @@ package com.garlicbread.includify.model.appointment;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-
 import java.util.List;
 
+/**
+ * Represents a request to create or modify an appointment.
+ * Contains details such as organization ID, user ID, resource IDs,
+ * start and end times, and the appointment date.
+ */
 public class AppointmentRequest {
 
   @NotBlank(message = "Organisation id is required")

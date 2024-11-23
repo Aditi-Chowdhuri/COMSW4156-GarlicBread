@@ -3,10 +3,9 @@ package com.garlicbread.includify.service.appointment;
 import com.garlicbread.includify.entity.appointment.Appointment;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.repository.appointment.AppointmentRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 /**
  * Service class for managing appointments.
@@ -22,23 +21,57 @@ public class AppointmentService {
     this.appointmentRepository = appointmentRepository;
   }
 
+  /**
+   * Creates a new appointment and saves it to the database.
+   *
+   * @param appointment the appointment to be created
+   * @return the saved appointment entity
+   */
   public Appointment createAppointment(Appointment appointment) {
     return appointmentRepository.save(appointment);
   }
 
+  /**
+   * Retrieves an appointment by its ID.
+   * If the appointment is not found, a ResourceNotFoundException is thrown.
+   *
+   * @param id the ID of the appointment to retrieve
+   * @return the appointment with the given ID
+   * @throws ResourceNotFoundException if the appointment is not found
+   */
   public Appointment getAppointmentById(String id) {
     Optional<Appointment> appointment = appointmentRepository.findById(id);
-    return appointment.orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
+    return appointment.orElseThrow(() -> new ResourceNotFoundException(
+        "Appointment not found with id: " + id));
   }
 
+  /**
+   * Retrieves all appointments for a specific organisation by its ID.
+   *
+   * @param id the ID of the organisation
+   * @return a list of appointments associated with the given organisation
+   */
   public List<Appointment> getAllAppointmentsForOrganisation(String id) {
     return appointmentRepository.findByOrganisationId(id);
   }
 
+  /**
+   * Retrieves all appointments for a specific user by their ID.
+   *
+   * @param id the ID of the user
+   * @return a list of appointments associated with the given user
+   */
   public List<Appointment> getAllAppointmentsForUser(String id) {
     return appointmentRepository.findByUserId(id);
   }
 
+  /**
+   * Deletes an appointment by its ID.
+   * If the appointment does not exist, a ResourceNotFoundException is thrown.
+   *
+   * @param id the ID of the appointment to delete
+   * @throws ResourceNotFoundException if the appointment is not found
+   */
   public void deleteAppointment(String id) {
     if (appointmentRepository.existsById(id)) {
       appointmentRepository.deleteById(id);
