@@ -1,14 +1,24 @@
 package com.garlicbread.includify.entity.user;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.util.AssertionErrors.fail;
+
 import com.garlicbread.includify.entity.resource.Resource;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * Unit tests for the {@link UserCategory} class.
+ * This class tests the functionality of the UserCategory entity,
+ * including its methods for managing users and resources, and its
+ * behavior when deleting categories with or without users or resources.
+ */
 public class UserCategoryTest {
 
   private UserCategory userCategory;
@@ -17,6 +27,11 @@ public class UserCategoryTest {
   private Resource mockResource1;
   private Resource mockResource2;
 
+  /**
+   * Set up mock data before each test.
+   * Initializes the UserCategory object and mocks necessary dependencies
+   * like User and Resource objects.
+   */
   @BeforeEach
   public void setUp() {
     userCategory = new UserCategory();
@@ -62,7 +77,8 @@ public class UserCategoryTest {
       userCategory.preRemove();
       fail("Expected IllegalStateException when deleting user category with existing users");
     } catch (IllegalStateException e) {
-      assertEquals("Cannot delete a user category with existing users or with existing resources targeting the same.", e.getMessage());
+      assertEquals("Cannot delete a user category with existing users or "
+          + "with existing resources targeting the same.", e.getMessage());
     }
   }
 
