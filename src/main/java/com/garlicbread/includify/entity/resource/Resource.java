@@ -16,6 +16,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,8 +109,12 @@ public class Resource {
     this.id = id;
   }
 
-  public List<Appointment> getAppointments() {
-    return appointments;
+  public List<String> getAppointments() {
+    List<String> appointmentIds = new ArrayList<>();
+    for (Appointment appointment: this.appointments) {
+      appointmentIds.add(appointment.getId());
+    }
+    return appointmentIds;
   }
 
   public void setAppointments(List<Appointment> appointments) {

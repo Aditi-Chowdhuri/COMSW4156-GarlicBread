@@ -53,6 +53,67 @@ public class Appointment {
   @Column(nullable = false)
   private long timeEnd; // milliseconds after midnight
 
-  @Column
+  @Column(nullable = false)
   private String date; // mmddyyyy
+
+  public String getId() {
+    return id;
+  }
+
+  public Organisation getOrganisation() {
+    return organisation;
+  }
+
+  public void setOrganisation(Organisation organisation) {
+    this.organisation = organisation;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public List<Resource> getResources() {
+    return resources;
+  }
+
+  public Volunteer getVolunteer() {
+    return volunteer;
+  }
+
+  public void setVolunteer(Volunteer volunteer) {
+    this.volunteer = volunteer;
+  }
+
+  public void setResources(List<Resource> resources) {
+    this.resources = resources;
+  }
+
+  public long getTimeStart() {
+    return timeStart;
+  }
+
+  public void setTimeStart(long timeStart) {
+    this.timeStart = timeStart;
+  }
+
+  public long getTimeEnd() {
+    return timeEnd;
+  }
+
+  public void setTimeEnd(long timeEnd) {
+    this.timeEnd = timeEnd;
+  }
+
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
+  }
 }
