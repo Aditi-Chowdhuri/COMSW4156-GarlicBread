@@ -98,6 +98,19 @@ public class UserController {
   }
 
   /**
+   * Retrieves details of the authenticated user.
+   *
+   * @return a ResponseEntity containing the authenticated User
+   */
+  @GetMapping()
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<User> getUser(Authentication authentication) {
+    String authenticatedUserId = ((UserDetails) authentication.getPrincipal()).getId();
+    Optional<User> user = userService.getUserById(authenticatedUserId);
+    return user.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  /**
    * Retrieves a user by their ID.
    *
    * @param id the ID of the user to retrieve
