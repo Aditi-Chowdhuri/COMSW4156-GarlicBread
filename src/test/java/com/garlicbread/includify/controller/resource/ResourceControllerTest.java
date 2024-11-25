@@ -106,6 +106,7 @@ public class ResourceControllerTest {
     testResource.setTitle("Test Resource");
     testResource.setDescription("Resource added for testing.");
     testResource.setUsageInstructions("set usage instructions");
+    testResource.setResourceType(new ArrayList<>());
     testResource.setOrganisation(testOrganisation);
     when(jwtDecoder.decode(any())).thenReturn(jwt);
     when(jwt.getClaimAsString("sub")).thenReturn("test_user");

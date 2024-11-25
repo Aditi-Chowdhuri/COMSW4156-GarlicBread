@@ -42,10 +42,6 @@ public class ResourceTool {
     this.id = id;
   }
 
-  public Resource getResource() {
-    return resource;
-  }
-
   public void setResource(Resource resource) {
     this.resource = resource;
   }
