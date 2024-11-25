@@ -3,8 +3,13 @@ package com.garlicbread.includify.util;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
+import com.garlicbread.includify.entity.resource.types.ResourceContact;
+import com.garlicbread.includify.entity.resource.types.ResourceInfra;
+import com.garlicbread.includify.entity.resource.types.ResourceService;
+import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.model.resource.ResourceRequest;
+import com.garlicbread.includify.model.resource.ResourceResponse;
 import java.util.List;
 
 /**
@@ -41,5 +46,36 @@ public class ResourceMapper {
     resource.setDescription(request.getDescription());
     resource.setUsageInstructions(request.getUsageInstructions());
     return resource;
+  }
+
+  public static ResourceResponse mapToResourceResponse(final Resource resource,
+                                                       final Object[] resourceTypeDetails) {
+    ResourceResponse resourceResponse = new ResourceResponse();
+    resourceResponse.setId(resource.getId());
+    resourceResponse.setTitle(resource.getTitle());
+    resourceResponse.setDescription(resource.getDescription());
+    resourceResponse.setUsageInstructions(resource.getUsageInstructions());
+    resourceResponse.setAppointmentIds(resource.getAppointments());
+    resourceResponse.setResourceType(resource.getResourceType());
+    resourceResponse.setTargetUserCategory(resource.getTargetUserCategory());
+    resourceResponse.setOrganisationId(resource.getOrganisation());
+
+    if (resourceTypeDetails[0] != null) {
+      resourceResponse.setResourceContact((ResourceContact) resourceTypeDetails[0]);
+    }
+
+    if (resourceTypeDetails[1] != null) {
+      resourceResponse.setResourceInfra((ResourceInfra) resourceTypeDetails[1]);
+    }
+
+    if (resourceTypeDetails[2] != null) {
+      resourceResponse.setResourceService((ResourceService) resourceTypeDetails[2]);
+    }
+
+    if (resourceTypeDetails[3] != null) {
+      resourceResponse.setResourceTool((ResourceTool) resourceTypeDetails[3]);
+    }
+
+    return resourceResponse;
   }
 }

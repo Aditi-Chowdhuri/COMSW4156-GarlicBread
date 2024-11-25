@@ -9,6 +9,7 @@ import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.resource.ResourceRequest;
+import com.garlicbread.includify.model.resource.ResourceResponse;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.resource.ResourceService;
@@ -143,10 +144,50 @@ public class ResourceController {
    */
   @GetMapping("/{id}")
   @PermitAll
-  public ResponseEntity<Resource> getResourceById(@PathVariable String id) {
+  public ResponseEntity<ResourceResponse> getResourceById(@PathVariable String id) {
     Optional<Resource> resource = resourceService.getResourceById(id);
-    return resource.map(ResponseEntity::ok)
-        .orElseThrow(() -> new ResourceNotFoundException("Resource " + "not found with id: " + id));
+
+    if (resource.isEmpty()) {
+      throw new ResourceNotFoundException("Resource " + "not found with id: " + id);
+    }
+
+    Object[] resourceTypeDetails = new Object[4];
+
+    for (ResourceType resourceType : resource.get().getResourceType()) {
+      if (resourceType.getId() <= 4 && resourceType.getId() >= 1) {
+
+        if (resourceType.getId() == 1) {
+          Optional<ResourceContact> resourceContact =
+              resourceContactService.getResourceContactById(resource.get().getId());
+          resourceContact.ifPresent(contact -> resourceTypeDetails[0] = contact);
+        }
+
+        if (resourceType.getId() == 2) {
+          Optional<ResourceInfra> resourceInfra
+              = resourceInfraService.getResourceInfraById(resource.get().getId());
+          resourceInfra.ifPresent(infra -> resourceTypeDetails[1] = infra);
+        }
+
+        if (resourceType.getId() == 3) {
+          Optional<com.garlicbread.includify.entity.resource.types.ResourceService> resourceServiceType =
+              resourceServiceService.getResourceServiceById(resource.get().getId());
+          resourceServiceType.ifPresent(service -> resourceTypeDetails[2] = service);
+        }
+
+        if (resourceType.getId() == 4) {
+          Optional<ResourceTool> resourceTool =
+              resourceToolService.getResourceToolById(resource.get().getId());
+          resourceTool.ifPresent(tool -> resourceTypeDetails[3] = tool);
+        }
+      }
+    }
+
+    ResourceResponse resourceDetails = ResourceMapper.mapToResourceResponse(
+        resource.get(),
+        resourceTypeDetails
+    );
+
+    return ResponseEntity.status(HttpStatus.OK).body(resourceDetails);
   }
 
   /**
