@@ -495,7 +495,6 @@ The possible clients who would likely use our service includes:
 - **GET** `/volunteer/{id}` → Retrieve a volunteer by ID.
 - **DELETE** `/volunteer/delete/{id}` → Delete a volunteer by ID.
 
-
 ## Appointment Endpoints
 
 ### 1. **POST `/appointment`**
