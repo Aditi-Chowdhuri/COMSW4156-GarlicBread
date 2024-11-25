@@ -495,6 +495,88 @@ The possible clients who would likely use our service includes:
 - **GET** `/volunteer/{id}` → Retrieve a volunteer by ID.
 - **DELETE** `/volunteer/delete/{id}` → Delete a volunteer by ID.
 
+
+## Appointment Endpoints
+
+### 1. **POST `/appointment`**
+
+- **Description**: Creates a new appointment.
+- **Request**: Expects a JSON payload representing the appointment details.
+  ```json
+  {
+  "organisationId": "org123",
+  "userId": "user456",
+  "resourceIds": ["resource789", "resource101"],
+  "date": "12252024",
+  "timeStart": 9,
+  "timeEnd": 11,
+  "description": "Wheelchair assistance appointment"
+  }
+- **Response**:
+  - `200 Ok`: Returns the created appointment.
+  - `400 Bad Request`: Invalid or missing input fields.
+  - `403 Forbidden`: The authenticated user or organisation is not allowed to create the appointment.
+  - `500 Internal Server Error`: Appointment creation failed.
+
+- **Pre-requisites**: A valid appointment JSON body, JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or USER authority.
+
+### 2. **GET `/appointment/organisation`**
+
+- **Description**: Retrieves all appointments for a specific organisation.
+- **Request Parameters**:
+  - `organisation` (String): The ID of the organisation to fetch appointments for.
+- **Response**:
+  - `200 OK`: Returns a list of appointments for the organisation.
+  - `403 Forbidden`: The authenticated organisation does not have permission to access the requested data.
+  - `500 Internal Server Error`: Failed to retrieve appointments.
+- **Pre-requisites**: Valid organisation ID., JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or VOLUNTEER authority.
+
+### 3. **GET `/appointment/user`**
+
+- **Description**: Retrieves all appointments for the authenticated user.
+- **Response**:
+  - `200 OK`: Returns a list of appointments for the user.
+  - `500 Internal Server Error`: Failed to retrieve appointments.
+- **Pre-requisites**: JWT Bearer token for authentication.
+- **Authorization**: Requires USER authority.
+
+### 4. **DELETE `/appointment/{id}`**
+
+- **Description**: Deletes an appointment by its ID.
+- **Path Variable**:
+  - `id` (String): The ID of the appointment to delete.
+- **Response**:
+  - `204 No Content`: Appointment deleted successfully.
+  - `403 Forbidden`: If the authenticated volunteer does not match the ID of the volunteer being deleted.
+  - `404 Not Found`: The authenticated user or organisation is not allowed to delete the appointment.
+  - `500 Internal Server Error`: Appointment deletion failed.
+- **Pre-requisites**:Valid appointment id, 
+JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or USER authority
+
+### 5. **POST `/appointment/{id}/volunteer`**
+
+- **Description**: Assigns a volunteer to an appointment.
+- **Path Variable**:
+  - `id` (String): The ID of the appointment to assign a volunteer.
+- **Response**:
+  - `200 OK`: Returns the updated appointment with the assigned volunteer.
+  - `400 Bad Request`: The appointment already has a volunteer assigned or invalid volunteer ID.
+  - `500 Internal Server Error`: Failed to assign the volunteer.
+- **Pre-requisites**:Valid appointment id, 
+JWT Bearer token for authentication.
+- **Authorization**: Requires VOLUNTEER authority
+
+### Summary of Endpoints:
+
+- **POST** `/appointment` → Create a new appointment.
+- **GET** `/appointment/organisation` → Get all appointments for an organisation.
+- **GET** `/appointment/user ` → Get all appointments for a user.
+- **DELETE** `/appointment/{id}` → Delete an appointment by ID.
+- **POST** `/appointment/{id}/volunteer` → Assign a volunteer to an appointment.
+
 ## Technology Stack
 
 - **Programming Language**: Java
