@@ -48,6 +48,22 @@ public class ResourceMapper {
     return resource;
   }
 
+  /**
+   * Maps a {@link Resource} entity and associated resource type details into a
+   * {@link ResourceResponse} object.
+   *
+   * @param resource            the {@link Resource} entity to be mapped. It contains basic
+   *                            information like
+   *                            ID, title, description, usage instructions, and relationships
+   *                            such as appointments,
+   *                            resource types, target user categories, and organisation.
+   * @param resourceTypeDetails an array of objects representing additional resource-specific
+   *                            details:
+   *                            - Index 0: {@link ResourceContact} (if available)
+   *                            - Index 1: {@link ResourceInfra} (if available)
+   *                            - Index 2: {@link ResourceService} (if available)
+   *                            - Index 3: {@link ResourceTool} (if available)
+   */
   public static ResourceResponse mapToResourceResponse(final Resource resource,
                                                        final Object[] resourceTypeDetails) {
     ResourceResponse resourceResponse = new ResourceResponse();

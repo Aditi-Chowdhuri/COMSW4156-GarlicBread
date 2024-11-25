@@ -169,8 +169,9 @@ public class ResourceController {
         }
 
         if (resourceType.getId() == 3) {
-          Optional<com.garlicbread.includify.entity.resource.types.ResourceService> resourceServiceType =
-              resourceServiceService.getResourceServiceById(resource.get().getId());
+          Optional<com.garlicbread.includify.entity.resource.types.ResourceService>
+              resourceServiceType = resourceServiceService
+                .getResourceServiceById(resource.get().getId());
           resourceServiceType.ifPresent(service -> resourceTypeDetails[2] = service);
         }
 

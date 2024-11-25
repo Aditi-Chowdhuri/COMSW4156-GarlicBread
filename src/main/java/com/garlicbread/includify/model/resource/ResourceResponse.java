@@ -8,6 +8,12 @@ import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import com.garlicbread.includify.entity.user.UserCategory;
 import java.util.List;
 
+/**
+ * The {@code ResourceResponse} class represents the data structure used to return
+ * detailed information about a resource in the system. It includes information
+ * about the resource's attributes, organisation association, related appointments,
+ * and specific types such as tools, services, contacts, and infrastructure.
+ */
 public class ResourceResponse {
 
   private String id;
