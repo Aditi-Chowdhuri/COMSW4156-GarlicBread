@@ -3,7 +3,7 @@ package com.garlicbread.includify.controller.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,6 +17,9 @@ import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.entity.resource.Resource;
 import com.garlicbread.includify.entity.resource.ResourceType;
+import com.garlicbread.includify.entity.resource.types.ResourceContact;
+import com.garlicbread.includify.entity.resource.types.ResourceInfra;
+import com.garlicbread.includify.entity.resource.types.ResourceTool;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.model.resource.ResourceRequest;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
@@ -32,10 +35,9 @@ import com.garlicbread.includify.service.resource.types.ResourceInfraService;
 import com.garlicbread.includify.service.resource.types.ResourceServiceService;
 import com.garlicbread.includify.service.resource.types.ResourceToolService;
 import com.garlicbread.includify.service.user.UserCategoryService;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -97,17 +99,21 @@ public class ResourceControllerTest {
     testOrganisation = new Organisation();
     testOrganisation.setId("1");
     testOrganisation.setName("Columbia University");
+
     testResourceType = new ResourceType();
     testResourceType.setTitle("infrastructure");
     testResourceType.setDescription("infrastructure resource category.");
+
     testUserCategory = new UserCategory();
     testUserCategory.setTitle("senior_citizen");
+
     testResource = new Resource();
     testResource.setTitle("Test Resource");
     testResource.setDescription("Resource added for testing.");
     testResource.setUsageInstructions("set usage instructions");
     testResource.setResourceType(new ArrayList<>());
     testResource.setOrganisation(testOrganisation);
+
     when(jwtDecoder.decode(any())).thenReturn(jwt);
     when(jwt.getClaimAsString("sub")).thenReturn("test_user");
     when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
@@ -245,6 +251,36 @@ public class ResourceControllerTest {
     when(resourceService.getResourceById("999")).thenReturn(Optional.empty());
     mockMvc.perform(get("/resource/999")).andExpect(status().isNotFound())
         .andExpect(content().string("Resource not found with id: 999"));
+  }
+
+  @Test
+  void getResourceById_ValidContactOnly() throws Exception {
+    ResourceType resourceType1 = new ResourceType();
+    resourceType1.setId(1);
+    testResource.setResourceType(Arrays.asList(resourceType1));
+    ResourceContact contact = new ResourceContact();
+
+    when(resourceService.getResourceById("1")).thenReturn(Optional.of(testResource));
+    when(resourceContactService.getResourceContactById("1")).thenReturn(Optional.of(contact));
+
+    mockMvc.perform(get("/resource/1"))
+        .andExpect(status().isOk());
+    verifyNoInteractions(resourceInfraService, resourceServiceService, resourceToolService);
+  }
+
+  @Test
+  void getResourceById_ValidInfraOnly() throws Exception {
+    ResourceType resourceType1 = new ResourceType();
+    resourceType1.setId(2);
+    testResource.setResourceType(List.of(resourceType1));
+    ResourceInfra infra = new ResourceInfra();
+
+    when(resourceService.getResourceById("1")).thenReturn(Optional.of(testResource));
+    when(resourceInfraService.getResourceInfraById("2")).thenReturn(Optional.of(infra));
+
+    mockMvc.perform(get("/resource/1"))
+        .andExpect(status().isOk());
+    verifyNoInteractions(resourceContactService, resourceServiceService, resourceToolService);
   }
 
   @Test
