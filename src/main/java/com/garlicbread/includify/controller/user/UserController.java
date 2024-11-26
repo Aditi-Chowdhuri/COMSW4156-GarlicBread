@@ -42,6 +42,20 @@ public class UserController {
   }
 
   /**
+   * Returns all user categories.
+   *
+   * @return a ResponseEntity containing the list of all user categories
+   */
+  @GetMapping("/category/all")
+  @PermitAll
+  public ResponseEntity<List<UserCategory>> getAllUserCategories() {
+    List<UserCategory> userCategories = userCategoryService.getAll();
+    if (userCategories.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<>(userCategories, HttpStatus.OK);  }
+
+  /**
    * Creates a new user category.
    *
    * @param userCategory the user category to create
