@@ -53,7 +53,8 @@ public class UserController {
     if (userCategories.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    return new ResponseEntity<>(userCategories, HttpStatus.OK);  }
+    return new ResponseEntity<>(userCategories, HttpStatus.OK);
+  }
 
   /**
    * Creates a new user category.
