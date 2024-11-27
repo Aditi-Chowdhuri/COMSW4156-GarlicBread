@@ -1,5 +1,6 @@
 package com.garlicbread.includify.controller.appointment;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
@@ -31,6 +32,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
@@ -156,6 +158,103 @@ public class AppointmentControllerExternalTest {
             .andExpect(jsonPath("$[0].timeStart").value(10))
             .andExpect(jsonPath("$[0].timeEnd").value(12))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetAllAppointmentsForOrganisation_Sad_Path() throws Exception {
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
+
+        mockMvc.perform(get("/appointment/organisation")
+                .header("Authorization", "Bearer Test-JWT-Token")
+                .param("organisation", "non_existent_id"))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testCreateAppointment_Happy_Path() throws Exception {
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
+
+        appointmentRequest.setOrganisationId(organisationService.getAllOrganisations().get(0).getId());
+        appointmentRequest.setUserId(userService.getAllUsers().get(0).getId());
+        appointmentRequest.setResourceIds(List.of(resourceService.getAllResources().get(0).getId()));
+
+        mockMvc.perform(post("/appointment")
+                .header("Authorization", "Bearer Test-JWT-Token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(appointmentRequest)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.date").value("12252024"))
+            .andExpect(jsonPath("$.timeStart").value(10))
+            .andExpect(jsonPath("$.timeEnd").value(12));
+    }
+
+    @Test
+    void testCreateAppointment_Sad_Path_InvalidResource() throws Exception {
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
+
+        appointmentRequest.setOrganisationId(organisationService.getAllOrganisations().get(0).getId());
+        appointmentRequest.setUserId(userService.getAllUsers().get(0).getId());
+        appointmentRequest.setResourceIds(List.of("non_existent_resource_id"));
+
+        mockMvc.perform(post("/appointment")
+                .header("Authorization", "Bearer Test-JWT-Token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(appointmentRequest)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string("Resource does not exist"));
+    }
+
+    @Test
+    void testDeleteAppointment_Happy_Path() throws Exception {
+        Appointment appointment = new Appointment();
+        appointment.setResources(listOf(testResource));
+        appointment.setOrganisation(testOrganisation);
+        appointment.setUser(testUser);
+        appointment.setDate("12252024");
+        appointment.setTimeStart(10);
+        appointment.setTimeEnd(12);
+
+        Appointment createdAppointment = appointmentService.createAppointment(appointment);
+
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
+
+        mockMvc.perform(delete("/appointment/{id}", createdAppointment.getId())
+                .header("Authorization", "Bearer Test-JWT-Token"))
+            .andExpect(status().isNoContent()); // Changed from isOk() to isNoContent()
+    }
+
+    @Test
+    void testDeleteAppointment_Sad_Path_NonExistentAppointment() throws Exception {
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
+
+        mockMvc.perform(delete("/appointment/{id}", "non_existent_id")
+                .header("Authorization", "Bearer Test-JWT-Token"))
+            .andExpect(status().isNotFound());
     }
 
 }
