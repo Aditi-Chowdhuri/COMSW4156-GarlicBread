@@ -1,8 +1,6 @@
 package com.garlicbread.includify.entity.user;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.fail;
@@ -83,6 +81,47 @@ public class UserCategoryTest {
   }
 
   @Test
+  public void testPreRemoveWithNullUsersAndResources() {
+    userCategory.setUsers(null);
+    userCategory.setResources(null);
+
+    try {
+      userCategory.preRemove();
+    } catch (IllegalStateException e) {
+      fail("Unexpected IllegalStateException thrown when deleting category with null users and resources.");
+    }
+  }
+
+  @Test
+  public void testPreRemoveWithNonEmptyUsersAndNullResources() {
+    // Users non-empty, resources null
+    userCategory.setUsers(Arrays.asList(mockUser1));
+    userCategory.setResources(null);
+
+    try {
+      userCategory.preRemove();
+      fail("Expected IllegalStateException when deleting user category with existing users");
+    } catch (IllegalStateException e) {
+      assertEquals("Cannot delete a user category with existing users or with "
+          + "existing resources targeting the same.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testPreRemoveWithNullUsersAndNonEmptyResources() {
+    userCategory.setUsers(null);
+    userCategory.setResources(Arrays.asList(mockResource1));
+
+    try {
+      userCategory.preRemove();
+      fail("Expected IllegalStateException when deleting user category with existing resources");
+    } catch (IllegalStateException e) {
+      assertEquals("Cannot delete a user category with existing users or with "
+          + "existing resources targeting the same.", e.getMessage());
+    }
+  }
+
+  @Test
   public void testPreRemoveWithoutUsers() {
     userCategory.setUsers(Arrays.asList());
     userCategory.setResources(Arrays.asList());
@@ -91,5 +130,20 @@ public class UserCategoryTest {
     } catch (IllegalStateException e) {
       fail("Unexpected IllegalStateException thrown when deleting category without users.");
     }
+  }
+  @Test
+  public void testGetResourceIdsWhenResourcesIsNull() {
+    userCategory.setResources(null);
+    List<String> resourceIds = userCategory.getResourceIds();
+    assertNotNull(resourceIds, "Resource IDs list should not be null");
+    assertTrue(resourceIds.isEmpty(), "Resource IDs list should be empty when resources are null");
+  }
+
+  @Test
+  public void testGetUserIdsWhenUsersIsNull() {
+    userCategory.setUsers(null);
+    List<String> userIds = userCategory.getUserIds();
+    assertNotNull(userIds, "User IDs list should not be null");
+    assertTrue(userIds.isEmpty(), "User IDs list should be empty when users are null");
   }
 }

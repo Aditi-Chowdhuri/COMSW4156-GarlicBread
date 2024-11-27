@@ -1,7 +1,6 @@
 package com.garlicbread.includify.controller.resource;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -101,6 +100,7 @@ public class ResourceControllerTest {
     testOrganisation.setName("Columbia University");
 
     testResourceType = new ResourceType();
+    testResourceType.setId(1);
     testResourceType.setTitle("infrastructure");
     testResourceType.setDescription("infrastructure resource category.");
 
@@ -284,6 +284,37 @@ public class ResourceControllerTest {
   }
 
   @Test
+  void getResourceById_ValidServiceOnly() throws Exception {
+    ResourceType resourceType1 = new ResourceType();
+    resourceType1.setId(3);
+    testResource.setResourceType(List.of(resourceType1));
+    com.garlicbread.includify.entity.resource.types.ResourceService service =
+        new com.garlicbread.includify.entity.resource.types.ResourceService();
+
+    when(resourceService.getResourceById("1")).thenReturn(Optional.of(testResource));
+    when(resourceServiceService.getResourceServiceById("3")).thenReturn(Optional.of(service));
+
+    mockMvc.perform(get("/resource/1"))
+        .andExpect(status().isOk());
+    verifyNoInteractions(resourceContactService, resourceInfraService, resourceToolService);
+  }
+
+  @Test
+  void getResourceById_ValidToolOnly() throws Exception {
+    ResourceType resourceType1 = new ResourceType();
+    resourceType1.setId(4);
+    testResource.setResourceType(List.of(resourceType1));
+    ResourceTool tool = new ResourceTool();
+
+    when(resourceService.getResourceById("1")).thenReturn(Optional.of(testResource));
+    when(resourceToolService.getResourceToolById("2")).thenReturn(Optional.of(tool));
+
+    mockMvc.perform(get("/resource/1"))
+        .andExpect(status().isOk());
+    verifyNoInteractions(resourceContactService, resourceServiceService, resourceInfraService);
+  }
+
+  @Test
   void createResourceType_Happy_Path() throws Exception {
     when(resourceTypeService.createResourceType(any(ResourceType.class))).thenReturn(
         testResourceType);
@@ -310,6 +341,14 @@ public class ResourceControllerTest {
     resourceRequest.setUsageInstructions("Usage instructions");
     resourceRequest.setResourceTypeIds(List.of("1"));
     resourceRequest.setTargetUserCategoryIds(List.of("1"));
+
+    ResourceContact resourceContact = new ResourceContact();
+    resourceContact.setName("Test");
+    resourceContact.setAddress("Addr");
+    resourceContact.setLatitude("lat");
+    resourceContact.setLongitude("long");
+    resourceContact.setDistance(2.0);
+    resourceRequest.setResourceContact(resourceContact);
     String requestBody = objectMapper.writeValueAsString(resourceRequest);
     mockMvc.perform(
             post("/resource/add").contentType(MediaType.APPLICATION_JSON).content(requestBody)
