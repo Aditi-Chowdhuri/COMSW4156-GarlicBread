@@ -35,8 +35,8 @@ jobs:
       - name: Run JaCoCo Coverage
         run: mvn jacoco:report
 
-#      - name: Check PMD Violations
-#        run: pmd:check
+      - name: Check PMD Violations
+        run: mvn pmd:check
 
       - name: Check Checkstyle Violations
         run: mvn checkstyle:checkstyle
@@ -50,8 +50,8 @@ jobs:
       - name: Move Checkstyle Report to Reports Directory
         run: cp target/site/checkstyle.html Reports/checkstyle-report.html
 
-#      - name: Move PMD Report to Reports Directory
-#        run: cp target/site/pmd.html Reports/pmd-report.html
+      - name: Move PMD Report to Reports Directory
+        run: cp target/site/pmd.html Reports/pmd-report.html
 
       - name: Upload Reports as Artifacts
         uses: actions/upload-artifact@v4
