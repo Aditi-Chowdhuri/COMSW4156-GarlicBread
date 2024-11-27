@@ -1,28 +1,30 @@
 package com.garlicbread.includify.controller.organisation;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Collections;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
 import com.garlicbread.includify.entity.organisation.Organisation;
+import com.garlicbread.includify.profile.organisation.OrganisationDetails;
+import com.garlicbread.includify.service.auth.OrganisationDetailsService;
+import com.garlicbread.includify.service.auth.ProfileServiceSelector;
 import com.garlicbread.includify.service.organisation.OrganisationService;
-import com.garlicbread.includify.util.Profile;
-import com.garlicbread.includify.service.auth.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,88 +38,117 @@ public class OrganisationControllerExternalTest {
     @Autowired
     private OrganisationService organisationService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockBean
+    private JwtDecoder jwtDecoder;
 
-    @Autowired
-    private TokenService tokenService;
+    @MockBean
+    private ProfileServiceSelector profileServiceSelector;
+
+    @MockBean
+    private OrganisationDetailsService organisationDetailsService;
+
+    @Mock
+    private Jwt jwt;
 
     private Organisation testOrganisation;
-    private String authToken;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testOrganisation = new Organisation();
-        testOrganisation.setAddress("New York");
-        testOrganisation.setEmail("test@cu.com");
-        testOrganisation.setPassword("password");
-        testOrganisation.setLatitude("12.89");
-        testOrganisation.setLongitude("-12.89");
-        testOrganisation.setDescription("Ivy League University");
-        testOrganisation.setName("Columbia University");
+        testOrganisation.setName("Test Organisation");
+        testOrganisation.setEmail("test@organisation.com");
+        testOrganisation.setPassword("password123");
+        testOrganisation.setAddress("123 Test St");
+        testOrganisation.setLatitude("40.7128");
+        testOrganisation.setLongitude("-74.0060");
+        testOrganisation.setDescription("Test Description");
 
-        // Generate auth token for tests
-        String username = testOrganisation.getEmail();
-        Profile profile = Profile.ORGANISATION;
-        List<String> authorities = Collections.singletonList("ROLE_ORGANISATION");
-        authToken = tokenService.generateToken(username, profile, authorities);
+        when(jwtDecoder.decode(any())).thenReturn(jwt);
+        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+        when(jwt.getClaimAsString("profile")).thenReturn("ORGANISATION");
+        when(profileServiceSelector.selectService(any())).thenReturn(organisationDetailsService);
+        when(organisationDetailsService.loadUserByUsername(any())).thenReturn(
+            new OrganisationDetails(testOrganisation));
     }
 
     @Test
-    void testCreateAndGetOrganisation() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(testOrganisation);
+    void testCreateAndGetOrganisation_Happy_Path() throws Exception {
+        String organisationJson = new ObjectMapper().writeValueAsString(testOrganisation);
 
-        // Create organisation
-        String responseContent = mockMvc.perform(post("/organisation/create")
+        String createdOrganisationId = mockMvc.perform(post("/organisation")
+                .header("Authorization", "Bearer Test-JWT-Token")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                .content(organisationJson))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.name").value("Columbia University"))
             .andReturn().getResponse().getContentAsString();
 
-        Organisation createdOrganisation = objectMapper.readValue(responseContent, Organisation.class);
-
-        // Get organisation by ID
-        mockMvc.perform(get("/organisation/" + createdOrganisation.getId())
-                .header("Authorization", "Bearer " + authToken))
+        mockMvc.perform(get("/organisation/{id}", createdOrganisationId)
+                .header("Authorization", "Bearer Test-JWT-Token"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.email").value("test@cu.com"))
-            .andExpect(jsonPath("$.name").value("Columbia University"))
-            .andExpect(jsonPath("$.latitude").value("12.89"))
-            .andExpect(jsonPath("$.longitude").value("-12.89"))
-            .andExpect(jsonPath("$.description").value("Ivy League University"));
+            .andExpect(jsonPath("$.name").value("Test Organisation"))
+            .andExpect(jsonPath("$.email").value("test@organisation.com"));
     }
 
     @Test
-    void testUpdateOrganisation() throws Exception {
-        // Create organisation
-        Organisation createdOrganisation = organisationService.createOrganisation(testOrganisation);
+    void testUpdateOrganisation_Happy_Path() throws Exception {
+        Organisation savedOrganisation = organisationService.createOrganisation(testOrganisation);
+        savedOrganisation.setName("Updated Organisation");
+        String updatedOrganisationJson = new ObjectMapper().writeValueAsString(savedOrganisation);
 
-        // Update organisation
-        createdOrganisation.setAddress("Updated Address");
-        String updateRequestBody = objectMapper.writeValueAsString(createdOrganisation);
-
-        mockMvc.perform(put("/organisation/update/" + createdOrganisation.getId())
+        mockMvc.perform(put("/organisation/{id}", savedOrganisation.getId())
+                .header("Authorization", "Bearer Test-JWT-Token")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(updateRequestBody)
-                .header("Authorization", "Bearer " + authToken))
+                .content(updatedOrganisationJson))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.address").value("Updated Address"));
+            .andExpect(jsonPath("$.name").value("Updated Organisation"));
     }
 
     @Test
-    void testDeleteOrganisation() throws Exception {
-        // Create organisation
-        Organisation createdOrganisation = organisationService.createOrganisation(testOrganisation);
+    void testDeleteOrganisation_Happy_Path() throws Exception {
+        Organisation savedOrganisation = organisationService.createOrganisation(testOrganisation);
 
-        // Delete organisation
-        mockMvc.perform(delete("/organisation/delete/" + createdOrganisation.getId())
-                .header("Authorization", "Bearer " + authToken))
+        mockMvc.perform(delete("/organisation/{id}", savedOrganisation.getId())
+                .header("Authorization", "Bearer Test-JWT-Token"))
             .andExpect(status().isNoContent());
 
-        // Verify organisation is deleted
-        mockMvc.perform(get("/organisation/" + createdOrganisation.getId())
-                .header("Authorization", "Bearer " + authToken))
+        mockMvc.perform(get("/organisation/{id}", savedOrganisation.getId())
+                .header("Authorization", "Bearer Test-JWT-Token"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetAllOrganisations_Happy_Path() throws Exception {
+        organisationService.createOrganisation(testOrganisation);
+
+        mockMvc.perform(get("/organisation/all")
+                .header("Authorization", "Bearer Test-JWT-Token"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].name").value("Test Organisation"))
+            .andExpect(jsonPath("$[0].email").value("test@organisation.com"));
+    }
+
+    @Test
+    void testGetOrganisationById_Sad_Path() throws Exception {
+        mockMvc.perform(get("/organisation/{id}", "non_existent_id")
+                .header("Authorization", "Bearer Test-JWT-Token"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testUpdateOrganisation_Sad_Path() throws Exception {
+        String updatedOrganisationJson = new ObjectMapper().writeValueAsString(testOrganisation);
+
+        mockMvc.perform(put("/organisation/{id}", "non_existent_id")
+                .header("Authorization", "Bearer Test-JWT-Token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedOrganisationJson))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeleteOrganisation_Sad_Path() throws Exception {
+        mockMvc.perform(delete("/organisation/{id}", "non_existent_id")
+                .header("Authorization", "Bearer Test-JWT-Token"))
             .andExpect(status().isNotFound());
     }
 }
