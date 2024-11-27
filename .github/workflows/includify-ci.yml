@@ -63,8 +63,6 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-#          git checkout -b ${{ github.head_ref }} || git checkout ${{ github.head_ref }}
           git add Reports/*
           git commit -m "Add all reports to Reports directory"
           git push
-#          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.head_ref }}
