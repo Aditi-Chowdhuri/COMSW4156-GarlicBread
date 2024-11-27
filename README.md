@@ -657,3 +657,25 @@ issues it might not be available for long.
 ## Jacoco Code Coverage Report
 
 <img width="1173" alt="Screenshot 2024-10-25 at 1 54 15 PM" src="https://github.com/user-attachments/assets/a1c7b4dc-0781-4e0d-906e-3bc2364e27e5">
+
+# **Final API Test Suit and Documentatione**
+
+This **Final API Test Suite** consists of a comprehensive set of endpoints for testing and validating the service. The suite is categorized into the following sections:
+
+1. **Organisation Endpoints**
+2. **Registration Endpoints**
+3. **Resource Endpoints**
+4. **Volunteer Endpoints**
+5. **Appointment Endpoints**
+
+The API includes both **public** and **non-public** endpoints, with automated integration into CI/CD pipelines using **Newman**.
+
+---
+
+## **Postman Documentation**
+
+The full Postman documentation for this API suite can be accessed here:
+
+- [All Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBVhrbR)
+- [Public Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBXAAPp)
+
