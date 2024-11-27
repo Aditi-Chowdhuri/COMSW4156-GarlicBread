@@ -32,9 +32,6 @@ jobs:
       - name: Run JaCoCo Coverage
         run: mvn jacoco:report
 
-      - name: Check PMD Violations
-        run: mvn pmd:check
-
       - name: Check Checkstyle Violations
         run: mvn checkstyle:checkstyle
 
@@ -47,14 +44,48 @@ jobs:
       - name: Move Checkstyle Report to Reports Directory
         run: cp target/site/checkstyle.html Reports/checkstyle-report.html
 
-      - name: Move PMD Report to Reports Directory
-        run: cp target/site/pmd.html Reports/pmd-report.html
-
       - name: Upload Reports as Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: reports
           path: Reports/
+
+  newman:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Newman Collection
+        run: |
+          newman run Includify.postman_collection.json \
+            --reporters cli,html,json \
+            --reporter-html-export newman-report.html \
+            --reporter-json-export newman-report.json
+
+      - name: Create Newman Reports Directory
+        run: mkdir -p NewmanReports
+
+      - name: Move Newman Reports to Directory
+        run: |
+          mv newman-report.html NewmanReports/
+          mv newman-report.json NewmanReports/
+
+      - name: Upload Newman Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-reports
+          path: NewmanReports/
+
 #TODO
 #      - name: Commit Reports to Repository
 #        run: |

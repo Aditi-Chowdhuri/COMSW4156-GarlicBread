@@ -25,7 +25,7 @@ volunteer support for these visits.
 - **Organizational Accessibility**: Organizations can post infrastructure
   details (e.g., ramps, elevators) and resource availability (e.g.,
   wheelchairs).
-- **User Scheduling**: Individuals can schedule visits based on the availability
+- **Registration Scheduling**: Individuals can schedule visits based on the availability
   of accessibility resources.
 - **Volunteer Coordination**: Volunteers can sign up to assist disabled
   individuals and senior citizens during their visits.
@@ -111,7 +111,7 @@ The possible clients who would likely use our service includes:
 
 - `POST /organisation/login` → Organization login
 - `POST /volunteer/login` → Volunteer login
-- `POST /user/login` → User login
+- `POST /registration/login` → Registration login
 
 ## Organisation Endpoints
 
@@ -314,7 +314,7 @@ The possible clients who would likely use our service includes:
 
 ## User Endpoints
 
-### 1. **POST `/user/createCategory`**
+### 1. **POST `/registration/createCategory`**
 
 - **Description**: Creates a new user category.
 - **Request**: Expects a JSON payload representing the user category.
@@ -329,7 +329,7 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: A valid user category JSON body.
 - **Authorization**: Public (No authorization required).
 
-### 2. **DELETE `/user/deleteCategory/{id}`**
+### 2. **DELETE `/registration/deleteCategory/{id}`**
 
 - **Description**: Deletes a user category by its ID.
 - **Path Variable**:
@@ -343,16 +343,16 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: A valid user category ID.
 - **Authorization**: Public (No authorization required).
 
-### 3. **GET `/user/all`**
+### 3. **GET `/registration/all`**
 
-- **Description**: Retrieves all users.
+- **Description**: Retrieves all users registered.
 - **Response**:
-  - `200 OK`: Returns a list of all users.
+  - `200 OK`: Returns a list of all users registered.
   - `204 No Content`: If no users exist.
 - **Pre-requisites**: None.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
-### 4. **GET `/user/{id}`**
+### 4. **GET `/registration/{id}`**
 
 - **Description**: Retrieves a user by their ID.
 - **Path Variable**:
@@ -363,9 +363,9 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: A valid user ID.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
-### 5. **POST `/user/create`**
+### 5. **POST `/registration/create`**
 
-- **Description**: Creates a new user.
+- **Description**: Creates a new user registration.
 - **Request**: Expects a JSON payload representing the user request.
   ```json
   {
@@ -384,9 +384,9 @@ The possible clients who would likely use our service includes:
 - **Pre-requisites**: Valid JSON body with user details, including category IDs.
 - **Authorization**: Public (No authorization required).
 
-### 6. **PUT `/user/update/{id}`**
+### 6. **PUT `/registration/update/{id}`**
 
-- **Description**: Updates an existing user.
+- **Description**: Updates an existing registered user.
 - **Path Variable**:
   - `id` (String): The ID of the user to update.
 - **Request**: Expects a JSON payload representing the updated user details.
@@ -409,7 +409,7 @@ The possible clients who would likely use our service includes:
 - **Authorization**: Requires JWT Bearer token with `USER` authority. The 
   token must belong to the user being updated.
 
-### 7. **DELETE `/user/delete/{id}`**
+### 7. **DELETE `/registration/delete/{id}`**
 
 - **Description**: Deletes a user by their ID.
 - **Path Variable**:
@@ -425,13 +425,13 @@ The possible clients who would likely use our service includes:
 
 ### Summary of Endpoints:
 
-- **POST** `/user/createCategory` → Create a new user category.
-- **DELETE** `/user/deleteCategory/{id}` → Delete a user category by its ID.
-- **GET** `/user/all` → Retrieve all users.
-- **GET** `/user/{id}` → Retrieve a user by ID.
-- **POST** `/user/create` → Create a new user.
-- **PUT** `/user/update/{id}` → Update a user by ID.
-- **DELETE** `/user/delete/{id}` → Delete a user by ID.
+- **POST** `/registration/createCategory` → Create a new user category.
+- **DELETE** `/registration/deleteCategory/{id}` → Delete a user category by its ID.
+- **GET** `/registration/all` → Retrieve all registered users.
+- **GET** `/registration/{id}` → Retrieve a user by ID.
+- **POST** `/registration/create` → Create a new user.
+- **PUT** `/registration/update/{id}` → Update a user by ID.
+- **DELETE** `/registration/delete/{id}` → Delete a user by ID.
 
 ## VolunteerController Endpoints
 
