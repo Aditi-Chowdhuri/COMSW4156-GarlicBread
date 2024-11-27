@@ -128,7 +128,10 @@ public class AppointmentController {
           if (resourceType.getId() == 4) {
             Optional<ResourceTool> resourceTool = resourceToolService.getResourceToolById(
                 resourceId);
-            if (resourceTool.isPresent() && resourceTool.get().getCount() <= 0) {
+            int usedCount = appointmentService.findAppointmentCountByDetails(resourceId,
+                appointmentRequest.getDate(), appointmentRequest.getTimeStart(),
+                appointmentRequest.getTimeEnd());
+            if (resourceTool.isPresent() && usedCount >= resourceTool.get().getCount()) {
               return new ResponseEntity<>("Resource not available: " + resourceId,
                   HttpStatus.BAD_REQUEST);
             }
@@ -162,20 +165,6 @@ public class AppointmentController {
       }
     } catch (DateTimeParseException e) {
       return new ResponseEntity<>("Invalid date format: expected mmddyyyy", HttpStatus.BAD_REQUEST);
-    }
-
-    for (Resource resource : resources) {
-      List<ResourceType> resourceTypes = resource.getResourceType();
-      for (ResourceType resourceType : resourceTypes) {
-        if (resourceType.getId() == 4) {
-          Optional<ResourceTool> resourceTool = resourceToolService
-              .getResourceToolById(resource.getId());
-          if (resourceTool.isPresent()) {
-            resourceTool.get().setCount(resourceTool.get().getCount() - 1);
-            resourceToolService.addResourceTool(resourceTool.get());
-          }
-        }
-      }
     }
 
     Appointment createdAppointment = appointmentService.createAppointment(mapToAppointment(

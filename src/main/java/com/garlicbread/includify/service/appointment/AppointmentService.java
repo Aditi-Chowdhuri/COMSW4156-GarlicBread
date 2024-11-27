@@ -41,8 +41,8 @@ public class AppointmentService {
    */
   public Appointment getAppointmentById(String id) {
     Optional<Appointment> appointment = appointmentRepository.findById(id);
-    return appointment.orElseThrow(() -> new ResourceNotFoundException(
-        "Appointment not found with id: " + id));
+    return appointment.orElseThrow(
+        () -> new ResourceNotFoundException("Appointment not found with id: " + id));
   }
 
   /**
@@ -53,6 +53,12 @@ public class AppointmentService {
    */
   public List<Appointment> getAllAppointmentsForOrganisation(String id) {
     return appointmentRepository.findByOrganisationId(id);
+  }
+
+  public int findAppointmentCountByDetails(String resourceId, String date, long startTime,
+                                           long endTime) {
+    return appointmentRepository.findAppointmentCountByDetails(resourceId, date, startTime,
+        endTime);
   }
 
   /**

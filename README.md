@@ -495,6 +495,87 @@ The possible clients who would likely use our service includes:
 - **GET** `/volunteer/{id}` → Retrieve a volunteer by ID.
 - **DELETE** `/volunteer/delete/{id}` → Delete a volunteer by ID.
 
+## Appointment Endpoints
+
+### 1. **POST `/appointment`**
+
+- **Description**: Creates a new appointment.
+- **Request**: Expects a JSON payload representing the appointment details.
+  ```json
+  {
+  "organisationId": "org123",
+  "userId": "user456",
+  "resourceIds": ["resource789", "resource101"],
+  "date": "12252024",
+  "timeStart": 9,
+  "timeEnd": 11,
+  "description": "Wheelchair assistance appointment"
+  }
+- **Response**:
+  - `200 Ok`: Returns the created appointment.
+  - `400 Bad Request`: Invalid or missing input fields.
+  - `403 Forbidden`: The authenticated user or organisation is not allowed to create the appointment.
+  - `500 Internal Server Error`: Appointment creation failed.
+
+- **Pre-requisites**: A valid appointment JSON body, JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or USER authority.
+
+### 2. **GET `/appointment/organisation`**
+
+- **Description**: Retrieves all appointments for a specific organisation.
+- **Request Parameters**:
+  - `organisation` (String): The ID of the organisation to fetch appointments for.
+- **Response**:
+  - `200 OK`: Returns a list of appointments for the organisation.
+  - `403 Forbidden`: The authenticated organisation does not have permission to access the requested data.
+  - `500 Internal Server Error`: Failed to retrieve appointments.
+- **Pre-requisites**: Valid organisation ID., JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or VOLUNTEER authority.
+
+### 3. **GET `/appointment/user`**
+
+- **Description**: Retrieves all appointments for the authenticated user.
+- **Response**:
+  - `200 OK`: Returns a list of appointments for the user.
+  - `500 Internal Server Error`: Failed to retrieve appointments.
+- **Pre-requisites**: JWT Bearer token for authentication.
+- **Authorization**: Requires USER authority.
+
+### 4. **DELETE `/appointment/{id}`**
+
+- **Description**: Deletes an appointment by its ID.
+- **Path Variable**:
+  - `id` (String): The ID of the appointment to delete.
+- **Response**:
+  - `204 No Content`: Appointment deleted successfully.
+  - `403 Forbidden`: If the authenticated volunteer does not match the ID of the volunteer being deleted.
+  - `404 Not Found`: The authenticated user or organisation is not allowed to delete the appointment.
+  - `500 Internal Server Error`: Appointment deletion failed.
+- **Pre-requisites**:Valid appointment id, 
+JWT Bearer token for authentication.
+- **Authorization**: Requires ORGANISATION or USER authority
+
+### 5. **POST `/appointment/{id}/volunteer`**
+
+- **Description**: Assigns a volunteer to an appointment.
+- **Path Variable**:
+  - `id` (String): The ID of the appointment to assign a volunteer.
+- **Response**:
+  - `200 OK`: Returns the updated appointment with the assigned volunteer.
+  - `400 Bad Request`: The appointment already has a volunteer assigned or invalid volunteer ID.
+  - `500 Internal Server Error`: Failed to assign the volunteer.
+- **Pre-requisites**:Valid appointment id, 
+JWT Bearer token for authentication.
+- **Authorization**: Requires VOLUNTEER authority
+
+### Summary of Endpoints:
+
+- **POST** `/appointment` → Create a new appointment.
+- **GET** `/appointment/organisation` → Get all appointments for an organisation.
+- **GET** `/appointment/user ` → Get all appointments for a user.
+- **DELETE** `/appointment/{id}` → Delete an appointment by ID.
+- **POST** `/appointment/{id}/volunteer` → Assign a volunteer to an appointment.
+
 ## Technology Stack
 
 - **Programming Language**: Java
@@ -576,3 +657,48 @@ issues it might not be available for long.
 ## Jacoco Code Coverage Report
 
 <img width="1173" alt="Screenshot 2024-10-25 at 1 54 15 PM" src="https://github.com/user-attachments/assets/a1c7b4dc-0781-4e0d-906e-3bc2364e27e5">
+
+# **Final API Test Suit and Documentatione**
+
+This **Final API Test Suite** consists of a comprehensive set of endpoints for testing and validating the service. The suite is categorized into the following sections:
+
+1. **Organisation Endpoints**
+2. **Registration Endpoints**
+3. **Resource Endpoints**
+4. **Volunteer Endpoints**
+5. **Appointment Endpoints**
+
+The API includes both **public** and **non-public** endpoints, with automated integration into CI/CD pipelines using **Newman**.
+
+---
+
+## **Postman Documentation**
+
+The full Postman documentation for this API suite can be accessed here:
+
+- [All Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBVhrbR)
+- [Public Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBXAAPp)
+
+## **Continuous Integration (CI)**
+
+This project uses GitHub Actions for CI to automate the build, testing, and static analysis processes. The CI pipeline is triggered on every `push` or `pull request` to the `main` branch.
+
+#### Key Steps
+
+1. **Checkout Code**: The workflow fetches the latest code from the repository.
+2. **Set up Java 17**: Java 17 is installed via the `actions/setup-java` action, ensuring a consistent environment.
+3. **Build with Maven**: The project is built using `mvn clean install`, resolving dependencies and compiling the code.
+4. **Run Tests**: Unit tests are executed with `mvn test` to verify code correctness.
+5. **PMD Analysis**: Runs `mvn pmd:check` to detect code quality issues.
+6. **Checkstyle Validation**: Ensures code adheres to the coding standards using `mvn checkstyle:checkstyle`.
+7. **JaCoCo Code Coverage**: Code coverage reports are generated using `mvn jacoco:report`, providing insights into test coverage.
+8. **Generate Reports**: Reports for PMD, Checkstyle, and JaCoCo are collected and stored in a `Reports` directory within the workflow.
+9. **Upload Reports as Artifacts**: The reports are uploaded to GitHub as artifacts for easy access and review.
+10. **Commit Reports to Repository**: The reports are committed to the repository under the `Reports` directory. This ensures that the latest reports are version-controlled and easily accessible. The commit uses a temporary branch created by the workflow.
+
+
+### Reports Directory
+The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory:
+- **JaCoCo Report**: Located at `Reports/jacoco-report.html`.
+- **Checkstyle Report**: Located at `Reports/checkstyle-report.html`.
+- **PMD Report**: Located at `Reports/pmd-report.html`.

@@ -24,5 +24,5 @@ public class Constants {
       new String[]{"/organisation/login", "/volunteer/login", "/registration/login", "/volunteer"
           + "/add", "/registration/create", "/organisation/create", "/resource/all",
           "/resource/{id}", "/organisation/all", "/organisation/{id}", "/", "/registration"
-          + "/deleteCategory/{id}", "/registration/createCategory"};
+          + "/deleteCategory/{id}", "/registration/createCategory", "registration/category/all"};
 }
