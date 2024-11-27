@@ -47,6 +47,12 @@ class ResourceTypeTest {
   }
 
   @Test
+  void testPreRemove_WithNullResources_ShouldNotThrowException() {
+    resourceType.setResources(null);
+    assertDoesNotThrow(() -> resourceType.preRemove());
+  }
+
+  @Test
   void testGetResourceIds_WithResources_ShouldReturnResourceIds() {
     List<Resource> resources = new ArrayList<>();
     when(mockResource.getId()).thenReturn("resource1");
