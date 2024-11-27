@@ -56,9 +56,6 @@ public class AuthControllerExternalTest {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private Authentication authentication;
-
-    @MockBean
     private TokenService tokenService;
 
     private Organisation testOrganisation;
@@ -84,11 +81,6 @@ public class AuthControllerExternalTest {
         testVolunteer.setAge(25);
         testVolunteer.setAddress("116st, NY");
         testVolunteer.setPhone("929-428-6666");
-
-        // Mock authentication process
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-        .thenReturn(mock(Authentication.class));
-        when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-token");
     }
 
     @Test
@@ -96,6 +88,11 @@ public class AuthControllerExternalTest {
         AuthRequest authRequest = new AuthRequest();
         authRequest.setEmail(testOrganisation.getEmail());
         authRequest.setPassword("password");
+
+        Authentication mockAuthentication = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+            .thenReturn(mockAuthentication);
+        when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-token");
 
         mockMvc.perform(post("/organisation/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,8 +107,9 @@ public class AuthControllerExternalTest {
         authRequest.setEmail(testUser.getEmail());
         authRequest.setPassword("password");
 
+        Authentication mockAuthentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-        .thenReturn(authentication);
+            .thenReturn(mockAuthentication);
         when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-user-token");
 
         mockMvc.perform(post("/registration/login")
@@ -127,8 +125,9 @@ public class AuthControllerExternalTest {
         authRequest.setEmail(testVolunteer.getEmail());
         authRequest.setPassword("password");
     
+        Authentication mockAuthentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-        .thenReturn(authentication);
+            .thenReturn(mockAuthentication);
         when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-volunteer-token");
     
         mockMvc.perform(post("/volunteer/login")
