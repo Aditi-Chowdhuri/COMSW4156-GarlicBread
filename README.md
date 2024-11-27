@@ -679,3 +679,26 @@ The full Postman documentation for this API suite can be accessed here:
 - [All Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBVhrbR)
 - [Public Endpoints](https://documenter.getpostman.com/view/39266957/2sAYBXAAPp)
 
+## **Continuous Integration (CI)**
+
+This project uses GitHub Actions for CI to automate the build, testing, and static analysis processes. The CI pipeline is triggered on every `push` or `pull request` to the `main` branch.
+
+#### Key Steps
+
+1. **Checkout Code**: The workflow fetches the latest code from the repository.
+2. **Set up Java 17**: Java 17 is installed via the `actions/setup-java` action, ensuring a consistent environment.
+3. **Build with Maven**: The project is built using `mvn clean install`, resolving dependencies and compiling the code.
+4. **Run Tests**: Unit tests are executed with `mvn test` to verify code correctness.
+5. **PMD Analysis**: Runs `mvn pmd:check` to detect code quality issues.
+6. **Checkstyle Validation**: Ensures code adheres to the coding standards using `mvn checkstyle:checkstyle`.
+7. **JaCoCo Code Coverage**: Code coverage reports are generated using `mvn jacoco:report`, providing insights into test coverage.
+8. **Generate Reports**: Reports for PMD, Checkstyle, and JaCoCo are collected and stored in a `Reports` directory within the workflow.
+9. **Upload Reports as Artifacts**: The reports are uploaded to GitHub as artifacts for easy access and review.
+10. **Commit Reports to Repository**: The reports are committed to the repository under the `Reports` directory. This ensures that the latest reports are version-controlled and easily accessible. The commit uses a temporary branch created by the workflow.
+
+
+### Reports Directory
+The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory:
+- **JaCoCo Report**: Located at `Reports/jacoco-report.html`.
+- **Checkstyle Report**: Located at `Reports/checkstyle-report.html`.
+- **PMD Report**: Located at `Reports/pmd-report.html`.
