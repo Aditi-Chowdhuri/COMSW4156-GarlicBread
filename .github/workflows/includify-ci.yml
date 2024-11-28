@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+    types: [ "opened", "edited", "synchronize", "reopened" ]
     branches:
       - main
 
@@ -65,4 +66,4 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add Reports/*
           git commit -m "Add all reports to Reports directory"
-          git push
+          git push origin HEAD:main
