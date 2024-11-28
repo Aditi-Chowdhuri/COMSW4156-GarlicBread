@@ -19,7 +19,7 @@ public class Constants {
   public static final String CLAIM_PROFILE = "profile";
   public static final String AUTH_HEADER = "Authorization";
   public static final String BEARER_TOKEN_PREFIX = "Bearer ";
-  public static final String JWT_ISSUER = "http://localhost:8080/";
+  public static final String JWT_ISSUER = "https://garlicbread-includify.ue.r.appspot.com/";
   public static final String[] NO_AUTH_ENDPOINTS =
       new String[]{"/organisation/login", "/volunteer/login", "/registration/login", "/volunteer"
           + "/add", "/registration/create", "/organisation/create", "/resource/all",
