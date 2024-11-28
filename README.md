@@ -15,7 +15,7 @@
 
 Please use the following link to view the repository relevant to the app: https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client
 
-## Project Management tool 
+## Project Management Tool 
 Trello Board used by GarlicBread team: https://trello.com/b/9EErBJ64/garlicbread
 
 ## Overview
@@ -608,12 +608,36 @@ JWT Bearer token for authentication.
 
 ## Testing Strategy
 
-- **Unit Testing**: Using **JUnit** for core business logic testing and *
-  *Mockito** for mocking dependencies and services.
-- **Integration Testing**: Using **MockMvc** for server-side endpoint testing
-  and simulating HTTP request-response cycles.
-- **End-to-End Testing**: Utilizing **Postman** to ensure real-world
-  functionality of the API across the full system.
+- **Unit Testing**: Using **JUnit** for core business logic testing and 
+  **Mockito** for mocking dependencies and services.
+  - [AppointmentServiceTest](src/test/java/com/garlicbread/includify/service/appointment/AppointmentServiceTest.java)
+  - [ProfileSelectorTest](src/test/java/com/garlicbread/includify/service/auth/ProfileServiceSelectorTest.java)
+  - [UserDetailsServiceTest](src/test/java/com/garlicbread/includify/service/auth/UserDetailsServiceTest.java)
+  - [VolunteerDetailsServiceTest](src/test/java/com/garlicbread/includify/service/auth/VolunteerDetailsServiceTest.java)
+  - [ResourceTest](src/test/java/com/garlicbread/includify/entity/resource/ResourceTest.java)
+  - [ResourceTypeTest](src/test/java/com/garlicbread/includify/entity/resource/ResourceTypeTest.java)
+  - [UserCategoryTest](src/test/java/com/garlicbread/includify/entity/user/UserCategoryTest.java)
+  
+- **Internal Integration Testing**: Using **MockMvc** for server-side endpoint 
+  testing and simulating HTTP request-response cycles.
+  - [AppointmentControllerTest](src/test/java/com/garlicbread/includify/controller/appointment/AppointmentControllerTest.java)
+  - [AuthControllerTest](src/test/java/com/garlicbread/includify/controller/auth/AuthControllerTest.java)
+  - [OrganisationControllerTest](src/test/java/com/garlicbread/includify/controller/organisation/OrganisationControllerTest.java)
+  - [ResourceControllerTest](src/test/java/com/garlicbread/includify/controller/resource/ResourceControllerTest.java)
+  - [UserControllerTest](src/test/java/com/garlicbread/includify/controller/user/UserControllerTest.java)
+  - [VolunteerControllerTest](src/test/java/com/garlicbread/includify/controller/volunteer/VolunteerControllerTest.java)
+
+- **External Integration Testing**: Using **in-memory Hsqldb** to test on 
+    actual data.
+  - [AppointmentControllerExternalTest](src/test/java/com/garlicbread/includify/controller/appointment/AppointmentControllerExternalTest.java)
+  - [AuthControllerExternalTest](src/test/java/com/garlicbread/includify/controller/auth/AuthControllerExternalTest.java)
+  - [OrganisationControllerExternalTest](src/test/java/com/garlicbread/includify/controller/organisation/OrganisationControllerExternalTest.java)
+  - [ResourceControllerExternalTest](src/test/java/com/garlicbread/includify/controller/resource/ResourceControllerExternalTest.java)
+  - [UserControllerExternalTest](src/test/java/com/garlicbread/includify/controller/user/UserControllerExternalTest.java)
+  - [VolunteerControllerExternalTest](src/test/java/com/garlicbread/includify/controller/volunteer/VolunteerControllerExternalTest.java)
+  
+- **End-to-End Testing**: Done on the client side [here](https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client?tab=readme-ov-file#testing).
+- **API Test Suite**: Available [here](#final-api-test-suite-and-documentation) 
 
 ## Installation
 
@@ -642,7 +666,13 @@ mvn jacoco:report
 Run code style checks:
 
 ```
-mvn checkstyle:check
+mvn checkstyle:checkstyle
+```
+
+Run static code analysis:
+
+```
+mvn pmd:check
 ```
 
 ## Tools and Technologies Used
@@ -662,6 +692,9 @@ project, along with additional details where applicable.
 - **Postman**  
   Postman is used for testing the functionality of our APIs.
 
+- **PMD**  
+  PMD is used for static code analysis.
+
 ## Service pushed to GCP App Engine
 
 The service is currently hosted [here](https://garlicbread-includify.ue.r.appspot.com/). However, owing to maintenance 
@@ -673,19 +706,19 @@ issues it might not be available for long.
 
 <img width="1450" alt="Screenshot 2024-10-18 at 11 18 47 PM" src="https://github.com/user-attachments/assets/58cb33bd-ee19-43f5-9dd1-c14a47594258">
 
-## Style-checks
+## Style-Checks (No warnings)
 
 <img width="1506" alt="Screenshot 2024-11-27 at 5 59 26 PM" src="https://github.com/user-attachments/assets/be648efb-af3d-4a01-9752-5a951b75ab11">
 
-## Jacoco Code Coverage Report
+## Jacoco Code Coverage Report (87%)
 
 <img width="1507" alt="Screenshot 2024-11-27 at 10 44 22 PM" src="https://github.com/user-attachments/assets/badf8fdb-71b1-4cdf-8315-78931c4c0c29">
 
-## PMD Static Analysis
+## PMD Static Analysis (No Issues)
 
 <img width="1501" alt="Screenshot 2024-11-27 at 3 26 59 PM" src="https://github.com/user-attachments/assets/2cd633b0-5232-4295-8f59-333b48098f7e">
 
-# **Final API Test Suit and Documentatione**
+# **Final API Test Suite and Documentation**
 
 This **Final API Test Suite** consists of a comprehensive set of endpoints for testing and validating the service. The suite is categorized into the following sections:
 
