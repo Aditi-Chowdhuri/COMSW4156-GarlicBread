@@ -392,7 +392,7 @@ The possible clients who would likely use our service includes:
     "password": "strongPassword456",
     "categoryIds": ["1"]
   }
- ```
+ 
  Note: categoryIds are optional.
 - **Response**:
  - `201 Created`: Returns the created user.
@@ -726,7 +726,4 @@ This project uses GitHub Actions for CI to automate the build, testing, and stat
 
 
 ### Reports Directory
-The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory:
-- **JaCoCo Report**: Located at `Reports/jacoco-report.html`.
-- **Checkstyle Report**: Located at `Reports/checkstyle-report.html`.
-- **PMD Report**: Located at `Reports/pmd-report.html`.
+The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory: https://github.com/Aditi-Chowdhuri/COMSW4156-GarlicBread/actions/runs/12061769123/artifacts/2247724605
