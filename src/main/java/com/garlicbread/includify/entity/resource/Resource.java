@@ -16,8 +16,12 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a resource entity in the system.
+ */
 @Entity
 @Table(name = "resource", uniqueConstraints = {
     // An organisation can have at most one resource with a given
@@ -100,8 +104,23 @@ public class Resource {
     this.usageInstructions = usageInstructions;
   }
 
-  public List<Appointment> getAppointments() {
-    return appointments;
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Gets the list of appointment IDs associated with the resource.
+   *
+   * @return the list of appointment IDs
+   */
+  public List<String> getAppointments() {
+    List<String> appointmentIds = new ArrayList<>();
+    if (this.appointments != null) {
+      for (Appointment appointment : this.appointments) {
+        appointmentIds.add(appointment.getId());
+      }
+    }
+    return appointmentIds;
   }
 
   public void setAppointments(List<Appointment> appointments) {

@@ -16,9 +16,9 @@ public class ApiError {
   /**
    * Constructs a new ApiError with the specified details.
    *
-   * @param status the HTTP status associated with the error
+   * @param status  the HTTP status associated with the error
    * @param message a human-readable message providing more details about the error
-   * @param path the request path that generated the error
+   * @param path    the request path that generated the error
    */
   public ApiError(HttpStatus status, String message, String path) {
     this.status = status;

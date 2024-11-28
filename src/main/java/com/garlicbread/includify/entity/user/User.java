@@ -18,6 +18,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * Entity class representing a User in the system.
+ * This class is mapped to the "user" table in the database
+ * with a unique constraint on the email field.
+ */
 @Entity
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User {
@@ -36,7 +41,7 @@ public class User {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_categories", joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "category_id"))
+      inverseJoinColumns = @JoinColumn(name = "category_id"))
   private List<UserCategory> categories;
 
   @Column(nullable = false, unique = true)
@@ -48,6 +53,10 @@ public class User {
   @NotBlank(message = "Password is required")
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getId() {
     return id;

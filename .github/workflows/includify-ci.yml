@@ -1,0 +1,66 @@
+name: Includify Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Run JaCoCo Coverage
+        run: mvn jacoco:report
+
+      - name: Check PMD Violations
+        run: mvn pmd:check
+
+      - name: Check Checkstyle Violations
+        run: mvn checkstyle:checkstyle
+
+      - name: Create Reports Directory
+        run: mkdir -p Reports
+
+      - name: Move JaCoCo Report to Reports Directory
+        run: cp target/site/jacoco/index.html Reports/jacoco-report.html
+
+      - name: Move Checkstyle Report to Reports Directory
+        run: cp target/site/checkstyle.html Reports/checkstyle-report.html
+
+      - name: Move PMD Report to Reports Directory
+        run: cp target/site/pmd.html Reports/pmd-report.html
+
+      - name: Upload Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: Reports/
+
+      - name: Commit Reports to Repository
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -b ${{ github.head_ref }} || git checkout ${{ github.head_ref }}
+          git add Reports/*
+          git commit -m "Add all reports to Reports directory"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.head_ref }}

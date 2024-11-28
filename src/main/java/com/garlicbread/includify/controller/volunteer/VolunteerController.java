@@ -2,6 +2,7 @@ package com.garlicbread.includify.controller.volunteer;
 
 import com.garlicbread.includify.entity.volunteer.Volunteer;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
+import com.garlicbread.includify.profile.volunteer.VolunteerDetails;
 import com.garlicbread.includify.service.volunteer.VolunteerService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing volunteer operations.
+ * Provides endpoints for adding, retrieving, and deleting volunteers.
+ */
 @RestController
 @RequestMapping("/volunteer")
 public class VolunteerController {
@@ -83,7 +89,13 @@ public class VolunteerController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAnyAuthority('VOLUNTEER')")
-  public ResponseEntity<String> deleteResource(@PathVariable String id) {
+  public ResponseEntity<String> deleteResource(@PathVariable String id,
+                                               Authentication authentication) {
+    String authenticatedVolunteerId = ((VolunteerDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedVolunteerId.equals(id)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     Optional<Volunteer> volunteer = volunteerService.getVolunteerById(id);
     if (volunteer.isPresent()) {
       volunteerService.deleteVolunteer(id);

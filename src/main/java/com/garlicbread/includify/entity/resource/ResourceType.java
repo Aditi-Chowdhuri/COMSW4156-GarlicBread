@@ -15,6 +15,10 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a type of resource in the application.
+ * This class is mapped to the "resource_type" table in the database.
+ */
 @Entity
 @Table(name = "resource_type", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})})
 public class ResourceType {
@@ -36,12 +40,17 @@ public class ResourceType {
   private String description;
 
   @PreRemove
-  private void preRemove() {
+  void preRemove() {
     if (resources != null && !resources.isEmpty()) {
-      throw new IllegalStateException("Cannot delete resource type with" + " existing resources.");
+      throw new IllegalStateException("Cannot delete resource type with existing resources.");
     }
   }
 
+  /**
+   * Gets the list of resource IDs associated with this resource type.
+   *
+   * @return a list of resource IDs; returns an empty list if there are no resources
+   */
   @JsonProperty("resourceId")
   public List<String> getResourceIds() {
     if (resources == null) {

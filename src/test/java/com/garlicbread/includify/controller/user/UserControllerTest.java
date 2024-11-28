@@ -17,9 +17,13 @@ import com.garlicbread.includify.entity.user.User;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.user.UserRequest;
+import com.garlicbread.includify.profile.user.UserDetails;
+import com.garlicbread.includify.service.auth.OrganisationDetailsService;
+import com.garlicbread.includify.service.auth.ProfileServiceSelector;
+import com.garlicbread.includify.service.auth.UserDetailsService;
+import com.garlicbread.includify.service.auth.VolunteerDetailsService;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.service.user.UserService;
-import com.garlicbread.includify.util.UserMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,156 +39,227 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Unit tests for the UserController class.
+ */
 @WebMvcTest(UserController.class)
 @Import(SecurityConfig.class)
 public class UserControllerTest {
+  @Autowired
+  private MockMvc mockMvc;
+  @MockBean
+  private UserService userService;
+  @MockBean
+  private UserCategoryService userCategoryService;
+  @MockBean
+  private ProfileServiceSelector profileServiceSelector;
+  @MockBean
+  private OrganisationDetailsService organisationDetailsService;
+  @MockBean
+  private VolunteerDetailsService volunteerDetailsService;
+  @MockBean
+  private UserDetailsService userDetailsService;
 
-    @Autowired
-    private MockMvc mockMvc;
+  @MockBean
+  private JwtDecoder jwtDecoder;
+  @Mock
+  private Jwt jwt;
+  @Autowired
+  private ObjectMapper objectMapper;
+  private User testUser;
+  private UserCategory testCategory;
 
-    @MockBean
-    private UserService userService;
+  @BeforeEach
+  void setUp() {
+    testUser = new User();
+    testUser.setId("1");
+    testUser.setEmail("ima014566@gmail.com");
+    testUser.setName("Ibrahim Mo");
+    testCategory = new UserCategory();
+    testCategory.setTitle("senior_citizen");
+    when(jwtDecoder.decode(any())).thenReturn(jwt);
+    when(jwt.getClaimAsString("sub")).thenReturn("test_user");
+    when(jwt.getClaimAsString("profile")).thenReturn("USER");
+    when(profileServiceSelector.selectService(any())).thenReturn(userDetailsService);
+    when(userDetailsService.loadUserByUsername(any())).thenReturn(new UserDetails(testUser));
+  }
 
-    @MockBean
-    private UserCategoryService userCategoryService;
+  @Test
+  void testGetAllUsers_Happy_Path() throws Exception {
+    when(userService.getAllUsers()).thenReturn(Collections.singletonList(testUser));
+    mockMvc.perform(get("/registration/all").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].email").value("ima014566@gmail.com"))
+        .andExpect(jsonPath("$[0].name").value("Ibrahim Mo"));
+  }
 
-    @MockBean
-    private JwtDecoder jwtDecoder;
+  @Test
+  void testGetAllUsers_Sad_Path() throws Exception {
+    when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+    mockMvc.perform(get("/registration/all").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNoContent());
+  }
 
-    @Mock
-    private Jwt jwt;
+  @Test
+  void getUserById_Happy_Path() throws Exception {
+    when(userService.getUserById("1")).thenReturn(Optional.of(testUser));
+    mockMvc.perform(get("/registration/1").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.email").value("ima014566@gmail.com"))
+        .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+  }
 
-    @Autowired
-    private ObjectMapper objectMapper;
+  @Test
+  void getUserById_Sad_Path() throws Exception {
+    when(userService.getUserById("22")).thenReturn(Optional.empty());
+    mockMvc.perform(get("/registration/22").header("Authorization", "Bearer testJWTToken"))
+        .andExpect(status().isNotFound()).andExpect(content().string("User not found with id: 22"));
+  }
 
-    private User testUser;
-    private UserCategory testCategory;
+  @Test
+  void deleteUserCategory_Invalid_Id() throws Exception {
+    mockMvc.perform(
+            delete("/registration/deleteCategory/abc").contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isBadRequest())
+        .andExpect(content().string("Invalid id passed"));
+  }
 
-    @BeforeEach
-    void setUp() {
-        testUser = new User();
-        testUser.setEmail("ima014566@gmail.com");
-        testUser.setName("Ibrahim Mo");
+  @Test
+  void deleteUserCategory_Forbidden() throws Exception {
+    mockMvc.perform(delete("/registration/deleteCategory/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden())
+        .andExpect(content().string("Cannot delete a default " + "user category"));
+  }
 
-        testCategory = new UserCategory();
-        testCategory.setName("senior_citizen");
+  @Test
+  void deleteUserCategory_Happy_Path() throws Exception {
+    when(userCategoryService.getById(any())).thenReturn(testCategory);
+    mockMvc.perform(delete("/registration/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNoContent())
+        .andExpect(content().string("User category deleted " + "successfully"));
+  }
 
-        when(jwtDecoder.decode(any())).thenReturn(jwt);
-        when(jwt.getClaimAsString("sub")).thenReturn("test_user");
-    }
+  @Test
+  void deleteUserCategory_Sad_Path() throws Exception {
+    when(userCategoryService.getById(any())).thenReturn(null);
+    mockMvc.perform(delete("/registration/deleteCategory/7").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNotFound())
+        .andExpect(content().string("User category not found " + "with id: 7"));
+  }
 
-    @Test
-    void testGetAllUsers_Happy_Path() throws Exception {
-        when(userService.getAllUsers()).thenReturn(Collections.singletonList(testUser));
+  @Test
+  void createUser_Happy_Path() throws Exception {
+    when(userService.createUser(any(User.class))).thenReturn(testUser);
+    when(userCategoryService.getById(anyString())).thenReturn(testCategory);
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc123");
+    userRequest.setCategoryIds(List.of("1"));
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+            post("/registration/create").contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+  }
 
-        mockMvc.perform(get("/user/all"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].email").value("ima014566@gmail.com"))
-                .andExpect(jsonPath("$[0].name").value("Ibrahim Mo"));
-    }
+  @Test
+  void updateUser_Happy_Path() throws Exception {
+    when(userService.updateUser(anyString(), any(User.class))).thenReturn(testUser);
+    when(userCategoryService.getById(anyString())).thenReturn(testCategory);
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc123");
+    userRequest.setCategoryIds(List.of("1"));
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+            put("/registration/update/1").contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+  }
 
-    @Test
-    void testGetAllUsers_Sad_Path() throws Exception {
-        when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+  @Test
+  void createUser_without_categories_Happy_Path() throws Exception {
+    when(userService.createUser(any(User.class))).thenReturn(testUser);
+    when(userCategoryService.getById(anyString())).thenReturn(testCategory);
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc123");
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+            post("/registration/create").contentType(MediaType.APPLICATION_JSON)
+        .content(requestBody))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
+  }
 
-        mockMvc.perform(get("/user/all"))
-                .andExpect(status().isNoContent());
-    }
+  @Test
+  void updateUser_Sad_Path() throws Exception {
+    when(userService.updateUser(anyString(), any(User.class))).thenThrow(
+        new ResourceNotFoundException("User not found with id: 1"));
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc");
+    userRequest.setCategoryIds(List.of("1"));
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+            put("/registration/update/1").contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .header("Authorization", "Bearer testJWTToken")).andExpect(status()
+                .isNotFound())
+        .andExpect(content().string("User not found with id: 1"));
+  }
 
-    @Test
-    void getUserById_Happy_Path() throws Exception {
-        when(userService.getUserById("1")).thenReturn(Optional.of(testUser));
+  @Test
+  void updateUser_Forbidden() throws Exception {
+    testUser.setId("test_id");
 
-        mockMvc.perform(get("/user/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.email").value("ima014566@gmail.com"))
-                .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
-    }
+    UserRequest userRequest = new UserRequest();
+    userRequest.setName("Ibrahim Mo");
+    userRequest.setEmail("ima014566@gmail.com");
+    userRequest.setPassword("cscsc");
+    userRequest.setCategoryIds(List.of("1"));
+    userRequest.setAge(21);
+    String requestBody = objectMapper.writeValueAsString(userRequest);
+    mockMvc.perform(
+        put("/registration/update/1").contentType(MediaType.APPLICATION_JSON).content(requestBody)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
 
-    @Test
-    void getUserById_Sad_Path() throws Exception {
-        when(userService.getUserById("22")).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/user/22"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found with id: 22"));
-    }
+  @Test
+  void deleteOrganisation_Forbidden() throws Exception {
+    testUser.setId("test_id");
 
-    @Test
-    void createUser_Happy_Path() throws Exception {
-        when(userService.createUser(any(User.class))).thenReturn(testUser);
-        when(userCategoryService.getById(anyString())).thenReturn(testCategory);
+    mockMvc.perform(delete("/registration/delete/testId").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
+  }
 
-        UserRequest userRequest = new UserRequest();
-        userRequest.setName("Ibrahim Mo");
-        userRequest.setEmail("ima014566@gmail.com");
-        userRequest.setCategoryIds(List.of("1"));
+  @Test
+  void deleteUser_Happy_Path() throws Exception {
+    when(userService.getUserById(anyString())).thenReturn(Optional.of(testUser));
+    mockMvc.perform(delete("/registration/delete/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNoContent())
+        .andExpect(content().string("User deleted successfully"));
+  }
 
-        String requestBody = objectMapper.writeValueAsString(userRequest);
-
-        mockMvc.perform(post("/user/create").contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
-    }
-
-    @Test
-    void updateUser_Happy_Path() throws Exception {
-        when(userService.updateUser(anyString(), any(User.class))).thenReturn(testUser);
-        when(userCategoryService.getById(anyString())).thenReturn(testCategory);
-
-        UserRequest userRequest = new UserRequest();
-        userRequest.setName("Ibrahim Mo");
-        userRequest.setEmail("ima014566@gmail.com");
-        userRequest.setCategoryIds(List.of("1"));
-
-        String requestBody = objectMapper.writeValueAsString(userRequest);
-
-        mockMvc.perform(put("/user/update/1").contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Ibrahim Mo"));
-    }
-
-    @Test
-    void updateUser_Sad_Path() throws Exception {
-        when(userService.updateUser(anyString(), any(User.class)))
-                .thenThrow(new ResourceNotFoundException("User not found with id: 1"));
-
-        UserRequest userRequest = new UserRequest();
-        userRequest.setName("Ibrahim Mo");
-        userRequest.setEmail("ima014566@gmail.com");
-        userRequest.setCategoryIds(List.of("1"));
-
-        String requestBody = objectMapper.writeValueAsString(userRequest);
-
-        mockMvc.perform(put("/user/update/1").contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found with id: 1"));
-    }
-
-    @Test
-    void deleteUser_Happy_Path() throws Exception {
-        when(userService.getUserById(anyString())).thenReturn(Optional.of(testUser));
-
-        mockMvc.perform(delete("/user/delete/1").contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNoContent())
-                .andExpect(content().string("User deleted successfully"));
-    }
-
-    @Test
-    void deleteUser_Sad_Path() throws Exception {
-        when(userService.getUserById(anyString())).thenReturn(Optional.empty());
-
-        mockMvc.perform(delete("/user/delete/1").contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer testJWTToken"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found with id: 1"));
-    }
+  @Test
+  void deleteUser_Sad_Path() throws Exception {
+    when(userService.getUserById(anyString())).thenReturn(Optional.empty());
+    mockMvc.perform(delete("/registration/delete/1").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isNotFound())
+        .andExpect(content().string("User not found with id: 1"));
+  }
 }

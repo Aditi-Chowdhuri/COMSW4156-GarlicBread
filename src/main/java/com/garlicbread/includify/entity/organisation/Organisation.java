@@ -15,9 +15,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Represents an organization entity in the system.
+ * An organization is associated with resources.
+ */
 @Entity
 @Table(name = "organisation", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Organisation {
@@ -43,11 +46,11 @@ public class Organisation {
   private String description;
 
   @Column(nullable = false)
-  @NotNull(message = "Latitude is required")
+  @NotBlank(message = "Latitude is required")
   private String latitude;
 
   @Column(nullable = false)
-  @NotNull(message = "Longitude is required")
+  @NotBlank(message = "Longitude is required")
   private String longitude;
 
   @Column(nullable = false)
@@ -57,6 +60,10 @@ public class Organisation {
   // one organisation can have many resources
   @OneToMany(mappedBy = "organisation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private List<Resource> resources;
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getId() {
     return id;

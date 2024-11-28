@@ -14,6 +14,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+/**
+ * Represents a volunteer entity in the system.
+ */
 @Entity
 @Table(name = "volunteer", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class Volunteer {
@@ -49,8 +52,19 @@ public class Volunteer {
   @NotBlank(message = "Phone number is required")
   private String phone;
 
+  // Getters
   public String getEmail() {
     return email;
+  }
+
+  // Setters
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getPassword() {
@@ -65,8 +79,16 @@ public class Volunteer {
     return age;
   }
 
+  public void setAge(int age) {
+    this.age = age;
+  }
+
   public String getAddress() {
     return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
   public String getId() {
@@ -77,8 +99,15 @@ public class Volunteer {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public String getPhone() {
     return phone;
   }
 
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 }

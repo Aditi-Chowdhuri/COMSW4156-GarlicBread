@@ -4,6 +4,7 @@ import com.garlicbread.includify.entity.user.User;
 import com.garlicbread.includify.entity.user.UserCategory;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.model.user.UserRequest;
+import com.garlicbread.includify.profile.user.UserDetails;
 import com.garlicbread.includify.service.user.UserCategoryService;
 import com.garlicbread.includify.service.user.UserService;
 import com.garlicbread.includify.util.UserMapper;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for managing user-related operations.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/registration")
 public class UserController {
 
   private final UserService userService;
@@ -37,6 +39,21 @@ public class UserController {
   public UserController(UserService userService, UserCategoryService userCategoryService) {
     this.userService = userService;
     this.userCategoryService = userCategoryService;
+  }
+
+  /**
+   * Returns all user categories.
+   *
+   * @return a ResponseEntity containing the list of all user categories
+   */
+  @GetMapping("/category/all")
+  @PermitAll
+  public ResponseEntity<List<UserCategory>> getAllUserCategories() {
+    List<UserCategory> userCategories = userCategoryService.getAll();
+    if (userCategories.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<>(userCategories, HttpStatus.OK);
   }
 
   /**
@@ -54,6 +71,33 @@ public class UserController {
   }
 
   /**
+   * Deletes a user category by its ID.
+   *
+   * @param id the ID of the user category to delete
+   * @return a ResponseEntity containing a success message or error
+   */
+  @DeleteMapping("/deleteCategory/{id}")
+  @PermitAll
+  public ResponseEntity<String> deleteUserCategory(
+      @PathVariable String id) {
+    try {
+      if (Integer.parseInt(id) <= 6) {
+        return new ResponseEntity<>("Cannot delete a default user category", HttpStatus.FORBIDDEN);
+      }
+    } catch (NumberFormatException ignored) {
+      return new ResponseEntity<>("Invalid id passed", HttpStatus.BAD_REQUEST);
+    }
+
+    UserCategory userCategory = userCategoryService.getById(id);
+    if (userCategory != null) {
+      userCategoryService.deleteCategoryById(id);
+      return new ResponseEntity<>("User category deleted successfully", HttpStatus.NO_CONTENT);
+    } else {
+      throw new ResourceNotFoundException("User category not found with " + "id: " + id);
+    }
+  }
+
+  /**
    * Retrieves all users.
    *
    * @return a ResponseEntity containing a list of all users
@@ -66,6 +110,19 @@ public class UserController {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity<>(users, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieves details of the authenticated user.
+   *
+   * @return a ResponseEntity containing the authenticated User
+   */
+  @GetMapping()
+  @PreAuthorize("hasAuthority('USER')")
+  public ResponseEntity<User> getUser(Authentication authentication) {
+    String authenticatedUserId = ((UserDetails) authentication.getPrincipal()).getId();
+    Optional<User> user = userService.getUserById(authenticatedUserId);
+    return user.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   /**
@@ -113,7 +170,13 @@ public class UserController {
   @PutMapping("/update/{id}")
   @PreAuthorize("hasAuthority('USER')")
   public ResponseEntity<User> updateUser(@PathVariable String id,
-                                         @Valid @RequestBody UserRequest userRequest) {
+                                         @Valid @RequestBody UserRequest userRequest,
+                                         Authentication authentication) {
+    String authenticatedUserId = ((UserDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedUserId.equals(id)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     List<UserCategory> userCategories = new ArrayList<>();
     userRequest.getCategoryIds().forEach(categoryId -> {
       userCategories.add(userCategoryService.getById(categoryId));
@@ -133,7 +196,12 @@ public class UserController {
    */
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('USER')")
-  public ResponseEntity<String> deleteUser(@PathVariable String id) {
+  public ResponseEntity<String> deleteUser(@PathVariable String id, Authentication authentication) {
+    String authenticatedUserId = ((UserDetails) authentication.getPrincipal()).getId();
+    if (!authenticatedUserId.equals(id)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     Optional<User> user = userService.getUserById(id);
     if (user.isPresent()) {
       userService.deleteUser(id);

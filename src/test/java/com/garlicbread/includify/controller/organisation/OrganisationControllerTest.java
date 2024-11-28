@@ -1,4 +1,4 @@
-package com.garlicbread.includify.controller;
+package com.garlicbread.includify.controller.organisation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garlicbread.includify.config.SecurityConfig;
-import com.garlicbread.includify.controller.organisation.OrganisationController;
 import com.garlicbread.includify.entity.organisation.Organisation;
 import com.garlicbread.includify.exception.ResourceNotFoundException;
 import com.garlicbread.includify.profile.organisation.OrganisationDetails;
@@ -76,6 +75,7 @@ public class OrganisationControllerTest {
   @BeforeEach
   void setUp() {
     testOrganisation = new Organisation();
+    testOrganisation.setId("testId");
     testOrganisation.setAddress("New York");
     testOrganisation.setEmail("test@cu.com");
     testOrganisation.setLatitude("12.89");
@@ -178,6 +178,29 @@ public class OrganisationControllerTest {
             .header("Authorization", "Bearer testJWTToken").content(requestBodyWithPassword))
         .andExpect(status().isNotFound())
         .andExpect(content().string("Organisation not found with id: testId"));
+  }
+
+  @Test
+  void updateOrganisation_Forbidden() throws Exception {
+    testOrganisation.setId("test_id");
+
+    testOrganisation.setAddress("Updated Address");
+    String requestBody = objectMapper.writeValueAsString(testOrganisation);
+    String requestBodyWithPassword = requestBody.substring(0,
+        requestBody.length() - 1) + "," + "\"password\":\"Test Password\"}";
+
+    mockMvc.perform(put("/organisation/update/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken").content(requestBodyWithPassword))
+        .andExpect(status().isForbidden());
+  }
+
+
+  @Test
+  void deleteOrganisation_Forbidden() throws Exception {
+    testOrganisation.setId("test_id");
+
+    mockMvc.perform(delete("/organisation/delete/testId").contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer testJWTToken")).andExpect(status().isForbidden());
   }
 
   @Test
