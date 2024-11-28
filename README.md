@@ -11,6 +11,13 @@
 
 - **Gail Kaiser**
 
+## View the Client App Repository 
+
+Please use the following link to view the repository relevant to the app: https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client
+
+## Project Management tool 
+Trello Board used by GarlicBread team: https://trello.com/b/9EErBJ64/garlicbread
+
 ## Overview
 
 This project proposes a service to improve accessibility for elderly individuals
@@ -652,11 +659,15 @@ issues it might not be available for long.
 
 ## Style-checks
 
-![WhatsApp Image 2024-10-18 at 11 01 50 PM](https://github.com/user-attachments/assets/03515699-ca94-42e6-a76d-29b81de20686)
+<img width="1506" alt="Screenshot 2024-11-27 at 5 59 26 PM" src="https://github.com/user-attachments/assets/be648efb-af3d-4a01-9752-5a951b75ab11">
 
 ## Jacoco Code Coverage Report
 
-<img width="1173" alt="Screenshot 2024-10-25 at 1 54 15 PM" src="https://github.com/user-attachments/assets/a1c7b4dc-0781-4e0d-906e-3bc2364e27e5">
+<img width="1507" alt="Screenshot 2024-11-27 at 5 38 40 PM" src="https://github.com/user-attachments/assets/da5f72a1-332d-42ec-ab0e-66417f20a5ce">
+
+## PMD Static Analysis
+
+<img width="1501" alt="Screenshot 2024-11-27 at 3 26 59 PM" src="https://github.com/user-attachments/assets/2cd633b0-5232-4295-8f59-333b48098f7e">
 
 # **Final API Test Suit and Documentatione**
 
