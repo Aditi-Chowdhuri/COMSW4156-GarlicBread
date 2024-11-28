@@ -679,7 +679,7 @@ issues it might not be available for long.
 
 ## Jacoco Code Coverage Report
 
-<img width="1507" alt="Screenshot 2024-11-27 at 5 38 40 PM" src="https://github.com/user-attachments/assets/da5f72a1-332d-42ec-ab0e-66417f20a5ce">
+<img width="1507" alt="Screenshot 2024-11-27 at 10 44 22 PM" src="https://github.com/user-attachments/assets/badf8fdb-71b1-4cdf-8315-78931c4c0c29">
 
 ## PMD Static Analysis
 
@@ -696,6 +696,7 @@ This **Final API Test Suite** consists of a comprehensive set of endpoints for t
 5. **Appointment Endpoints**
 
 The API includes both **public** and **non-public** endpoints, with automated integration into CI/CD pipelines using **Newman**.
+
 
 ---
 
@@ -726,4 +727,4 @@ This project uses GitHub Actions for CI to automate the build, testing, and stat
 
 
 ### Reports Directory
-The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory: https://github.com/Aditi-Chowdhuri/COMSW4156-GarlicBread/actions/runs/12061769123/artifacts/2247724605
+The CI pipeline organizes all the static analysis and code coverage reports in a `Reports` directory: https://github.com/Aditi-Chowdhuri/COMSW4156-GarlicBread/actions/runs/12062101916/artifacts/2247813671
