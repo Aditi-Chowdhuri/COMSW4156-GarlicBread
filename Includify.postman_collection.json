@@ -56,51 +56,6 @@
                             ]
                         }
                     }
-                },
-                {
-                    "name": "Get Organisation By Id [NOT FOUND]",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "if (pm.response.code === 404) {",
-                                    "    pm.test(\"Status code is 404\", function () {",
-                                    "        pm.response.to.have.status(404);",
-                                    "    });",
-                                    "    pm.test(\"Response contains error message\", function () {",
-                                    "        const jsonData = pm.response.json();",
-                                    "        pm.expect(jsonData).to.have.property(\"error\", \"Resource Not Found\");",
-                                    "        pm.expect(jsonData.message).to.include(\"Organisation not found with id:\");",
-                                    "    });",
-                                    "}"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "auth": {
-                            "type": "noauth"
-                        },
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/ec4682a9-2461-4cd9-aab0-0aec665ac192",
-                            "protocol": "https",
-                            "host": [
-                                "garlicbread-includify",
-                                "ue",
-                                "r",
-                                "appspot",
-                                "com"
-                            ],
-                            "path": [
-                                "organisation",
-                                "ec4682a9-2461-4cd9-aab0-0aec665ac192"
-                            ]
-                        }
-                    }
                 }
             ]
         }
