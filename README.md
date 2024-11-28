@@ -11,6 +11,13 @@
 
 - **Gail Kaiser**
 
+## View the Client App Repository 
+
+Please use the following link to view the repository relevant to the app: https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client
+
+## Project Management tool 
+Trello Board used by GarlicBread team: https://trello.com/b/9EErBJ64/garlicbread
+
 ## Overview
 
 This project proposes a service to improve accessibility for elderly individuals
