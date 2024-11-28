@@ -319,126 +319,142 @@ The possible clients who would likely use our service includes:
 - **POST** `/resource/add` → Add a new resource.
 - **DELETE** `/resource/delete/{id}` → Delete a resource by ID.
 
-## User Endpoints
+## Registration Endpoints
 
-### 1. **POST `/user/createCategory`**
+
+### 1. **POST `/registration/createCategory`**
+
 
 - **Description**: Creates a new user category.
 - **Request**: Expects a JSON payload representing the user category.
-  ```json
-  {
-  "title": "Senior Citizens",
-  "description": "Categories for senior citizens including services and resources tailored for their needs."
-  }
+ ```json
+ {
+ "title": "Senior Citizens",
+ "description": "Categories for senior citizens including services and resources tailored for their needs."
+ }
 - **Response**:
-  - `201 Created`: Returns the created user category.
-  - `500 Internal Server Error`: If category creation fails.
+ - `201 Created`: Returns the created user category.
+ - `500 Internal Server Error`: If category creation fails.
 - **Pre-requisites**: A valid user category JSON body.
 - **Authorization**: Public (No authorization required).
 
-### 2. **DELETE `/user/deleteCategory/{id}`**
+
+### 2. **DELETE `/registration/deleteCategory/{id}`**
+
 
 - **Description**: Deletes a user category by its ID.
 - **Path Variable**:
-  - `id` (integer): The ID of the user category to delete.
+ - `id` (integer): The ID of the user category to delete.
 - **Response**:
-  - `204 No Content`: User category deleted successfully.
-  - `400 Bad Request`: Invalid ID format passed.
-  - `403 Forbidden`: Default categories cannot be deleted.
-  - `404 Not Found`: If the category with the given ID is not found.
-  - `500 Internal Server Error`: If the deletion fails.
+ - `204 No Content`: User category deleted successfully.
+ - `400 Bad Request`: Invalid ID format passed.
+ - `403 Forbidden`: Default categories cannot be deleted.
+ - `404 Not Found`: If the category with the given ID is not found.
+ - `500 Internal Server Error`: If the deletion fails.
 - **Pre-requisites**: A valid user category ID.
 - **Authorization**: Public (No authorization required).
 
-### 3. **GET `/user/all`**
 
-- **Description**: Retrieves all users.
+### 3. **GET `/registration/all`**
+
+
+- **Description**: Retrieves all users registered.
 - **Response**:
-  - `200 OK`: Returns a list of all users.
-  - `204 No Content`: If no users exist.
+ - `200 OK`: Returns a list of all users registered.
+ - `204 No Content`: If no users exist.
 - **Pre-requisites**: None.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
-### 4. **GET `/user/{id}`**
+
+### 4. **GET `/registration/{id}`**
+
 
 - **Description**: Retrieves a user by their ID.
 - **Path Variable**:
-  - `id` (String): The ID of the user to retrieve.
+ - `id` (String): The ID of the user to retrieve.
 - **Response**:
-  - `200 OK`: Returns the user with the specified ID.
-  - `404 Not Found`: If the user with the specified ID is not found.
+ - `200 OK`: Returns the user with the specified ID.
+ - `404 Not Found`: If the user with the specified ID is not found.
 - **Pre-requisites**: A valid user ID.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
-### 5. **POST `/user/create`**
 
-- **Description**: Creates a new user.
+### 5. **POST `/registration/create`**
+
+
+- **Description**: Creates a new user registration.
 - **Request**: Expects a JSON payload representing the user request.
-  ```json
-  {
-  "name": "Jane Smith",
-  "age": 30,
-  "email": "jane.smith@example.com",
-  "password": "strongPassword456",
-  "categoryIds": ["1"]
-  }
-  ```
-  Note: categoryIds are optional.
+ ```json
+ {
+ "name": "Jane Smith",
+ "age": 30,
+ "email": "jane.smith@example.com",
+ "password": "strongPassword456",
+ "categoryIds": ["1"]
+ }
+ ```
+ Note: categoryIds are optional.
 - **Response**:
-  - `201 Created`: Returns the created user.
-  - `404 Not Found`: If any of the category IDs are invalid.
-  - `500 Internal Server Error`: If user creation fails.
+ - `201 Created`: Returns the created user.
+ - `404 Not Found`: If any of the category IDs are invalid.
+ - `500 Internal Server Error`: If user creation fails.
 - **Pre-requisites**: Valid JSON body with user details, including category IDs.
 - **Authorization**: Public (No authorization required).
 
-### 6. **PUT `/user/update/{id}`**
 
-- **Description**: Updates an existing user.
+### 6. **PUT `/registration/update/{id}`**
+
+
+- **Description**: Updates an existing registered user.
 - **Path Variable**:
-  - `id` (String): The ID of the user to update.
+ - `id` (String): The ID of the user to update.
 - **Request**: Expects a JSON payload representing the updated user details.
-  ```json
-  {
-  "name": "Jane Smith",
-  "age": 30,
-  "email": "jane.smith@example.com",
-  "password": "strongPassword456",
-  "categoryIds": ["1"]
-  }
-  ```
-  Note: categoryIds are optional.
+ ```json
+ {
+ "name": "Jane Smith",
+ "age": 30,
+ "email": "jane.smith@example.com",
+ "password": "strongPassword456",
+ "categoryIds": ["1"]
+ }
+ ```
+ Note: categoryIds are optional.
 - **Response**:
-  - `200 OK`: Returns the updated user.
-  - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
-  - `404 Not Found`: If the user with the specified ID is not found.
-  - `500 Internal Server Error`: If user update fails.
+ - `200 OK`: Returns the updated user.
+ - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
+ - `404 Not Found`: If the user with the specified ID is not found.
+ - `500 Internal Server Error`: If user update fails.
 - **Pre-requisites**: Valid JSON body with updated user details.
-- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
-  token must belong to the user being updated.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The
+ token must belong to the user being updated.
 
-### 7. **DELETE `/user/delete/{id}`**
+
+### 7. **DELETE `/registration/delete/{id}`**
+
 
 - **Description**: Deletes a user by their ID.
 - **Path Variable**:
-  - `id` (String): The ID of the user to delete.
+ - `id` (String): The ID of the user to delete.
 - **Response**:
-  - `204 No Content`: User deleted successfully.
-  - `403 Forbidden`: If the authenticated user does not match the ID of the user being deleted.
-  - `404 Not Found`: If the user with the specified ID is not found.
-  - `500 Internal Server Error`: If user deletion fails.
+ - `204 No Content`: User deleted successfully.
+ - `403 Forbidden`: If the authenticated user does not match the ID of the user being deleted.
+ - `404 Not Found`: If the user with the specified ID is not found.
+ - `500 Internal Server Error`: If user deletion fails.
 - **Pre-requisites**: A valid user ID.
-- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
-  token must belong to the user being deleted.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The
+ token must belong to the user being deleted.
+
 
 ### Summary of Endpoints:
 
-- **POST** `/user/createCategory` → Create a new user category.
-- **DELETE** `/user/deleteCategory/{id}` → Delete a user category by its ID.
-- **GET** `/user/all` → Retrieve all users.
-- **GET** `/user/{id}` → Retrieve a user by ID.
-- **POST** `/user/create` → Create a new user.
-- **PUT** `/user/update/{id}` → Update a user by ID.
-- **DELETE** `/user/delete/{id}` → Delete a user by ID.
+
+- **POST** `/registration/createCategory` → Create a new user category.
+- **DELETE** `/registration/deleteCategory/{id}` → Delete a user category by its ID.
+- **GET** `/registration/all` → Retrieve all registered users.
+- **GET** `/registration/{id}` → Retrieve a user by ID.
+- **POST** `/registration/create` → Create a new user.
+- **PUT** `/registration/update/{id}` → Update a user by ID.
+- **DELETE** `/registration/delete/{id}` → Delete a user by ID.
 
 ## VolunteerController Endpoints
 
@@ -706,6 +722,7 @@ This project uses GitHub Actions for CI to automate the build, testing, and stat
 8. **Generate Reports**: Reports for PMD, Checkstyle, and JaCoCo are collected and stored in a `Reports` directory within the workflow.
 9. **Upload Reports as Artifacts**: The reports are uploaded to GitHub as artifacts for easy access and review.
 10. **Commit Reports to Repository**: The reports are committed to the repository under the `Reports` directory. This ensures that the latest reports are version-controlled and easily accessible. The commit uses a temporary branch created by the workflow.
+11. **API test newmany**: We have added Newman to our CI pipeline to automate API testing. Due to GCloud credit constraints and the manipulation of data in the database, we divided the Postman collections into two endpoints: Updated_Includify.postman_collection.json and Includify.postman_collection.json. The latter is a subset of the collections. For more details, refer to the API testing section.
 
 
 ### Reports Directory
