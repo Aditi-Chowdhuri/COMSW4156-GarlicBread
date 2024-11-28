@@ -332,6 +332,7 @@ The possible clients who would likely use our service includes:
  "title": "Senior Citizens",
  "description": "Categories for senior citizens including services and resources tailored for their needs."
  }
+ ```
 - **Response**:
  - `201 Created`: Returns the created user category.
  - `500 Internal Server Error`: If category creation fails.
