@@ -11,6 +11,13 @@
 
 - **Gail Kaiser**
 
+## View the Client App Repository 
+
+Please use the following link to view the repository relevant to the app: https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client
+
+## Project Management tool 
+Trello Board used by GarlicBread team: https://trello.com/b/9EErBJ64/garlicbread
+
 ## Overview
 
 This project proposes a service to improve accessibility for elderly individuals
@@ -314,116 +321,132 @@ The possible clients who would likely use our service includes:
 
 ## Registration Endpoints
 
+
 ### 1. **POST `/registration/createCategory`**
+
 
 - **Description**: Creates a new user category.
 - **Request**: Expects a JSON payload representing the user category.
-  ```json
-  {
-  "title": "Senior Citizens",
-  "description": "Categories for senior citizens including services and resources tailored for their needs."
-  }
+ ```json
+ {
+ "title": "Senior Citizens",
+ "description": "Categories for senior citizens including services and resources tailored for their needs."
+ }
 - **Response**:
-  - `201 Created`: Returns the created user category.
-  - `500 Internal Server Error`: If category creation fails.
+ - `201 Created`: Returns the created user category.
+ - `500 Internal Server Error`: If category creation fails.
 - **Pre-requisites**: A valid user category JSON body.
 - **Authorization**: Public (No authorization required).
 
+
 ### 2. **DELETE `/registration/deleteCategory/{id}`**
+
 
 - **Description**: Deletes a user category by its ID.
 - **Path Variable**:
-  - `id` (integer): The ID of the user category to delete.
+ - `id` (integer): The ID of the user category to delete.
 - **Response**:
-  - `204 No Content`: User category deleted successfully.
-  - `400 Bad Request`: Invalid ID format passed.
-  - `403 Forbidden`: Default categories cannot be deleted.
-  - `404 Not Found`: If the category with the given ID is not found.
-  - `500 Internal Server Error`: If the deletion fails.
+ - `204 No Content`: User category deleted successfully.
+ - `400 Bad Request`: Invalid ID format passed.
+ - `403 Forbidden`: Default categories cannot be deleted.
+ - `404 Not Found`: If the category with the given ID is not found.
+ - `500 Internal Server Error`: If the deletion fails.
 - **Pre-requisites**: A valid user category ID.
 - **Authorization**: Public (No authorization required).
 
+
 ### 3. **GET `/registration/all`**
+
 
 - **Description**: Retrieves all users registered.
 - **Response**:
-  - `200 OK`: Returns a list of all users registered.
-  - `204 No Content`: If no users exist.
+ - `200 OK`: Returns a list of all users registered.
+ - `204 No Content`: If no users exist.
 - **Pre-requisites**: None.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
+
 ### 4. **GET `/registration/{id}`**
+
 
 - **Description**: Retrieves a user by their ID.
 - **Path Variable**:
-  - `id` (String): The ID of the user to retrieve.
+ - `id` (String): The ID of the user to retrieve.
 - **Response**:
-  - `200 OK`: Returns the user with the specified ID.
-  - `404 Not Found`: If the user with the specified ID is not found.
+ - `200 OK`: Returns the user with the specified ID.
+ - `404 Not Found`: If the user with the specified ID is not found.
 - **Pre-requisites**: A valid user ID.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
+
 ### 5. **POST `/registration/create`**
+
 
 - **Description**: Creates a new user registration.
 - **Request**: Expects a JSON payload representing the user request.
-  ```json
-  {
-  "name": "Jane Smith",
-  "age": 30,
-  "email": "jane.smith@example.com",
-  "password": "strongPassword456",
-  "categoryIds": ["1"]
-  }
-  ```
-  Note: categoryIds are optional.
+ ```json
+ {
+ "name": "Jane Smith",
+ "age": 30,
+ "email": "jane.smith@example.com",
+ "password": "strongPassword456",
+ "categoryIds": ["1"]
+ }
+ ```
+ Note: categoryIds are optional.
 - **Response**:
-  - `201 Created`: Returns the created user.
-  - `404 Not Found`: If any of the category IDs are invalid.
-  - `500 Internal Server Error`: If user creation fails.
+ - `201 Created`: Returns the created user.
+ - `404 Not Found`: If any of the category IDs are invalid.
+ - `500 Internal Server Error`: If user creation fails.
 - **Pre-requisites**: Valid JSON body with user details, including category IDs.
 - **Authorization**: Public (No authorization required).
 
+
 ### 6. **PUT `/registration/update/{id}`**
+
 
 - **Description**: Updates an existing registered user.
 - **Path Variable**:
-  - `id` (String): The ID of the user to update.
+ - `id` (String): The ID of the user to update.
 - **Request**: Expects a JSON payload representing the updated user details.
-  ```json
-  {
-  "name": "Jane Smith",
-  "age": 30,
-  "email": "jane.smith@example.com",
-  "password": "strongPassword456",
-  "categoryIds": ["1"]
-  }
-  ```
-  Note: categoryIds are optional.
+ ```json
+ {
+ "name": "Jane Smith",
+ "age": 30,
+ "email": "jane.smith@example.com",
+ "password": "strongPassword456",
+ "categoryIds": ["1"]
+ }
+ ```
+ Note: categoryIds are optional.
 - **Response**:
-  - `200 OK`: Returns the updated user.
-  - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
-  - `404 Not Found`: If the user with the specified ID is not found.
-  - `500 Internal Server Error`: If user update fails.
+ - `200 OK`: Returns the updated user.
+ - `403 Forbidden`: If the authenticated user does not match the ID of the user being updated.
+ - `404 Not Found`: If the user with the specified ID is not found.
+ - `500 Internal Server Error`: If user update fails.
 - **Pre-requisites**: Valid JSON body with updated user details.
-- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
-  token must belong to the user being updated.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The
+ token must belong to the user being updated.
+
 
 ### 7. **DELETE `/registration/delete/{id}`**
 
+
 - **Description**: Deletes a user by their ID.
 - **Path Variable**:
-  - `id` (String): The ID of the user to delete.
+ - `id` (String): The ID of the user to delete.
 - **Response**:
-  - `204 No Content`: User deleted successfully.
-  - `403 Forbidden`: If the authenticated user does not match the ID of the user being deleted.
-  - `404 Not Found`: If the user with the specified ID is not found.
-  - `500 Internal Server Error`: If user deletion fails.
+ - `204 No Content`: User deleted successfully.
+ - `403 Forbidden`: If the authenticated user does not match the ID of the user being deleted.
+ - `404 Not Found`: If the user with the specified ID is not found.
+ - `500 Internal Server Error`: If user deletion fails.
 - **Pre-requisites**: A valid user ID.
-- **Authorization**: Requires JWT Bearer token with `USER` authority. The 
-  token must belong to the user being deleted.
+- **Authorization**: Requires JWT Bearer token with `USER` authority. The
+ token must belong to the user being deleted.
+
 
 ### Summary of Endpoints:
+
 
 - **POST** `/registration/createCategory` → Create a new user category.
 - **DELETE** `/registration/deleteCategory/{id}` → Delete a user category by its ID.
@@ -652,11 +675,15 @@ issues it might not be available for long.
 
 ## Style-checks
 
-![WhatsApp Image 2024-10-18 at 11 01 50 PM](https://github.com/user-attachments/assets/03515699-ca94-42e6-a76d-29b81de20686)
+<img width="1506" alt="Screenshot 2024-11-27 at 5 59 26 PM" src="https://github.com/user-attachments/assets/be648efb-af3d-4a01-9752-5a951b75ab11">
 
 ## Jacoco Code Coverage Report
 
-<img width="1173" alt="Screenshot 2024-10-25 at 1 54 15 PM" src="https://github.com/user-attachments/assets/a1c7b4dc-0781-4e0d-906e-3bc2364e27e5">
+<img width="1507" alt="Screenshot 2024-11-27 at 5 38 40 PM" src="https://github.com/user-attachments/assets/da5f72a1-332d-42ec-ab0e-66417f20a5ce">
+
+## PMD Static Analysis
+
+<img width="1501" alt="Screenshot 2024-11-27 at 3 26 59 PM" src="https://github.com/user-attachments/assets/2cd633b0-5232-4295-8f59-333b48098f7e">
 
 # **Final API Test Suit and Documentatione**
 
@@ -695,6 +722,7 @@ This project uses GitHub Actions for CI to automate the build, testing, and stat
 8. **Generate Reports**: Reports for PMD, Checkstyle, and JaCoCo are collected and stored in a `Reports` directory within the workflow.
 9. **Upload Reports as Artifacts**: The reports are uploaded to GitHub as artifacts for easy access and review.
 10. **Commit Reports to Repository**: The reports are committed to the repository under the `Reports` directory. This ensures that the latest reports are version-controlled and easily accessible. The commit uses a temporary branch created by the workflow.
+11. **API test newmany**: We have added Newman to our CI pipeline to automate API testing. Due to GCloud credit constraints and the manipulation of data in the database, we divided the Postman collections into two endpoints: Updated_Includify.postman_collection.json and Includify.postman_collection.json. The latter is a subset of the collections. For more details, refer to the API testing section.
 
 
 ### Reports Directory

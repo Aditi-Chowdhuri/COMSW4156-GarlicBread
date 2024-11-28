@@ -1,1040 +1,150 @@
 {
-	"info": {
-		"_postman_id": "ba5dcdad-f0eb-4183-bef4-cd67ebc69050",
-		"name": "Includify Final [Public Endpoints]",
-		"description": "Final API Test Suite \\[PUBLIC ENDPOINTS ONLY, CI\\]\n\nIt classify as followes:\n\n- Organisation Endpoints\n    \n- Registration Endpoints\n    \n- Resource Endpoints\n    \n- Volunteer Endpoints\n    \n- Appointment Endpoints\n    \n\nPlease note that public endponts encoroprate it with our CI using [Newman](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/) and this documentation contains both publicendpoints. Team [demo](https://cvn.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=aedbc222-ea4d-4d5c-aa24-b22f011e30cd) regarding the authentication & autherization.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39266957",
-		"_collection_link": "https://garlicbread-8501.postman.co/workspace/d3d201b0-3c77-4157-8eae-6d2dfa7993de/collection/39266957-ba5dcdad-f0eb-4183-bef4-cd67ebc69050?action=share&source=collection_link&creator=39266957"
-	},
-	"item": [
-		{
-			"name": "Organisation Endpoints",
-			"item": [
-				{
-					"name": "Create Organisation [CREATED]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201 (CREATED)\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Columbia University\",\n    \"email\": \"cu@columbia.edu\",\n    \"password\": \"Password1\",\n    \"description\": \"Ivy League University in the city of New York.\",\n    \"latitude\": \"41.8566\",\n    \"longitude\": \"20.3522\",\n    \"address\": \"116th, Broadway, Morningside Heights\",\n    \"resources\": []\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/create",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"organisation",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Organisations [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 (OK)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"pm.test(\"Each organisation has required fields\", function () {",
-									"    const responseJson = pm.response.json();",
-									"    responseJson.forEach(org => {",
-									"        pm.expect(org).to.have.property('id');",
-									"        pm.expect(org).to.have.property('name');",
-									"        pm.expect(org).to.have.property('email');",
-									"        pm.expect(org).to.have.property('address');",
-									"    });",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/all",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"organisation",
-								"all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Organisation By Id [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 200) {",
-									"    pm.test(\"Status code is 200\", function () {",
-									"        pm.response.to.have.status(200);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains expected fields\", function () {",
-									"        const jsonData = pm.response.json();",
-									"        pm.expect(jsonData).to.have.property(\"id\");",
-									"        pm.expect(jsonData).to.have.property(\"name\");",
-									"        pm.expect(jsonData).to.have.property(\"email\");",
-									"        pm.expect(jsonData).to.have.property(\"address\");",
-									"        pm.expect(jsonData).to.have.property(\"latitude\");",
-									"        pm.expect(jsonData).to.have.property(\"longitude\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/ec4682a9-2461-4cd9-aab0-0aec665ac192",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"organisation",
-								"ec4682a9-2461-4cd9-aab0-0aec665ac192"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Organisation By Id [NOT FOUND]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 404) {",
-									"    pm.test(\"Status code is 404\", function () {",
-									"        pm.response.to.have.status(404);",
-									"    });",
-									"    pm.test(\"Response contains error message\", function () {",
-									"        const jsonData = pm.response.json();",
-									"        pm.expect(jsonData).to.have.property(\"error\", \"Resource Not Found\");",
-									"        pm.expect(jsonData.message).to.include(\"Organisation not found with id:\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/ec4682a9-2461-4cd9-aab0-0aec665ac192",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"organisation",
-								"ec4682a9-2461-4cd9-aab0-0aec665ac192"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Registration Endpoints",
-			"item": [
-				{
-					"name": "Create User Category [CREATED]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201 (CREATED)\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Senior Citizens\",\n    \"description\": \"Users over the age of 60 needing age-appropriate assistance.\",\n    \"userId\": [],\n    \"resourceId\": []\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/createCategory",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"createCategory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User Category [BADREQUEST]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 400) {",
-									"    pm.test(\"Status code is 400 - Bad Request\", function () {",
-									"        pm.response.to.have.status(400);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains 'Invalid id passed' message\", function () {",
-									"        const responseText = pm.response.text();",
-									"        pm.expect(responseText).to.equal(\"Invalid id passed\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/deleteCategory/2",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"deleteCategory",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User Category [FORBIDDEN]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 403) {",
-									"    pm.test(\"Status code is 403 - Forbidden\", function () {",
-									"        pm.response.to.have.status(403);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains 'Cannot delete a default user category' message\", function () {",
-									"        const responseText = pm.response.text();",
-									"        pm.expect(responseText).to.equal(\"Cannot delete a default user category\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/user/deleteCategory/2",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"user",
-								"deleteCategory",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User Category [NO CONTENT]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 204) {",
-									"    pm.test(\"Status code is 204 - No Content\", function () {",
-									"        pm.response.to.have.status(204);",
-									"    });",
-									"",
-									"    pm.test(\"Response body is empty\", function () {",
-									"        pm.expect(pm.response.text()).to.equal(\"\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/deleteCategory/2",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"deleteCategory",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User Category [NO FOUND]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 404) {",
-									"    pm.test(\"Status code is 404 - Not Found\", function () {",
-									"        pm.response.to.have.status(404);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains 'User category not found' message\", function () {",
-									"        const responseJson = pm.response.json();",
-									"        pm.expect(responseJson.error).to.equal(\"Resource Not Found\");",
-									"        pm.expect(responseJson.message).to.include(\"User category not found with id:\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/deleteCategory/2",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"deleteCategory",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create User [CREATED]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201 - Created\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"pm.test(\"Response contains user fields\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property(\"id\");",
-									"    pm.expect(jsonData).to.have.property(\"name\", \"Sara Davis\");",
-									"    pm.expect(jsonData).to.have.property(\"age\", 30);",
-									"    pm.expect(jsonData).to.have.property(\"email\", \"sara.davis_lower123@gmail.com\");",
-									"    pm.expect(jsonData).to.have.property(\"categories\");",
-									"    pm.expect(jsonData.categories).to.be.an(\"array\");",
-									"});",
-									"pm.test(\"User is linked to category ID 6\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    const categoryIds = jsonData.categories.map(category => category.id);",
-									"    pm.expect(categoryIds).to.include(\"6\");",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Sara Davis\",\n    \"age\": 30,\n    \"email\": \"sara.davis_lower123@gmail.com\",\n    \"password\": \"MobilityAssist2024\",\n    \"categoryIds\": [\n        \"6\"\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/create",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get User By Id [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 200) {",
-									"    pm.test(\"Status code is 200 - OK\", function () {",
-									"        pm.response.to.have.status(200);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains user fields\", function () {",
-									"        const jsonData = pm.response.json();",
-									"        pm.expect(jsonData).to.have.property(\"id\");",
-									"        pm.expect(jsonData).to.have.property(\"name\");",
-									"        pm.expect(jsonData).to.have.property(\"email\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTAyMzgsImlhdCI6MTcyOTc4NjYzOCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.IuRaG2EMlosarCyKTNBlR-j9G-l5TKIKWj7vVLFFwIzMqigy4fiAeW7DtjID_6j4pP2IYf611e7q96LW6EyFcz9whSL6GWikTmzNdp-Q_tBdQuV5Jq4KaNY0vXJOfvNsgNITgb5_X9KlpXqUwtqMdwwl3vZJQ6xp6k095UfPHPWa885ynasVOEUNIGcP6KXopPHQXTBmrSr7AdUCe_hv8szSoJPVNkpHCKmaOKTwO8tTR7XvcQn2C9R2RcQblNXeeTLVGHst-8AadFsBcDLhdWIsHjwiDgB99yREBh9vlRVe2Hqmv7gKsvGGsnxNH7oPLNglUgzhknSRp1LzE-Oiug",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/f8e97746-0fd1-4869-b384-2e9bf0d77f2a",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"f8e97746-0fd1-4869-b384-2e9bf0d77f2a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get User By Id [FORBDDEN]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 403) {",
-									"    pm.test(\"Status code is 403 - Forbidden\", function () {",
-									"        pm.response.to.have.status(403);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains forbidden message\", function () {",
-									"        const responseText = pm.response.text();",
-									"        pm.expect(responseText).to.include(\"Forbidden\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTAyMzgsImlhdCI6MTcyOTc4NjYzOCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.IuRaG2EMlosarCyKTNBlR-j9G-l5TKIKWj7vVLFFwIzMqigy4fiAeW7DtjID_6j4pP2IYf611e7q96LW6EyFcz9whSL6GWikTmzNdp-Q_tBdQuV5Jq4KaNY0vXJOfvNsgNITgb5_X9KlpXqUwtqMdwwl3vZJQ6xp6k095UfPHPWa885ynasVOEUNIGcP6KXopPHQXTBmrSr7AdUCe_hv8szSoJPVNkpHCKmaOKTwO8tTR7XvcQn2C9R2RcQblNXeeTLVGHst-8AadFsBcDLhdWIsHjwiDgB99yREBh9vlRVe2Hqmv7gKsvGGsnxNH7oPLNglUgzhknSRp1LzE-Oiug",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/f8e97746-0fd1-4869-b384-2e9bf0d77f2a",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"f8e97746-0fd1-4869-b384-2e9bf0d77f2a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get User By Id [Not Found]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 404) {",
-									"    pm.test(\"Status code is 404 - Not Found\", function () {",
-									"        pm.response.to.have.status(404);",
-									"    });",
-									"",
-									"    pm.test(\"Response contains 'User not found' message\", function () {",
-									"        const responseJson = pm.response.json();",
-									"        pm.expect(responseJson.error).to.equal(\"Resource Not Found\");",
-									"        pm.expect(responseJson.message).to.include(\"User not found with id:\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTAyMzgsImlhdCI6MTcyOTc4NjYzOCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.IuRaG2EMlosarCyKTNBlR-j9G-l5TKIKWj7vVLFFwIzMqigy4fiAeW7DtjID_6j4pP2IYf611e7q96LW6EyFcz9whSL6GWikTmzNdp-Q_tBdQuV5Jq4KaNY0vXJOfvNsgNITgb5_X9KlpXqUwtqMdwwl3vZJQ6xp6k095UfPHPWa885ynasVOEUNIGcP6KXopPHQXTBmrSr7AdUCe_hv8szSoJPVNkpHCKmaOKTwO8tTR7XvcQn2C9R2RcQblNXeeTLVGHst-8AadFsBcDLhdWIsHjwiDgB99yREBh9vlRVe2Hqmv7gKsvGGsnxNH7oPLNglUgzhknSRp1LzE-Oiug",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/registration/f8e97746-0fd1-4869-b384-2e9bf0d77f2a",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"registration",
-								"f8e97746-0fd1-4869-b384-2e9bf0d77f2a"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Resource Endpoints",
-			"item": [
-				{
-					"name": "Get All Resources [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 - OK\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/resource/all",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"resource",
-								"all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Resource By Id [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 - OK\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response contains resource fields\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property(\"id\");",
-									"    pm.expect(jsonData).to.have.property(\"name\");",
-									"    pm.expect(jsonData).to.have.property(\"organisation\");",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/resource/0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"resource",
-								"0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Resource By Id [NOT FOUND]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"  pm.test(\"Status code is 404 - Not Found\", function () {",
-									"        pm.response.to.have.status(404);",
-									"    });"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/resource/0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"resource",
-								"0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Volunteer Endpoints",
-			"item": [
-				{
-					"name": "Get All Volunteers [OK, NO CONTENT]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 or 204\", function () {",
-									"    pm.expect([200, 204]).to.include(pm.response.code);",
-									"});",
-									"",
-									"if (pm.response.code === 200) {",
-									"    pm.test(\"Response is an array of volunteers\", function () {",
-									"        const jsonData = pm.response.json();",
-									"        pm.expect(jsonData).to.be.an(\"array\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/all",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"volunteer",
-								"all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Volunteer By Id [OK]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 200) {",
-									"    pm.test(\"Response contains volunteer fields\", function () {",
-									"        const jsonData = pm.response.json();",
-									"        pm.expect(jsonData).to.have.property(\"id\");",
-									"        pm.expect(jsonData).to.have.property(\"name\");",
-									"        pm.expect(jsonData).to.have.property(\"email\");",
-									"        pm.expect(jsonData).to.have.property(\"phone\");",
-									"    });",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/15e33775-e95f-40f3-ba14-1464c3d47ee4",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"volunteer",
-								"15e33775-e95f-40f3-ba14-1464c3d47ee4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Volunteer By Id [NOT FOUND]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 or 404\", function () {",
-									"    pm.expect([404]).to.include(pm.response.code);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/15e33775-e95f-40f3-ba14-1464c3d47ee4",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"volunteer",
-								"15e33775-e95f-40f3-ba14-1464c3d47ee4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Volunteer [CREATED]",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201 - Created\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"pm.test(\"Response contains volunteer details\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property(\"name\", \"John Doe\");",
-									"    pm.expect(jsonData).to.have.property(\"email\", \"johndoe@example.com\");",
-									"    pm.expect(jsonData).to.have.property(\"age\", 25);",
-									"    pm.expect(jsonData).to.have.property(\"address\", \"123 Main St, Anytown, USA\");",
-									"    pm.expect(jsonData).to.have.property(\"phone\", \"+1 (555) 123-4567\");",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"id\": \"4f29c0e5-5e8e-44b2-bd12-ec58797b2c3c\",\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"securePassword123\",\n  \"age\": 25,\n  \"address\": \"123 Main St, Anytown, USA\",\n  \"phone\": \"+1 (555) 123-4567\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/add",
-							"protocol": "https",
-							"host": [
-								"garlicbread-includify",
-								"ue",
-								"r",
-								"appspot",
-								"com"
-							],
-							"path": [
-								"volunteer",
-								"add"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Home",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://garlicbread-includify.ue.r.appspot.com/",
-					"protocol": "https",
-					"host": [
-						"garlicbread-includify",
-						"ue",
-						"r",
-						"appspot",
-						"com"
-					],
-					"path": [
-						""
-					]
-				}
-			},
-			"response": []
-		}
-	]
+    "info": {
+        "_postman_id": "ba5dcdad-f0eb-4183-bef4-cd67ebc69050",
+        "name": "Includify Final [Public Endpoints]",
+        "description": "Final API Test Suite [PUBLIC ENDPOINTS ONLY, CI]\n\nThis suite tests the core public API endpoints.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "39266957"
+    },
+    "item": [
+        {
+            "name": "Organisation Endpoints",
+            "item": [
+                {
+                    "name": "Create Organisation [CREATED]",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 (CREATED)\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Columbia University\",\n    \"email\": \"cu@columbia.edu\",\n    \"password\": \"Password1\",\n    \"description\": \"Ivy League University in the city of New York.\",\n    \"latitude\": \"41.8566\",\n    \"longitude\": \"20.3522\",\n    \"address\": \"116th, Broadway, Morningside Heights\",\n    \"resources\": []\n}"
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/create",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "create"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Organisations [OK]",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200 (OK)\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Each organisation has required fields\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    responseJson.forEach(org => {",
+                                    "        pm.expect(org).to.have.property('id');",
+                                    "        pm.expect(org).to.have.property('name');",
+                                    "        pm.expect(org).to.have.property('email');",
+                                    "        pm.expect(org).to.have.property('address');",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/all",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "all"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Organisation By Id [NOT FOUND]",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 404) {",
+                                    "    pm.test(\"Status code is 404\", function () {",
+                                    "        pm.response.to.have.status(404);",
+                                    "    });",
+                                    "    pm.test(\"Response contains error message\", function () {",
+                                    "        const jsonData = pm.response.json();",
+                                    "        pm.expect(jsonData).to.have.property(\"error\", \"Resource Not Found\");",
+                                    "        pm.expect(jsonData.message).to.include(\"Organisation not found with id:\");",
+                                    "    });",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/ec4682a9-2461-4cd9-aab0-0aec665ac192",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "ec4682a9-2461-4cd9-aab0-0aec665ac192"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
 }

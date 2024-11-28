@@ -1,0 +1,1004 @@
+{
+    "info": {
+        "_postman_id": "e1cd6026-f2e0-4845-9aaf-be13dce26c08",
+        "name": "Includify",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "39266957",
+        "_collection_link": "https://garlicbread-8501.postman.co/workspace/GarlicBread-Workspace~d3d201b0-3c77-4157-8eae-6d2dfa7993de/collection/15248357-e1cd6026-f2e0-4845-9aaf-be13dce26c08?action=share&source=collection_link&creator=39266957"
+    },
+    "item": [
+        {
+            "name": "Organisation Endpoints",
+            "item": [
+                {
+                    "name": "Create Organisation",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Columbia University\",\n    \"email\": \"cu@columbia.edu\",\n    \"password\": \"Password1\",\n    \"description\": \"Ivy League University in the city of New York.\",\n    \"latitude\": \"41.8566\",\n    \"longitude\": \"20.3522\",\n    \"address\": \"116th, Broadway, Morningside Heights\",\n    \"resources\": []\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/create",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Organisation",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhbWNAbnljLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTc4ODQxMSwiaWF0IjoxNzI5Nzg0ODExLCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.GFj259CgBw4-Yb0F5DxmVspLWCCSIHBjcovNP6lunnF71tOZydki4AUB88RR4o5_rVV0KoR0vfj0trXLX1r7zwwyIj7kjYebNGpoSTl8EtHF5qrOpCLSBgvJEuusRGOk-ghZk3apZz0igBk8cjUhZXaQiQCqcqvfY9PpmoTODLzaOK6AtgmLA5XxSSLBsL-V60W3dR_Iwz9RCRXFgsL1wJMe9qwmijZMmBD_5W30WykXXDtcvlNfKFp51zBEouPrDZhc25Cwuma4GmhYfrvTBV5vwYigMBULS2oQ0USh5aFqi2iGfmXSL8PbKVcms5Kj02HzrMlFqIYdKTOG1nPY2Q",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"AMC Theatre\",\n    \"email\": \"amc@nyc.com\",\n    \"password\": \"Password5\",\n    \"description\": \"Biggest theatre in New York City.\",\n    \"latitude\": \"42.8436\",\n    \"longitude\": \"13.3465\",\n    \"address\": \"42nd Street, 5th Av\",\n    \"resources\": []\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/update/ec4682a9-2461-4cd9-aab0-0aec665ac192",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "update",
+                                "ec4682a9-2461-4cd9-aab0-0aec665ac192"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Organisation Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"burlington@gmail.com\",\n    \"password\": \"Password6\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/login",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Organisation",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhbWNAbnljLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTc4ODYzOSwiaWF0IjoxNzI5Nzg1MDM5LCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.gutOCUDKsqHVl8T5g2DOpZpkq61r2knJDusjz12IcONIkPUY8a3uA11tf-y-6NxRJvfGuP40uCU7j17qjwT44dv0szYmeMJ7f_EEiw-FUCM26M3z-aVYgI9fkiOzNPvJcvx1iISAmBwfZ5TLm9ajYSr1whoFoCOq071hpP5VElwTdZGsdOrshrb5VRSYHcNOJvrecEpMZe90yEYywnj6xPLPG-EAJ6f-p2YZNDlndbzIjve4A7tP66Hc7irirtzYDz12gkPALA9ciwRm-0v1ZveqtvesCVbqb1sOrSon2WKSZVCej-1hvQOZzZ0noMneXpiU2VfWmw9IhMRIKBsAjg",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/delete/17133120-f6e0-486e-a3bb-594a97dcb8d2",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "delete",
+                                "17133120-f6e0-486e-a3bb-594a97dcb8d2"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Organisations",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/all",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "all"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Organisation By Id",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/organisation/ec4682a9-2461-4cd9-aab0-0aec665ac192",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "organisation",
+                                "ec4682a9-2461-4cd9-aab0-0aec665ac192"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "User Endpoints",
+            "item": [
+                {
+                    "name": "Create User Category",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Senior Citizens\",\n    \"description\": \"Users over the age of 60 needing age-appropriate assistance.\",\n    \"userId\": [],\n    \"resourceId\": []\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/createCategory",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "createCategory"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete User Category",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/deleteCategory/2",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "deleteCategory",
+                                "2"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Sara Davis\",\n    \"age\": 30,\n    \"email\": \"sara.davis_lower123@gmail.com\",\n    \"password\": \"MobilityAssist2024\",\n    \"categoryIds\": [\n        \"6\"\n    ]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/create",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJkZWYzMTRmYS02OTVmLTRiYTAtOTY5MC03YjdiMTczN2VmMzEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTk0MzAsImlhdCI6MTcyOTc5NTgzMCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.YUCC0PzaW8KXFW_i3syzaGf-3kb18pgfeBZIVcH5mptMUjRv3Z8jek7mPLIM_Yzon-R_QusQdHIv05Ixi8QyFr-OiSYL6hVoDe_gJcoIdH3g9gfXSJQ_UqbyNoI8A4aPhP8nvoZA-XisryoOtKXwQxSSJ5BA99rqtEi9FssXEnmhHmopkc6nO5tiwkdB-dlHyz7kSRCrFt_v8cDpWgU06WXTxpQsEl9HcTHRY1RECJRK6oYA-Dtf-iD8DeTybrh4dzobPy5P8xaYaWeWD_kPE09-_0XgNvcvTiES6QOvWlUq6HH261GC6Jv0OG7iQ48WF6vXUFjVfpWISRSTpqr18A",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/all",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "all"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User By Id",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTAyMzgsImlhdCI6MTcyOTc4NjYzOCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.IuRaG2EMlosarCyKTNBlR-j9G-l5TKIKWj7vVLFFwIzMqigy4fiAeW7DtjID_6j4pP2IYf611e7q96LW6EyFcz9whSL6GWikTmzNdp-Q_tBdQuV5Jq4KaNY0vXJOfvNsgNITgb5_X9KlpXqUwtqMdwwl3vZJQ6xp6k095UfPHPWa885ynasVOEUNIGcP6KXopPHQXTBmrSr7AdUCe_hv8szSoJPVNkpHCKmaOKTwO8tTR7XvcQn2C9R2RcQblNXeeTLVGHst-8AadFsBcDLhdWIsHjwiDgB99yREBh9vlRVe2Hqmv7gKsvGGsnxNH7oPLNglUgzhknSRp1LzE-Oiug",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/f8e97746-0fd1-4869-b384-2e9bf0d77f2a",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "f8e97746-0fd1-4869-b384-2e9bf0d77f2a"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "User Login",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"michael.brown_up@gmail.com\",\n    \"password\": \"UpperLimbsAid101\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/login",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtaWNoYWVsLmJyb3duX3VwQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJVU0VSIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTAyMzgsImlhdCI6MTcyOTc4NjYzOCwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdfQ.IuRaG2EMlosarCyKTNBlR-j9G-l5TKIKWj7vVLFFwIzMqigy4fiAeW7DtjID_6j4pP2IYf611e7q96LW6EyFcz9whSL6GWikTmzNdp-Q_tBdQuV5Jq4KaNY0vXJOfvNsgNITgb5_X9KlpXqUwtqMdwwl3vZJQ6xp6k095UfPHPWa885ynasVOEUNIGcP6KXopPHQXTBmrSr7AdUCe_hv8szSoJPVNkpHCKmaOKTwO8tTR7XvcQn2C9R2RcQblNXeeTLVGHst-8AadFsBcDLhdWIsHjwiDgB99yREBh9vlRVe2Hqmv7gKsvGGsnxNH7oPLNglUgzhknSRp1LzE-Oiug",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/user/delete/f8e97746-0fd1-4869-b384-2e9bf0d77f2a",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "user",
+                                "delete",
+                                "f8e97746-0fd1-4869-b384-2e9bf0d77f2a"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Resource Endpoints",
+            "item": [
+                {
+                    "name": "Create Resource Type",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhbWNAbnljLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTc5MDc1MCwiaWF0IjoxNzI5Nzg3MTUwLCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.Rke0JSNtibDreKNWrGLbZHSUE8gKy20jVP8fvTU1OmRoJVq0aoA-wqeFtyWB3hAXtMh5hFuB59P2D4CDgMgLOzTTCnxtyEpCRjCzPR053Bn5Vz1opNyrMBaqYuMHwfmNEl9mvMSz2dONpMmOQVKcf4eiHwDACCZFfOqxwphAC_PcFqbhd6FH7YXLPOwVgyrwFLwofIy0X4utpi0iSkr7oyCoAtXVfgRhozpyih2OoIMHHHxMoXDAuP2aglxybps6SjJfIkk1Ow_c8iZ8BzFtFrHaCUbZRwAZb3v0zpUJ7vgxWESnz7GzWt4VPYSYWYs0BFzp0t5GvNLihy_w7OAdAA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 4,\n    \"title\": \"Contacts\",\n    \"description\": \"Essential contacts including nearby healthcare facilities and emergency services.\",\n    \"resourceId\": []\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/createResourceType",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "createResourceType"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Resource Type",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhbWNAbnljLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTc5MDc1MCwiaWF0IjoxNzI5Nzg3MTUwLCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.Rke0JSNtibDreKNWrGLbZHSUE8gKy20jVP8fvTU1OmRoJVq0aoA-wqeFtyWB3hAXtMh5hFuB59P2D4CDgMgLOzTTCnxtyEpCRjCzPR053Bn5Vz1opNyrMBaqYuMHwfmNEl9mvMSz2dONpMmOQVKcf4eiHwDACCZFfOqxwphAC_PcFqbhd6FH7YXLPOwVgyrwFLwofIy0X4utpi0iSkr7oyCoAtXVfgRhozpyih2OoIMHHHxMoXDAuP2aglxybps6SjJfIkk1Ow_c8iZ8BzFtFrHaCUbZRwAZb3v0zpUJ7vgxWESnz7GzWt4VPYSYWYs0BFzp0t5GvNLihy_w7OAdAA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/deleteResourceType/4",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "deleteResourceType",
+                                "4"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Resources",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/all",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "all"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Resource By Id",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "0fb03ec1-f06c-4b9d-adca-8cb7c8fd771a"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Resource",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJkZWYzMTRmYS02OTVmLTRiYTAtOTY5MC03YjdiMTczN2VmMzEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJidXJsaW5ndG9uQGdtYWlsLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTgwMDUxOCwiaWF0IjoxNzI5Nzk2OTE4LCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.BbhLSrLpwzDJeXxdo0GKd6oo4BihndHCPETgBCRol_5C7wCo56Efm9QOU7SUAszTqSZgJxsFJ82PAVFdDVdvy96RI6g15cwoATym3XUy0q-At5t3FKdz-Xv4d5ReVtp5UB8xLNjk7aaZrBGOQr4T398jr53j1FPL8gF6eogYT6oPa4dlid5pHlGfUPlCWjQQT6BiHdAr1G2sAiPBvOuXlb06yf9BnzSByodZIFPBEMVDkr0Nla2Jvrz7_UxHRuaAtJErC2lYYCocWV19WsBDCEaEbJO35vcTJRQcHyYayN1uNIWh1I5qrPoAOGUQvgHbObrr0qDswk6uj0x80MDRRA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"organisationId\": \"41ec70f2-cdab-46bc-be87-bc8b1a3f8f03\",\n  \"resourceTypeIds\": [\n    \"4\"\n  ],\n  \"targetUserCategoryIds\": [\n    \"6\"\n  ],\n  \"title\": \"Hospital: Mount Sinai New\",\n  \"description\": \"A healthcare facility providing a range of medical services, including emergency care, specialized treatment, and rehabilitation services. Address: 1468 Madison Ave, New York, NY 10029. Phone: +1 (212) 241-6500.\",\n  \"usageInstructions\": \"Contact the hospital for appointment scheduling, and check the accessibility options available for users with lower limb impairments.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/add",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "add"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Resource",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhbWNAbnljLmNvbSIsInByb2ZpbGUiOiJPUkdBTklTQVRJT04iLCJpc3MiOiJodHRwczovL2dhcmxpY2JyZWFkLWluY2x1ZGlmeS51ZS5yLmFwcHNwb3QuY29tLyIsImV4cCI6MTcyOTc5MDc1MCwiaWF0IjoxNzI5Nzg3MTUwLCJhdXRob3JpdGllcyI6WyJPUkdBTklTQVRJT04iXX0.Rke0JSNtibDreKNWrGLbZHSUE8gKy20jVP8fvTU1OmRoJVq0aoA-wqeFtyWB3hAXtMh5hFuB59P2D4CDgMgLOzTTCnxtyEpCRjCzPR053Bn5Vz1opNyrMBaqYuMHwfmNEl9mvMSz2dONpMmOQVKcf4eiHwDACCZFfOqxwphAC_PcFqbhd6FH7YXLPOwVgyrwFLwofIy0X4utpi0iSkr7oyCoAtXVfgRhozpyih2OoIMHHHxMoXDAuP2aglxybps6SjJfIkk1Ow_c8iZ8BzFtFrHaCUbZRwAZb3v0zpUJ7vgxWESnz7GzWt4VPYSYWYs0BFzp0t5GvNLihy_w7OAdAA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/resource/delete/6dd14eb2-9226-11ef-bac3-42010a400003",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "resource",
+                                "delete",
+                                "6dd14eb2-9226-11ef-bac3-42010a400003"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Volunteer Endpoints",
+            "item": [
+                {
+                    "name": "Get All Volunteers",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/all",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "volunteer",
+                                "all"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Volunteer By Id",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/15e33775-e95f-40f3-ba14-1464c3d47ee4",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "volunteer",
+                                "15e33775-e95f-40f3-ba14-1464c3d47ee4"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create a Volunteer",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"4f29c0e5-5e8e-44b2-bd12-ec58797b2c3c\",\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"securePassword123\",\n  \"age\": 25,\n  \"address\": \"123 Main St, Anytown, USA\",\n  \"phone\": \"+1 (555) 123-4567\"\n}\n",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/add",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "volunteer",
+                                "add"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete a Volunteer",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJraWQiOiJhZmRmZWQ0My0zYTA1LTQ1ODQtYjA3Zi0yYTczODA1MzExNmIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJjdUBjb2x1bWJpYS5lZHUiLCJwcm9maWxlIjoiT1JHQU5JU0FUSU9OIiwiaXNzIjoiaHR0cHM6Ly9nYXJsaWNicmVhZC1pbmNsdWRpZnkudWUuci5hcHBzcG90LmNvbS8iLCJleHAiOjE3Mjk3OTMyMzUsImlhdCI6MTcyOTc4OTYzNSwiYXV0aG9yaXRpZXMiOlsiT1JHQU5JU0FUSU9OIl19.XfFczlaGYxm1XzL-U0ht1d47Sq8g3g-pFn5u3uiX9oQ8uwx8qAxp2lZvqoa0RiYacNGFeiCyE4Q6MTg5VYmEPx9HTY06py6-lJ8erNGKFsfhx5AST6WYb_KdegMCttPsJzMgLntdS-iiNFfdhwpEKjbe96MijE_h1Q0kcfNcl6yME_hX4yxmuZjgSRrh4kdqjCMHAtzZ8pgTnrLuiXL1MpydmLdW9UbhBN5H9vEofsUJ3atjypslBUVOy4UBWoHovsLyI0I7-M0R5av6NxkKiGzDxwBR5SYPg47xgvfaQeiZTWELoZRX0L3wPG4Hk4NlYyt4V_fsAXebofuPUNbvqA",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/delete/15e33775-e95f-40f3-ba14-1464c3d47ee4",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "volunteer",
+                                "delete",
+                                "15e33775-e95f-40f3-ba14-1464c3d47ee4"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Volunteer Login",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"securePassword123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/volunteer/login",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "volunteer",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Home",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "https://garlicbread-includify.ue.r.appspot.com/",
+                    "protocol": "https",
+                    "host": [
+                        "garlicbread-includify",
+                        "ue",
+                        "r",
+                        "appspot",
+                        "com"
+                    ],
+                    "path": [
+                        ""
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Appointment Endpoints",
+            "item": [
+                {
+                    "name": "Create Appointment",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"organisationId\": \"org123\",\n    \"userId\": \"user456\",\n    \"date\": \"11242024\",\n    \"timeStart\": 1600,\n    \"timeEnd\": 1700,\n    \"resourceIds\": [\n        \"res789\"\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/appointment",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "appointment"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Appointments For Organisation",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/appointment/organisation?organisation=org123",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "appointment",
+                                "organisation"
+                            ],
+                            "query": [
+                                {
+                                    "key": "organisation",
+                                    "value": "org123"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Appointments For User",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/appointment/user",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "appointment",
+                                "user"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Appointment",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/appointment/{id}",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "appointment",
+                                "{id}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Volunteer To Appointment",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}"
+                        },
+                        "url": {
+                            "raw": "https://garlicbread-includify.ue.r.appspot.com/appointment/{id}/volunteer",
+                            "protocol": "https",
+                            "host": [
+                                "garlicbread-includify",
+                                "ue",
+                                "r",
+                                "appspot",
+                                "com"
+                            ],
+                            "path": [
+                                "appointment",
+                                "{id}",
+                                "volunteer"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
