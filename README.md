@@ -15,7 +15,7 @@
 
 Please use the following link to view the repository relevant to the app: https://github.com/abhishekpaul11/COMS-4156-GarlicBread-Client
 
-## Project Management tool 
+## Project Management Tool 
 Trello Board used by GarlicBread team: https://trello.com/b/9EErBJ64/garlicbread
 
 ## Overview
