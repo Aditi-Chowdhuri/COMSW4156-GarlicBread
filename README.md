@@ -337,61 +337,60 @@ The possible clients who would likely use our service includes:
  - `500 Internal Server Error`: If category creation fails.
 - **Pre-requisites**: A valid user category JSON body.
 - **Authorization**: Public (No authorization required).
+---
 
-
-### 2. **DELETE `/registration/deleteCategory/{id}`**
-
+### **2. DELETE `/registration/deleteCategory/{id}`**
 
 - **Description**: Deletes a user category by its ID.
 - **Path Variable**:
- - `id` (integer): The ID of the user category to delete.
+  - `id` (integer): The ID of the user category to delete.
 - **Response**:
- - `204 No Content`: User category deleted successfully.
- - `400 Bad Request`: Invalid ID format passed.
- - `403 Forbidden`: Default categories cannot be deleted.
- - `404 Not Found`: If the category with the given ID is not found.
- - `500 Internal Server Error`: If the deletion fails.
+  - `204 No Content`: User category deleted successfully.
+  - `400 Bad Request`: Invalid ID format passed.
+  - `403 Forbidden`: Default categories cannot be deleted.
+  - `404 Not Found`: If the category with the given ID is not found.
+  - `500 Internal Server Error`: If the deletion fails.
 - **Pre-requisites**: A valid user category ID.
 - **Authorization**: Public (No authorization required).
 
+---
 
-### 3. **GET `/registration/all`**
-
+### **3. GET `/registration/all`**
 
 - **Description**: Retrieves all users registered.
 - **Response**:
- - `200 OK`: Returns a list of all users registered.
- - `204 No Content`: If no users exist.
+  - `200 OK`: Returns a list of all users registered.
+  - `204 No Content`: If no users exist.
 - **Pre-requisites**: None.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
+---
 
-### 4. **GET `/registration/{id}`**
-
+### **4. GET `/registration/{id}`**
 
 - **Description**: Retrieves a user by their ID.
 - **Path Variable**:
- - `id` (String): The ID of the user to retrieve.
+  - `id` (String): The ID of the user to retrieve.
 - **Response**:
- - `200 OK`: Returns the user with the specified ID.
- - `404 Not Found`: If the user with the specified ID is not found.
+  - `200 OK`: Returns the user with the specified ID.
+  - `404 Not Found`: If the user with the specified ID is not found.
 - **Pre-requisites**: A valid user ID.
 - **Authorization**: Requires JWT Bearer token with `USER` authority.
 
+---
 
-### 5. **POST `/registration/create`**
-
+### **5. POST `/registration/create`**
 
 - **Description**: Creates a new user registration.
 - **Request**: Expects a JSON payload representing the user request.
- ```json
- {
- "name": "Jane Smith",
- "age": 30,
- "email": "jane.smith@example.com",
- "password": "strongPassword456",
- "categoryIds": ["1"]
- }
+  ```json
+  {
+    "name": "Jane Smith",
+    "age": 30,
+    "email": "jane.smith@example.com",
+    "password": "strongPassword456",
+    "categoryIds": ["1"]
+  }
  ```
  Note: categoryIds are optional.
 - **Response**:
