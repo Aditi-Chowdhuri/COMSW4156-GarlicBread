@@ -17,9 +17,11 @@ import com.garlicbread.includify.service.auth.TokenService;
 import com.garlicbread.includify.service.organisation.OrganisationService;
 import com.garlicbread.includify.service.user.UserService;
 import com.garlicbread.includify.service.volunteer.VolunteerService;
+import com.garlicbread.includify.util.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -53,7 +55,16 @@ public class AuthControllerExternalTest {
     private VolunteerService volunteerService;
 
     @MockBean
-    private AuthenticationManager authenticationManager;
+    @Qualifier(Constants.ORGANISATION_AUTHENTICATION_MANAGER)
+    private AuthenticationManager organisationAuthenticationManager;
+
+    @MockBean
+    @Qualifier(Constants.USER_AUTHENTICATION_MANAGER)
+    private AuthenticationManager userAuthenticationManager;
+
+    @MockBean
+    @Qualifier(Constants.VOLUNTEER_AUTHENTICATION_MANAGER)
+    private AuthenticationManager volunteerAuthenticationManager;
 
     @MockBean
     private TokenService tokenService;
@@ -90,7 +101,7 @@ public class AuthControllerExternalTest {
         authRequest.setPassword("password");
 
         Authentication mockAuthentication = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(organisationAuthenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenReturn(mockAuthentication);
         when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-token");
 
@@ -108,7 +119,7 @@ public class AuthControllerExternalTest {
         authRequest.setPassword("password");
 
         Authentication mockAuthentication = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(userAuthenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenReturn(mockAuthentication);
         when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-user-token");
 
@@ -126,7 +137,7 @@ public class AuthControllerExternalTest {
         authRequest.setPassword("password");
     
         Authentication mockAuthentication = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(volunteerAuthenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenReturn(mockAuthentication);
         when(tokenService.generateToken(any(), any(), any())).thenReturn("mocked-volunteer-token");
     
@@ -143,7 +154,7 @@ public class AuthControllerExternalTest {
         authRequest.setEmail("invalid@email.com");
         authRequest.setPassword("wrongpassword");
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(organisationAuthenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenThrow(new org.springframework.security.authentication.BadCredentialsException("Invalid credentials"));
 
         mockMvc.perform(post("/organisation/login")
